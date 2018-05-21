@@ -8,6 +8,7 @@ import com.liuz.lotus.net.convert.GsonConverterFactory;
 import com.liuz.lotus.net.core.ApiCache;
 import com.liuz.lotus.net.core.ApiCookie;
 import com.liuz.lotus.net.exception.ApiException;
+import com.liuz.lotus.net.func.ApiDataFunc;
 import com.liuz.lotus.net.func.ApiErrFunc;
 import com.liuz.lotus.net.func.ApiFunc;
 import com.liuz.lotus.net.func.ApiResultFunc;
@@ -20,12 +21,13 @@ import com.liuz.lotus.net.mode.ApiHost;
 import com.liuz.lotus.net.mode.ApiResult;
 import com.liuz.lotus.net.mode.CacheMode;
 import com.liuz.lotus.net.mode.CacheResult;
+import com.liuz.lotus.net.subscriber.ApiCallbackSubscriber;
 import com.liuz.lotus.utils.JConfig;
 import com.liuz.lotus.utils.JLog;
 import com.liuz.lotus.utils.assist.ClassUtil;
 import com.liuz.lotus.utils.assist.SSLUtil;
 
-import org.reactivestreams.Subscription;
+
 
 import java.io.File;
 import java.net.Proxy;
@@ -39,6 +41,7 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.ObservableTransformer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.Cache;
@@ -126,7 +129,7 @@ public class ViseApi {
      * @param <T>
      * @return
      */
-    public <T> Subscription get(String url, Map<String, String> maps, ApiCallback<T> callback) {
+    public <T> Disposable get(String url, Map<String, String> maps, ApiCallback<T> callback) {
         return this.get(url, maps, ClassUtil.getTClass(callback)).subscribe(new ApiCallbackSubscriber(context, callback));
     }
 
@@ -152,7 +155,7 @@ public class ViseApi {
      * @param <T>
      * @return
      */
-    public <T> Subscription cacheGet(String url, Map<String, String> maps, ApiCallback<T> callback) {
+    public <T> Disposable cacheGet(String url, Map<String, String> maps, ApiCallback<T> callback) {
         return this.cacheGet(url, maps, ClassUtil.getTClass(callback)).subscribe(new ApiCallbackSubscriber(context, callback));
     }
 
@@ -178,7 +181,7 @@ public class ViseApi {
      * @param <T>
      * @return
      */
-    public <T> Subscription post(String url, Map<String, String> maps, ApiCallback<T> callback) {
+    public <T> Disposable post(String url, Map<String, String> maps, ApiCallback<T> callback) {
         return this.post(url, maps, ClassUtil.getTClass(callback)).subscribe(new ApiCallbackSubscriber(context, callback));
     }
 
@@ -204,7 +207,7 @@ public class ViseApi {
      * @param <T>
      * @return
      */
-    public <T> Subscription cachePost(String url, Map<String, String> maps, ApiCallback<T> callback) {
+    public <T> Disposable cachePost(String url, Map<String, String> maps, ApiCallback<T> callback) {
         return this.cachePost(url, maps, ClassUtil.getTClass(callback)).subscribe(new ApiCallbackSubscriber(context, callback));
     }
 
@@ -230,7 +233,7 @@ public class ViseApi {
      * @param <T>
      * @return
      */
-    public <T> Subscription form(final String url, final @FieldMap(encoded = true) Map<String, Object> fields, ApiCallback<T> callback) {
+    public <T> Disposable form(final String url, final @FieldMap(encoded = true) Map<String, Object> fields, ApiCallback<T> callback) {
         return this.form(url, fields, ClassUtil.getTClass(callback)).subscribe(new ApiCallbackSubscriber(context, callback));
     }
 
@@ -256,7 +259,7 @@ public class ViseApi {
      * @param <T>
      * @return
      */
-    public <T> Subscription body(final String url, final Object body, ApiCallback<T> callback) {
+    public <T> Disposable body(final String url, final Object body, ApiCallback<T> callback) {
         return this.body(url, body, ClassUtil.getTClass(callback)).subscribe(new ApiCallbackSubscriber(context, callback));
     }
 
@@ -282,7 +285,7 @@ public class ViseApi {
      * @param <T>
      * @return
      */
-    public <T> Subscription delete(String url, Map<String, String> maps, ApiCallback<T> callback) {
+    public <T> Disposable delete(String url, Map<String, String> maps, ApiCallback<T> callback) {
         return this.delete(url, maps, ClassUtil.getTClass(callback)).subscribe(new ApiCallbackSubscriber(context, callback));
     }
 
@@ -308,7 +311,7 @@ public class ViseApi {
      * @param <T>
      * @return
      */
-    public <T> Subscription put(String url, Map<String, String> maps, ApiCallback<T> callback) {
+    public <T> Disposable put(String url, Map<String, String> maps, ApiCallback<T> callback) {
         return this.put(url, maps, ClassUtil.getTClass(callback)).subscribe(new ApiCallbackSubscriber(context, callback));
     }
 
@@ -419,7 +422,7 @@ public class ViseApi {
      * @param <T>
      * @return
      */
-    public <T> Subscription apiGet(final String url, final Map<String, String> maps, ApiCallback<T> callback) {
+    public <T> Disposable apiGet(final String url, final Map<String, String> maps, ApiCallback<T> callback) {
         return this.apiGet(url, maps, ClassUtil.getTClass(callback)).subscribe(new ApiCallbackSubscriber(context, callback));
     }
 
@@ -445,7 +448,7 @@ public class ViseApi {
      * @param <T>
      * @return
      */
-    public <T> Subscription apiCacheGet(final String url, final Map<String, String> maps, ApiCallback<T> callback) {
+    public <T> Disposable apiCacheGet(final String url, final Map<String, String> maps, ApiCallback<T> callback) {
         return this.apiCacheGet(url, maps, ClassUtil.getTClass(callback)).subscribe(new ApiCallbackSubscriber(context, callback));
     }
 
@@ -471,7 +474,7 @@ public class ViseApi {
      * @param <T>
      * @return
      */
-    public <T> Subscription apiPost(final String url, final Map<String, String> parameters, ApiCallback<T> callback) {
+    public <T> Disposable apiPost(final String url, final Map<String, String> parameters, ApiCallback<T> callback) {
         return this.apiPost(url, parameters, ClassUtil.getTClass(callback)).subscribe(new ApiCallbackSubscriber(context, callback));
     }
 
@@ -497,7 +500,7 @@ public class ViseApi {
      * @param <T>
      * @return
      */
-    public <T> Subscription apiCachePost(final String url, final Map<String, String> parameters, ApiCallback<T> callback) {
+    public <T> Disposable apiCachePost(final String url, final Map<String, String> parameters, ApiCallback<T> callback) {
         return this.apiCachePost(url, parameters, ClassUtil.getTClass(callback)).subscribe(new ApiCallbackSubscriber(context, callback));
     }
 
@@ -506,7 +509,7 @@ public class ViseApi {
      *
      * @return
      */
-    public Subscription clearCache() {
+    public Disposable clearCache() {
         return apiCache.clear();
     }
 

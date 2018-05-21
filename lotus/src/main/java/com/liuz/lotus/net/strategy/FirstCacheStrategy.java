@@ -5,7 +5,7 @@ import com.liuz.lotus.net.mode.CacheResult;
 
 import io.reactivex.Observable;
 import io.reactivex.functions.Function;
-import rx.functions.Func1;
+import io.reactivex.functions.Predicate;
 
 /**
  * @Description: 缓存策略--优先缓存
@@ -23,9 +23,9 @@ public class FirstCacheStrategy<T> extends CacheStrategy<T> {
             }
         });
         Observable<CacheResult<T>> remote = loadRemote(apiCache, cacheKey, source);
-        return Observable.concat(cache, remote).first( new Function<CacheResult<T>, Boolean>() {
+        return Observable.concat(cache, remote).filter(new Predicate<CacheResult<T>>() {
             @Override
-            public Boolean apply(CacheResult<T> tResultData) throws Exception {
+            public boolean test(CacheResult<T> tResultData) throws Exception {
                 return tResultData != null && tResultData.getCacheData() != null;
             }
         });

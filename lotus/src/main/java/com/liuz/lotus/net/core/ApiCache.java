@@ -5,10 +5,10 @@ import android.content.Context;
 import com.liuz.lotus.cache.DiskCache;
 import com.liuz.lotus.net.mode.CacheMode;
 import com.liuz.lotus.net.mode.CacheResult;
+import com.liuz.lotus.net.strategy.ICacheStrategy;
 
 import java.io.File;
 
-import cn.wwah.common.net.strategy.ICacheStrategy;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;

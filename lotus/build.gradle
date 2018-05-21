@@ -54,4 +54,5 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
     api 'io.reactivex.rxjava2:rxandroid:2.0.2'
     api 'io.reactivex.rxjava2:rxjava:2.1.14-RC1'
+    api 'com.vise.xiaoyaoyou:viseutils:1.1.0'
 }

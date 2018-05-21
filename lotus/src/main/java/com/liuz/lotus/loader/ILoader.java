@@ -3,7 +3,7 @@ package com.liuz.lotus.loader;
 import android.content.Context;
 import android.widget.ImageView;
 
-import com.liuz.lotus.utils.JConfig;
+import com.liuz.lotus.common.ViseConfig;
 
 import java.io.File;
 
@@ -35,7 +35,7 @@ public interface ILoader {
         public int loadErrorResId = RES_NONE;//加载失败的资源id
 
         public static Options defaultOptions() {
-            return new Options(JConfig.IL_LOADING_RES, JConfig.IL_ERROR_RES);
+            return new Options(ViseConfig.IL_LOADING_RES, ViseConfig.IL_ERROR_RES);
         }
 
         public Options(int loadingResId, int loadErrorResId) {

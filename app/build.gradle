@@ -54,8 +54,9 @@ dependencies {
     implementation "android.arch.lifecycle:runtime:$lifecycle_version"
     annotationProcessor "android.arch.lifecycle:compiler:$lifecycle_version"
 
-//    // alternately - if using Java8, use the following instead of compiler
-//    implementation "android.arch.lifecycle:common-java8:$lifecycle_version"
+    //    // alternately - if using Java8, use the following instead of compiler
+
+    //    implementation "android.arch.lifecycle:common-java8:$lifecycle_version"
 
     // optional - ReactiveStreams support for LiveData
     implementation "android.arch.lifecycle:reactivestreams:$lifecycle_version"
@@ -82,8 +83,7 @@ dependencies {
     androidTestImplementation "android.arch.navigation:navigation-testing:$nav_version"
 
     // use -ktx for Kotlin
-    implementation project(':lotus')
-
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.android.support.constraint:constraint-layout:1.1.0'
+    implementation project(':common')
 }

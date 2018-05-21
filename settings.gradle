@@ -1,1 +1,1 @@
-include ':app', ':db', ':lotus'
+include ':app', ':db', ':lotus', ':common'

@@ -3,7 +3,6 @@ package com.liuz.lotus.net;
 import android.content.Context;
 
 import com.liuz.lotus.cache.DiskCache;
-import com.liuz.lotus.net.callback.ApiCallback;
 import com.liuz.lotus.net.convert.GsonConverterFactory;
 import com.liuz.lotus.net.core.ApiCache;
 import com.liuz.lotus.net.core.ApiCookie;
@@ -21,13 +20,9 @@ import com.liuz.lotus.net.mode.ApiHost;
 import com.liuz.lotus.net.mode.ApiResult;
 import com.liuz.lotus.net.mode.CacheMode;
 import com.liuz.lotus.net.mode.CacheResult;
-import com.liuz.lotus.net.subscriber.ApiCallbackSubscriber;
 import com.liuz.lotus.utils.JConfig;
 import com.liuz.lotus.utils.JLog;
-import com.liuz.lotus.utils.assist.ClassUtil;
 import com.liuz.lotus.utils.assist.SSLUtil;
-
-
 
 import java.io.File;
 import java.net.Proxy;
@@ -120,18 +115,18 @@ public class ViseApi {
         return apiService.get(url, maps).compose(this.norTransformer(clazz));
     }
 
-    /**
-     * 普通Get方式请求，无需订阅，只需传入Callback回调
-     *
-     * @param url
-     * @param maps
-     * @param callback
-     * @param <T>
-     * @return
-     */
-    public <T> Disposable get(String url, Map<String, String> maps, ApiCallback<T> callback) {
-        return this.get(url, maps, ClassUtil.getTClass(callback)).subscribe(new ApiCallbackSubscriber(context, callback));
-    }
+//    /**
+//     * 普通Get方式请求，无需订阅，只需传入Callback回调
+//     *
+//     * @param url
+//     * @param maps
+//     * @param callback
+//     * @param <T>
+//     * @return
+//     */
+//    public <T> Disposable get(String url, Map<String, String> maps, ApiCallback<T> callback) {
+//        return this.get(url, maps, ClassUtil.getTClass(callback)).subscribe(new ApiCallbackSubscriber(context, callback));
+//    }
 
     /**
      * 带缓存Get方式请求，请求前需配置缓存key，缓存时间默认永久，还可以配置缓存策略，需传入实体类
@@ -146,18 +141,18 @@ public class ViseApi {
         return this.get(url, maps, clazz).compose(apiCache.transformer(cacheMode, clazz));
     }
 
-    /**
-     * 带缓存Get方式请求，请求前需配置缓存key，缓存时间默认永久，还可以配置缓存策略，无需订阅，只需配置Callback回调
-     *
-     * @param url
-     * @param maps
-     * @param callback
-     * @param <T>
-     * @return
-     */
-    public <T> Disposable cacheGet(String url, Map<String, String> maps, ApiCallback<T> callback) {
-        return this.cacheGet(url, maps, ClassUtil.getTClass(callback)).subscribe(new ApiCallbackSubscriber(context, callback));
-    }
+//    /**
+//     * 带缓存Get方式请求，请求前需配置缓存key，缓存时间默认永久，还可以配置缓存策略，无需订阅，只需配置Callback回调
+//     *
+//     * @param url
+//     * @param maps
+//     * @param callback
+//     * @param <T>
+//     * @return
+//     */
+//    public <T> Disposable cacheGet(String url, Map<String, String> maps, ApiCallback<T> callback) {
+//        return this.cacheGet(url, maps, ClassUtil.getTClass(callback)).subscribe(new ApiCallbackSubscriber(context, callback));
+//    }
 
     /**
      * 普通POST方式请求，需传入实体类
@@ -172,18 +167,18 @@ public class ViseApi {
         return apiService.post(url, parameters).compose(this.norTransformer(clazz));
     }
 
-    /**
-     * 普通POST方式请求，无需订阅，只需传入Callback回调
-     *
-     * @param url
-     * @param maps
-     * @param callback
-     * @param <T>
-     * @return
-     */
-    public <T> Disposable post(String url, Map<String, String> maps, ApiCallback<T> callback) {
-        return this.post(url, maps, ClassUtil.getTClass(callback)).subscribe(new ApiCallbackSubscriber(context, callback));
-    }
+//    /**
+//     * 普通POST方式请求，无需订阅，只需传入Callback回调
+//     *
+//     * @param url
+//     * @param maps
+//     * @param callback
+//     * @param <T>
+//     * @return
+//     */
+//    public <T> Disposable post(String url, Map<String, String> maps, ApiCallback<T> callback) {
+//        return this.post(url, maps, ClassUtil.getTClass(callback)).subscribe(new ApiCallbackSubscriber(context, callback));
+//    }
 
     /**
      * 带缓存POST方式请求，请求前需配置缓存key，缓存时间默认永久，还可以配置缓存策略，需传入实体类
@@ -198,18 +193,18 @@ public class ViseApi {
         return this.post(url, maps, clazz).compose(apiCache.transformer(cacheMode, clazz));
     }
 
-    /**
-     * 带缓存POST方式请求，请求前需配置缓存key，缓存时间默认永久，还可以配置缓存策略，无需订阅，只需配置Callback回调
-     *
-     * @param url
-     * @param maps
-     * @param callback
-     * @param <T>
-     * @return
-     */
-    public <T> Disposable cachePost(String url, Map<String, String> maps, ApiCallback<T> callback) {
-        return this.cachePost(url, maps, ClassUtil.getTClass(callback)).subscribe(new ApiCallbackSubscriber(context, callback));
-    }
+//    /**
+//     * 带缓存POST方式请求，请求前需配置缓存key，缓存时间默认永久，还可以配置缓存策略，无需订阅，只需配置Callback回调
+//     *
+//     * @param url
+//     * @param maps
+//     * @param callback
+//     * @param <T>
+//     * @return
+//     */
+//    public <T> Disposable cachePost(String url, Map<String, String> maps, ApiCallback<T> callback) {
+//        return this.cachePost(url, maps, ClassUtil.getTClass(callback)).subscribe(new ApiCallbackSubscriber(context, callback));
+//    }
 
     /**
      * 提交表单方式请求，需传入实体类
@@ -224,18 +219,18 @@ public class ViseApi {
         return apiService.postForm(url, fields).compose(this.norTransformer(clazz));
     }
 
-    /**
-     * 提交表单方式请求，无需订阅，只需传入Callback回调
-     *
-     * @param url
-     * @param fields
-     * @param callback
-     * @param <T>
-     * @return
-     */
-    public <T> Disposable form(final String url, final @FieldMap(encoded = true) Map<String, Object> fields, ApiCallback<T> callback) {
-        return this.form(url, fields, ClassUtil.getTClass(callback)).subscribe(new ApiCallbackSubscriber(context, callback));
-    }
+//    /**
+//     * 提交表单方式请求，无需订阅，只需传入Callback回调
+//     *
+//     * @param url
+//     * @param fields
+//     * @param callback
+//     * @param <T>
+//     * @return
+//     */
+//    public <T> Disposable form(final String url, final @FieldMap(encoded = true) Map<String, Object> fields, ApiCallback<T> callback) {
+//        return this.form(url, fields, ClassUtil.getTClass(callback)).subscribe(new ApiCallbackSubscriber(context, callback));
+//    }
 
     /**
      * 提交Body方式请求，需传入实体类
@@ -250,18 +245,18 @@ public class ViseApi {
         return apiService.postBody(url, body).compose(this.norTransformer(clazz));
     }
 
-    /**
-     * 提交Body方式请求，无需订阅，只需传入Callback回调
-     *
-     * @param url
-     * @param body
-     * @param callback
-     * @param <T>
-     * @return
-     */
-    public <T> Disposable body(final String url, final Object body, ApiCallback<T> callback) {
-        return this.body(url, body, ClassUtil.getTClass(callback)).subscribe(new ApiCallbackSubscriber(context, callback));
-    }
+//    /**
+//     * 提交Body方式请求，无需订阅，只需传入Callback回调
+//     *
+//     * @param url
+//     * @param body
+//     * @param callback
+//     * @param <T>
+//     * @return
+//     */
+//    public <T> Disposable body(final String url, final Object body, ApiCallback<T> callback) {
+//        return this.body(url, body, ClassUtil.getTClass(callback)).subscribe(new ApiCallbackSubscriber(context, callback));
+//    }
 
     /**
      * 删除信息请求，需传入实体类
@@ -276,18 +271,18 @@ public class ViseApi {
         return apiService.delete(url, maps).compose(this.norTransformer(clazz));
     }
 
-    /**
-     * 删除信息请求，无需订阅，只需传入Callback回调
-     *
-     * @param url
-     * @param maps
-     * @param callback
-     * @param <T>
-     * @return
-     */
-    public <T> Disposable delete(String url, Map<String, String> maps, ApiCallback<T> callback) {
-        return this.delete(url, maps, ClassUtil.getTClass(callback)).subscribe(new ApiCallbackSubscriber(context, callback));
-    }
+//    /**
+//     * 删除信息请求，无需订阅，只需传入Callback回调
+//     *
+//     * @param url
+//     * @param maps
+//     * @param callback
+//     * @param <T>
+//     * @return
+//     */
+//    public <T> Disposable delete(String url, Map<String, String> maps, ApiCallback<T> callback) {
+//        return this.delete(url, maps, ClassUtil.getTClass(callback)).subscribe(new ApiCallbackSubscriber(context, callback));
+//    }
 
     /**
      * 修改信息请求，需传入实体类
@@ -302,18 +297,18 @@ public class ViseApi {
         return apiService.put(url, maps).compose(this.norTransformer(clazz));
     }
 
-    /**
-     * 修改信息请求，无需订阅，只需传入Callback回调
-     *
-     * @param url
-     * @param maps
-     * @param callback
-     * @param <T>
-     * @return
-     */
-    public <T> Disposable put(String url, Map<String, String> maps, ApiCallback<T> callback) {
-        return this.put(url, maps, ClassUtil.getTClass(callback)).subscribe(new ApiCallbackSubscriber(context, callback));
-    }
+//    /**
+//     * 修改信息请求，无需订阅，只需传入Callback回调
+//     *
+//     * @param url
+//     * @param maps
+//     * @param callback
+//     * @param <T>
+//     * @return
+//     */
+//    public <T> Disposable put(String url, Map<String, String> maps, ApiCallback<T> callback) {
+//        return this.put(url, maps, ClassUtil.getTClass(callback)).subscribe(new ApiCallbackSubscriber(context, callback));
+//    }
 
     /**
      * 上传图片，需传入请求body和实体类
@@ -413,18 +408,18 @@ public class ViseApi {
         return apiService.get(url, maps).map(new ApiResultFunc<T>(clazz)).compose(this.<T>apiTransformer());
     }
 
-    /**
-     * 返回ApiResult<T>的Get方式请求，无需订阅，只需传入Callback回调
-     *
-     * @param url
-     * @param maps
-     * @param callback
-     * @param <T>
-     * @return
-     */
-    public <T> Disposable apiGet(final String url, final Map<String, String> maps, ApiCallback<T> callback) {
-        return this.apiGet(url, maps, ClassUtil.getTClass(callback)).subscribe(new ApiCallbackSubscriber(context, callback));
-    }
+//    /**
+//     * 返回ApiResult<T>的Get方式请求，无需订阅，只需传入Callback回调
+//     *
+//     * @param url
+//     * @param maps
+//     * @param callback
+//     * @param <T>
+//     * @return
+//     */
+//    public <T> Disposable apiGet(final String url, final Map<String, String> maps, ApiCallback<T> callback) {
+//        return this.apiGet(url, maps, ClassUtil.getTClass(callback)).subscribe(new ApiCallbackSubscriber(context, callback));
+//    }
 
     /**
      * 返回ApiResult<T>并带缓存的Get方式请求，需传入实体类
@@ -438,19 +433,19 @@ public class ViseApi {
     public <T> Observable<CacheResult<T>> apiCacheGet(final String url, final Map<String, String> maps, Class<T> clazz) {
         return this.apiGet(url, maps, clazz).compose(apiCache.transformer(cacheMode, clazz));
     }
-
-    /**
-     * 返回ApiResult<T>并带缓存的Get方式请求，无需订阅，只需传入Callback回调
-     *
-     * @param url
-     * @param maps
-     * @param callback
-     * @param <T>
-     * @return
-     */
-    public <T> Disposable apiCacheGet(final String url, final Map<String, String> maps, ApiCallback<T> callback) {
-        return this.apiCacheGet(url, maps, ClassUtil.getTClass(callback)).subscribe(new ApiCallbackSubscriber(context, callback));
-    }
+//
+//    /**
+//     * 返回ApiResult<T>并带缓存的Get方式请求，无需订阅，只需传入Callback回调
+//     *
+//     * @param url
+//     * @param maps
+//     * @param callback
+//     * @param <T>
+//     * @return
+//     */
+//    public <T> Disposable apiCacheGet(final String url, final Map<String, String> maps, ApiCallback<T> callback) {
+//        return this.apiCacheGet(url, maps, ClassUtil.getTClass(callback)).subscribe(new ApiCallbackSubscriber(context, callback));
+//    }
 
     /**
      * 返回ApiResult<T>的POST方式请求，需传入实体类
@@ -465,18 +460,18 @@ public class ViseApi {
         return apiService.post(url, parameters).map(new ApiResultFunc<T>(clazz)).compose(this.<T>apiTransformer());
     }
 
-    /**
-     * 返回ApiResult<T>的POST方式请求，无需订阅，只需传入Callback回调
-     *
-     * @param url
-     * @param parameters
-     * @param callback
-     * @param <T>
-     * @return
-     */
-    public <T> Disposable apiPost(final String url, final Map<String, String> parameters, ApiCallback<T> callback) {
-        return this.apiPost(url, parameters, ClassUtil.getTClass(callback)).subscribe(new ApiCallbackSubscriber(context, callback));
-    }
+//    /**
+//     * 返回ApiResult<T>的POST方式请求，无需订阅，只需传入Callback回调
+//     *
+//     * @param url
+//     * @param parameters
+//     * @param callback
+//     * @param <T>
+//     * @return
+//     */
+//    public <T> Disposable apiPost(final String url, final Map<String, String> parameters, ApiCallback<T> callback) {
+//        return this.apiPost(url, parameters, ClassUtil.getTClass(callback)).subscribe(new ApiCallbackSubscriber(context, callback));
+//    }
 
     /**
      * 返回ApiResult<T>并带缓存的POST方式请求，需传入实体类
@@ -491,18 +486,18 @@ public class ViseApi {
         return this.apiPost(url, parameters, clazz).compose(apiCache.transformer(cacheMode, clazz));
     }
 
-    /**
-     * 返回ApiResult<T>并带缓存的POST方式请求，无需订阅，只需传入Callback回调
-     *
-     * @param url
-     * @param parameters
-     * @param callback
-     * @param <T>
-     * @return
-     */
-    public <T> Disposable apiCachePost(final String url, final Map<String, String> parameters, ApiCallback<T> callback) {
-        return this.apiCachePost(url, parameters, ClassUtil.getTClass(callback)).subscribe(new ApiCallbackSubscriber(context, callback));
-    }
+//    /**
+//     * 返回ApiResult<T>并带缓存的POST方式请求，无需订阅，只需传入Callback回调
+//     *
+//     * @param url
+//     * @param parameters
+//     * @param callback
+//     * @param <T>
+//     * @return
+//     */
+//    public <T> Disposable apiCachePost(final String url, final Map<String, String> parameters, ApiCallback<T> callback) {
+//        return this.apiCachePost(url, parameters, ClassUtil.getTClass(callback)).subscribe(new ApiCallbackSubscriber(context, callback));
+//    }
 
     /**
      * 清楚所有缓存

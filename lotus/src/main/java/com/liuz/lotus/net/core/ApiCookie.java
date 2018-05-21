@@ -2,10 +2,11 @@ package com.liuz.lotus.net.core;
 
 import android.content.Context;
 
+import com.liuz.lotus.net.mode.CookiesStore;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.wwah.common.net.mode.CookiesStore;
 import okhttp3.Cookie;
 import okhttp3.CookieJar;
 import okhttp3.HttpUrl;

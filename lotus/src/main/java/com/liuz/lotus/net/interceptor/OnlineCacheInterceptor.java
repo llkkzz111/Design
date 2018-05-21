@@ -2,11 +2,11 @@ package com.liuz.lotus.net.interceptor;
 
 import android.text.TextUtils;
 
-import com.vise.log.ViseLog;
+import com.liuz.lotus.utils.JConfig;
+import com.liuz.lotus.utils.JLog;
 
 import java.io.IOException;
 
-import cn.wwah.common.JConfig;
 import okhttp3.Interceptor;
 import okhttp3.Response;
 
@@ -32,7 +32,7 @@ public class OnlineCacheInterceptor implements Interceptor {
         String cacheControl = originalResponse.header("Cache-Control");
         if (TextUtils.isEmpty(cacheControl) || cacheControl.contains("no-store") || cacheControl.contains("no-cache") || cacheControl
                 .contains("must-revalidate") || cacheControl.contains("max-age") || cacheControl.contains("max-stale")) {
-            ViseLog.d(originalResponse.headers());
+            JLog.d(originalResponse.headers().toString());
             return originalResponse.newBuilder()
                     .header("Cache-Control", "public, " + cacheControlValue)
                     .removeHeader("Pragma")

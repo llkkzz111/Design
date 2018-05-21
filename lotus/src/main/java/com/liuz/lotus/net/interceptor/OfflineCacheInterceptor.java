@@ -2,10 +2,11 @@ package com.liuz.lotus.net.interceptor;
 
 import android.content.Context;
 
+import com.liuz.lotus.utils.JConfig;
+import com.liuz.lotus.utils.assist.Network;
+
 import java.io.IOException;
 
-import cn.wwah.common.JConfig;
-import cn.wwah.common.assist.Network;
 import okhttp3.CacheControl;
 import okhttp3.Interceptor;
 import okhttp3.Request;

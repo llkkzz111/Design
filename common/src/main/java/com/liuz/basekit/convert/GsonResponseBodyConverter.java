@@ -5,8 +5,9 @@ import android.support.annotation.NonNull;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
-import com.vise.netexpand.common.ResponseHelper;
-import com.vise.netexpand.mode.ApiResult;
+import com.liuz.basekit.common.ResponseHelper;
+import com.liuz.basekit.mode.ApiResult;
+
 
 import java.io.IOException;
 import java.net.UnknownServiceException;

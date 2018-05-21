@@ -1,6 +1,6 @@
 package com.liuz.basekit.temp;
 
-import com.vise.netexpand.mode.ResponseCode;
+import com.liuz.basekit.mode.ResponseCode;
 
 import java.util.List;
 

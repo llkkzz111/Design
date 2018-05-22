@@ -6,4 +6,9 @@
     <string name="permission_allow">已经授权！</string>
     <string name="permission_refuse">拒绝授权，提示请求许可理由！</string>
     <string name="permission_noAsk">拒绝授权，不再提醒！</string>
+    <string name="permission_storage_title">权限申请</string>
+    <string name="permission_storage_des">在设置-应用-Design-权限中开启存储空间权限，以正常使用Design功能</string>
+    <string name="permission_noAsk3">拒绝授权，不再提醒！</string>
+    <string name="permission_cancel">取消</string>
+    <string name="permission_ok">去设置</string>
 </resources>

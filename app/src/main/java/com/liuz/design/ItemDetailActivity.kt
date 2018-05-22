@@ -1,8 +1,6 @@
 package com.liuz.design
 
-import android.view.Window
-import android.view.WindowManager
-import com.liuz.lotus.base.TranslucentBarBaseActivity
+import com.liuz.design.base.TranslucentBarBaseActivity
 
 /**
  * An activity representing a single Item detail screen. This

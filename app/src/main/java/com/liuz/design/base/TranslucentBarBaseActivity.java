@@ -1,4 +1,4 @@
-package com.liuz.lotus.base;
+package com.liuz.design.base;
 
 import android.app.Activity;
 import android.content.Context;

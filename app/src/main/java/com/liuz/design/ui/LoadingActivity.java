@@ -13,7 +13,6 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
-import com.liuz.design.ItemListActivity;
 import com.liuz.design.R;
 import com.liuz.design.base.TranslucentBarBaseActivity;
 import com.liuz.design.utils.DialogUtils;
@@ -109,7 +108,7 @@ public class LoadingActivity extends TranslucentBarBaseActivity {
             @Override
             public void accept(Long aLong) throws Exception {
                 Intent intent = new Intent();
-                intent.setClass(mContext, ItemListActivity.class);
+                intent.setClass(mContext, GuideActivity.class);
                 startActivity(intent);
                 finish();
             }

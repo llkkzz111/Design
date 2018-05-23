@@ -11,4 +11,7 @@
     <string name="permission_noAsk3">拒绝授权，不再提醒！</string>
     <string name="permission_cancel">取消</string>
     <string name="permission_ok">去设置</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

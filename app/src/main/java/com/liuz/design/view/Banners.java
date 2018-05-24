@@ -10,35 +10,20 @@ import android.os.Parcelable;
 public class Banners implements Parcelable {
     private int bannerRes;
     private int tipsRes;
-    public static final Creator<Banners> CREATOR = new Creator<Banners>() {
-        @Override
-        public Banners createFromParcel(Parcel source) {
-            return new Banners(source);
-        }
+    private int tipBtnRes;
+    private int tipDesRes;
 
-        @Override
-        public Banners[] newArray(int size) {
-            return new Banners[size];
-        }
-    };
-    private int tipHintRes;
-
-    public Banners(int bannerRes, int tipsRes) {
+    public Banners(int bannerRes, int tipsRes, int tipBtnRes, int tipDesRes) {
         this.bannerRes = bannerRes;
         this.tipsRes = tipsRes;
-        this.tipHintRes = -1;
+        this.tipBtnRes = tipBtnRes;
+        this.tipDesRes = tipDesRes;
     }
 
-    public Banners(int bannerRes, int tipsRes, int tipHintRes) {
+    public Banners(int bannerRes, int tipBtnRes) {
         this.bannerRes = bannerRes;
-        this.tipsRes = tipsRes;
-        this.tipHintRes = tipHintRes;
-    }
-
-    protected Banners(Parcel in) {
-        this.bannerRes = in.readInt();
-        this.tipsRes = in.readInt();
-        this.tipHintRes = in.readInt();
+        this.tipsRes = tipBtnRes;
+        this.tipBtnRes = -1;
     }
 
 
@@ -58,23 +43,52 @@ public class Banners implements Parcelable {
         this.tipsRes = tipsRes;
     }
 
+    public int getTipBtnRes() {
+        return tipBtnRes;
+    }
+
+    public void setTipBtnRes(int tipBtnRes) {
+        this.tipBtnRes = tipBtnRes;
+    }
+
+    public int getTipDesRes() {
+        return tipDesRes;
+    }
+
+    public void setTipDesRes(int tipDesRes) {
+        this.tipDesRes = tipDesRes;
+    }
+
+
     @Override
     public int describeContents() {
         return 0;
-    }
-
-    public int getTipHintRes() {
-        return tipHintRes;
-    }
-
-    public void setTipHintRes(int tipHintRes) {
-        this.tipHintRes = tipHintRes;
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(this.bannerRes);
         dest.writeInt(this.tipsRes);
-        dest.writeInt(this.tipHintRes);
+        dest.writeInt(this.tipBtnRes);
+        dest.writeInt(this.tipDesRes);
     }
+
+    protected Banners(Parcel in) {
+        this.bannerRes = in.readInt();
+        this.tipsRes = in.readInt();
+        this.tipBtnRes = in.readInt();
+        this.tipDesRes = in.readInt();
+    }
+
+    public static final Creator<Banners> CREATOR = new Creator<Banners>() {
+        @Override
+        public Banners createFromParcel(Parcel source) {
+            return new Banners(source);
+        }
+
+        @Override
+        public Banners[] newArray(int size) {
+            return new Banners[size];
+        }
+    };
 }

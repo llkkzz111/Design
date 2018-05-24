@@ -1,10 +1,11 @@
-﻿package com.liuz.design.base;
+package com.liuz.design.base;
 
 import android.app.Application;
 import android.content.Context;
 import android.support.multidex.MultiDex;
 
 import com.facebook.stetho.okhttp3.StethoInterceptor;
+import com.liuz.design.utils.UIManager;
 import com.liuz.lotus.net.ViseHttp;
 import com.liuz.lotus.net.interceptor.HttpLogInterceptor;
 import com.vise.log.ViseLog;
@@ -25,8 +26,13 @@ public class LotusApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        init();
         initLog();
         initNet();
+    }
+
+    private void init() {
+        UIManager.getInstance().setBaseContext(this);
     }
 
     private void initLog() {

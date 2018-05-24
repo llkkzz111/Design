@@ -12,21 +12,29 @@
         android:adjustViewBounds="true"
         android:scaleType="fitXY"/>
 
-
-    <ImageView
-        android:id="@+id/iv_btn"
-        android:layout_width="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="30dp"/>
     <ImageView
         android:id="@+id/iv_tips"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/iv_btn"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"/>
+
+    <ImageView
+        android:id="@+id/iv_btn"
+        android:layout_above="@+id/iv_tips"
+        android:layout_width="wrap_content"
+        android:layout_marginBottom="25dp"
+        android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"/>
+
+    <ImageView
+        android:id="@+id/iv_des"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/iv_btn"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"/>
     <ImageView
         android:id="@+id/iv_logo"
         android:layout_width="wrap_content"
@@ -36,6 +44,5 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
         app:srcCompat="@drawable/logo_164x52"/>
-
 
 </RelativeLayout>

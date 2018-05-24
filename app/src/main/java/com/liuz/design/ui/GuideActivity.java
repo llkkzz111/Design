@@ -32,7 +32,7 @@ public class GuideActivity extends TranslucentBarBaseActivity {
         list.add(new Banners(R.drawable.lead_bg1, R.drawable.lead_bg1_iv));
         list.add(new Banners(R.drawable.lead_bg2, R.drawable.lead_bg2_iv));
         list.add(new Banners(R.drawable.lead_bg3, R.drawable.lead_bg3_iv));
-        list.add(new Banners(R.drawable.lead_bg4, R.drawable.lead_bg4_des, R.drawable.lead_bg4_btn));
+        list.add(new Banners(R.drawable.lead_bg4, R.drawable.lead_bg4_iv, R.drawable.lead_bg4_btn,R.drawable.lead_bg4_des));
         vpBanner.setAdapter(new BannerAdapter(getSupportFragmentManager()));
     }
 

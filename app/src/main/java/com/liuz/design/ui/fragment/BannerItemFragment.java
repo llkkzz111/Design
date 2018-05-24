@@ -1,5 +1,6 @@
 package com.liuz.design.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -8,10 +9,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.liuz.design.R;
+import com.liuz.design.ui.MainActivity;
+import com.liuz.design.utils.PreferencesUtils;
 import com.liuz.design.view.Banners;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 
 
@@ -22,6 +26,7 @@ public class BannerItemFragment extends Fragment {
     @BindView(R.id.iv_btn) ImageView ivBtn;
     @BindView(R.id.iv_logo) ImageView ivLogo;
     @BindView(R.id.iv_tips) ImageView ivTips;
+    @BindView(R.id.iv_des) ImageView ivDes;
     private Banners banner;
     private Unbinder unbinder;
 
@@ -45,6 +50,14 @@ public class BannerItemFragment extends Fragment {
         }
     }
 
+    @OnClick(R.id.iv_btn)
+    void onViewClick() {
+        PreferencesUtils.setFirstVisitState(false);
+        startActivity(new Intent(getActivity(), MainActivity.class));
+
+        getActivity().finish();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -52,13 +65,14 @@ public class BannerItemFragment extends Fragment {
         unbinder = ButterKnife.bind(this, view);
         ivBanner.setBackgroundResource(banner.getBannerRes());
         ivTips.setBackgroundResource(banner.getTipsRes());
-        if (banner.getTipHintRes() > 0) {
+        if (banner.getTipBtnRes() > 0) {
             ivLogo.setVisibility(View.GONE);
-            ivBtn.setBackgroundResource(banner.getTipHintRes());
+            ivBtn.setBackgroundResource(banner.getTipBtnRes());
+            ivDes.setBackgroundResource(banner.getTipDesRes());
         }else{
-
+            ivBtn.setVisibility(View.GONE);
+            ivDes.setVisibility(View.GONE);
         }
-
 
         return view;
     }

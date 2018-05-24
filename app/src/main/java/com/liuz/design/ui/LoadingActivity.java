@@ -16,6 +16,7 @@ import com.bumptech.glide.request.transition.Transition;
 import com.liuz.design.R;
 import com.liuz.design.base.TranslucentBarBaseActivity;
 import com.liuz.design.utils.DialogUtils;
+import com.liuz.design.utils.PreferencesUtils;
 import com.liuz.lotus.loader.GlideApp;
 import com.liuz.lotus.permission.Permission;
 import com.liuz.lotus.permission.RxPermissions;
@@ -108,7 +109,11 @@ public class LoadingActivity extends TranslucentBarBaseActivity {
             @Override
             public void accept(Long aLong) throws Exception {
                 Intent intent = new Intent();
-                intent.setClass(mContext, GuideActivity.class);
+                if (PreferencesUtils.getFirstVisitState()) {
+                    intent.setClass(mContext, GuideActivity.class);
+                } else {
+                    intent.setClass(mContext, MainActivity.class);
+                }
                 startActivity(intent);
                 finish();
             }

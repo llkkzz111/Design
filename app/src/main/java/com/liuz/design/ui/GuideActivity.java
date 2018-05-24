@@ -4,7 +4,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.widget.LinearLayout;
 
 import com.liuz.design.R;
 import com.liuz.design.base.TranslucentBarBaseActivity;
@@ -20,7 +19,6 @@ public class GuideActivity extends TranslucentBarBaseActivity {
 
     private static List<Banners> list;
     @BindView(R.id.vp_banner) ViewPager vpBanner;
-    @BindView(R.id.ll_dots) LinearLayout llDots;
 
     @Override
     protected int getLayoutResId() {
@@ -34,10 +32,9 @@ public class GuideActivity extends TranslucentBarBaseActivity {
         list.add(new Banners(R.drawable.lead_bg1, R.drawable.lead_bg1_iv));
         list.add(new Banners(R.drawable.lead_bg2, R.drawable.lead_bg2_iv));
         list.add(new Banners(R.drawable.lead_bg3, R.drawable.lead_bg3_iv));
-        list.add(new Banners(R.drawable.lead_bg4, R.drawable.lead_bg4_btn));
+        list.add(new Banners(R.drawable.lead_bg4, R.drawable.lead_bg4_des, R.drawable.lead_bg4_btn));
         vpBanner.setAdapter(new BannerAdapter(getSupportFragmentManager()));
     }
-
 
     static class BannerAdapter extends FragmentPagerAdapter {
 
@@ -45,19 +42,16 @@ public class GuideActivity extends TranslucentBarBaseActivity {
             super(fm);
         }
 
-
         @Override
         public int getCount() {
             return list.size();
         }
-
 
         @Override
         public Fragment getItem(int position) {
             BannerItemFragment fragment = BannerItemFragment.newInstance(list.get(position));
             return fragment;
         }
-
 
     }
 }

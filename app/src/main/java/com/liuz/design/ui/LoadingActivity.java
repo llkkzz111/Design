@@ -104,7 +104,7 @@ public class LoadingActivity extends TranslucentBarBaseActivity {
     }
 
     private void Timer() {
-        Observable.timer(3, TimeUnit.SECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<Long>() {
+        Observable.timer(1, TimeUnit.SECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<Long>() {
             @Override
             public void accept(Long aLong) throws Exception {
                 Intent intent = new Intent();

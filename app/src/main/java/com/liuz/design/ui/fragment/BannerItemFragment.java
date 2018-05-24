@@ -9,7 +9,6 @@ import android.widget.ImageView;
 
 import com.liuz.design.R;
 import com.liuz.design.view.Banners;
-import com.liuz.lotus.loader.LoaderFactory;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -20,18 +19,20 @@ public class BannerItemFragment extends Fragment {
 
     private static final String bannerStr = "bannerItem";
     @BindView(R.id.iv_banner) ImageView ivBanner;
+    @BindView(R.id.iv_btn) ImageView ivBtn;
+    @BindView(R.id.iv_logo) ImageView ivLogo;
     @BindView(R.id.iv_tips) ImageView ivTips;
-    private Banners banners;
+    private Banners banner;
     private Unbinder unbinder;
 
     public BannerItemFragment() {
         // Required empty public constructor
     }
 
-    public static BannerItemFragment newInstance(Banners param1) {
+    public static BannerItemFragment newInstance(Banners banner) {
         BannerItemFragment fragment = new BannerItemFragment();
         Bundle args = new Bundle();
-        args.putParcelable(bannerStr, param1);
+        args.putParcelable(bannerStr, banner);
         fragment.setArguments(args);
         return fragment;
     }
@@ -40,7 +41,7 @@ public class BannerItemFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            banners = getArguments().getParcelable(bannerStr);
+            banner = getArguments().getParcelable(bannerStr);
         }
     }
 
@@ -49,10 +50,15 @@ public class BannerItemFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_banner_item_layout, container, false);
         unbinder = ButterKnife.bind(this, view);
+        ivBanner.setBackgroundResource(banner.getBannerRes());
+        ivTips.setBackgroundResource(banner.getTipsRes());
+        if (banner.getTipHintRes() > 0) {
+            ivLogo.setVisibility(View.GONE);
+            ivBtn.setBackgroundResource(banner.getTipHintRes());
+        }else{
 
-        ivBanner.setBackgroundResource(banners.getBannerRes());
+        }
 
-        LoaderFactory.getLoader().loadResource(ivTips, banners.getTipsRes(), null);
 
         return view;
     }

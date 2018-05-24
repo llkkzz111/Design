@@ -1,4 +1,4 @@
-package com.liuz.design.base;
+﻿package com.liuz.design.base;
 
 import android.app.Application;
 import android.content.Context;
@@ -48,5 +48,10 @@ public class LotusApplication extends Application {
                         .setLevel(HttpLogInterceptor.Level.BODY));
 
     }
+
+    private void myCode(){
+
+      //lhhan add for test push code
+   }
 
 }

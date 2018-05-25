@@ -15,7 +15,7 @@ import com.vise.log.inner.LogcatTree;
  * date: 2018/5/17 16:19
  * author liuzhao
  */
-public class LotusApplication extends Application {
+public class  LotusApplication extends Application {
 
     @Override
     protected void attachBaseContext(Context base) {

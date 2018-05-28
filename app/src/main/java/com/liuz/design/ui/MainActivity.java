@@ -7,11 +7,14 @@ import android.widget.TextView;
 
 import com.liuz.design.R;
 import com.liuz.design.base.TranslucentBarBaseActivity;
+import com.liuz.design.utils.BottomNavigationViewHelper;
+
+import butterknife.BindView;
 
 public class MainActivity extends TranslucentBarBaseActivity {
 
-    private TextView mTextMessage;
 
+    @BindView(R.id.navigation) BottomNavigationView navigation;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -19,13 +22,19 @@ public class MainActivity extends TranslucentBarBaseActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    mTextMessage.setText(R.string.title_home);
+
                     return true;
-                case R.id.navigation_dashboard:
-                    mTextMessage.setText(R.string.title_dashboard);
+                case R.id.navigation_ticket:
+
                     return true;
-                case R.id.navigation_notifications:
-                    mTextMessage.setText(R.string.title_notifications);
+                case R.id.navigation_shop:
+
+                    return true;
+                case R.id.navigation_live:
+
+                    return true;
+                case R.id.navigation_me:
+
                     return true;
             }
             return false;
@@ -39,8 +48,8 @@ public class MainActivity extends TranslucentBarBaseActivity {
 
     @Override
     protected void initEventAndData() {
-        mTextMessage = (TextView) findViewById(R.id.message);
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+
+        BottomNavigationViewHelper.disableShiftMode(navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 

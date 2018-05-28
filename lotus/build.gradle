@@ -42,16 +42,15 @@ dependencies {
     api 'com.squareup.retrofit2:converter-simplexml:2.4.0'
     api 'com.squareup.retrofit2:converter-scalars:2.4.0'
     api 'com.squareup.retrofit2:converter-jackson:2.4.0'
-
     api 'com.trello.rxlifecycle2:rxlifecycle:2.2.1'
     api 'com.trello.rxlifecycle2:rxlifecycle-android:2.2.1'
     api 'com.trello.rxlifecycle2:rxlifecycle-components:2.2.1'
-
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.10.0'
+    api 'com.squareup.okhttp3:logging-interceptor:3.10.0'
     api 'com.facebook.stetho:stetho-okhttp3:1.5.0'
     api 'com.github.bumptech.glide:glide:4.7.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
     api 'io.reactivex.rxjava2:rxandroid:2.0.2'
     api 'io.reactivex.rxjava2:rxjava:2.1.14-RC1'
     api 'com.vise.xiaoyaoyou:viseutils:1.1.0'
+    api 'com.squareup.okhttp3:okhttp:3.10.0'
 }

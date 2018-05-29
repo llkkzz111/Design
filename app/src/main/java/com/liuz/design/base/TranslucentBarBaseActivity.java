@@ -112,4 +112,10 @@ public abstract class TranslucentBarBaseActivity extends RxAppCompatActivity {
         super.onDestroy();
         ActivityStack.getInstance().remove(this);
     }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return super.onSupportNavigateUp();
+    }
 }

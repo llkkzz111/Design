@@ -1,20 +1,21 @@
 package com.liuz.design.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.liuz.db.AreaBean;
+import com.liuz.db.AreasDatabase;
 import com.liuz.design.R;
-import com.liuz.design.api.MTimeApiService;
 import com.liuz.design.base.BaseFragment;
 import com.liuz.design.bean.AreasBean;
+import com.liuz.design.ui.AreaActivity;
 import com.liuz.design.utils.AssetsUtils;
 import com.liuz.design.view.Banners;
-import com.liuz.lotus.net.ViseHttp;
-import com.liuz.lotus.net.callback.ACallback;
-import com.liuz.lotus.net.core.ApiTransformer;
-import com.liuz.lotus.net.subscriber.ApiCallbackSubscriber;
-import com.vise.log.ViseLog;
+
+import java.util.List;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -22,7 +23,12 @@ import javax.net.ssl.SSLSession;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import okhttp3.OkHttpClient;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 
 /**
@@ -62,26 +68,26 @@ public class HomeFragment extends BaseFragment {
 
     @OnClick({R.id.btn_area})
     void onViewClick() {
-        ViseHttp.RETROFIT()
-                .addHeader("Host", "api-m.mtime.cn")
-                .create(MTimeApiService.class)
-                .getAreas()
-                .compose(ApiTransformer.<AreasBean>norTransformer())
-                .subscribe(new ApiCallbackSubscriber<>(new ACallback<AreasBean>() {
-                    @Override
-                    public void onSuccess(AreasBean authorModel) {
-                        ViseLog.i("request onSuccess!");
-                        if (authorModel == null) {
-                            return;
-                        }
 
-                    }
+        startActivity(new Intent(mContext, AreaActivity.class));
 
+        Observable.create(new ObservableOnSubscribe<List<AreaBean>>() {
+            @Override
+            public void subscribe(ObservableEmitter<List<AreaBean>> emitter) throws Exception {
+                List<AreaBean> list = AreasDatabase.getInstance(mContext).areaDao().getAreasDes("A");
+                emitter.onNext(list);
+            }
+
+
+        })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<List<AreaBean>>() {
                     @Override
-                    public void onFail(int errCode, String errMsg) {
-                        ViseLog.e("request errorCode:" + errCode + ",errorMsg:" + errMsg);
+                    public void accept(List<AreaBean> areaBeans) throws Exception {
+                        Toast.makeText(mContext,areaBeans.toString(),Toast.LENGTH_LONG).show();
                     }
-                }));
+                });
 
     }
 }

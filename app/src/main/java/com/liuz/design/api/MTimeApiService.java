@@ -14,6 +14,6 @@ public interface MTimeApiService {
     @Headers({
             "Host:api-m.mtime.cn"
     })
-    @GET("https://api-m.mtime.cn/Showtime/HotCitiesByCinema.api")
+    @GET("http://api-m.mtime.cn/Showtime/HotCitiesByCinema.api")
     Observable<AreasBean> getAreas();
 }

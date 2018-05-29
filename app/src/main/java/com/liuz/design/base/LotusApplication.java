@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.support.multidex.MultiDex;
 
+import com.facebook.stetho.Stetho;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.liuz.design.R;
 import com.liuz.design.utils.UIManager;
@@ -14,16 +15,11 @@ import com.vise.log.inner.LogcatTree;
 import java.io.InputStream;
 import java.security.KeyStore;
 import java.security.SecureRandom;
-import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 
-import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocketFactory;
-import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
-import javax.net.ssl.X509TrustManager;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -93,13 +89,12 @@ public class LotusApplication extends Application {
     }
 
     private void onHttpCertficates(OkHttpClient.Builder builder) {
-        int[] certficates = new int[]{R.raw.card3};
+        int[] certficates = new int[]{R.raw.mtimecn};
         builder.socketFactory(getSSLSocketFactory(getBaseContext(), certficates));
     }
 
     private void init() {
         UIManager.getInstance().setBaseContext(this);
-
     }
 
     private void initNet() {
@@ -112,51 +107,25 @@ public class LotusApplication extends Application {
                 .networkInterceptor(new StethoInterceptor())
                 .interceptor(new HttpLoggingInterceptor()
                         .setLevel(HttpLoggingInterceptor.Level.HEADERS));
+        initStetho();
 
-        onHttpCertficates(ViseHttp.getOkHttpBuilder());
-//        onHttps(ViseHttp.getOkHttpBuilder())
+    }
+
+    /**
+     * 添加网络请求监测
+     */
+    private void initStetho() {
+        Stetho.initialize(
+                Stetho.newInitializerBuilder(this)
+                        .enableDumpapp(
+                                Stetho.defaultDumperPluginsProvider(this))
+                        .enableWebKitInspector(
+                                Stetho.defaultInspectorModulesProvider(this))
+                        .build());
     }
 
 
-    public static SSLSocketFactory getSSLSocketFactory() throws Exception {
-        //创建一个不验证证书链的证书信任管理器。
-        final TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
-            @Override
-            public void checkClientTrusted(
-                    java.security.cert.X509Certificate[] chain,
-                    String authType) throws CertificateException {
-            }
-
-            @Override
-            public void checkServerTrusted(
-                    java.security.cert.X509Certificate[] chain,
-                    String authType) throws CertificateException {
-            }
-
-            @Override
-            public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-                return new java.security.cert.X509Certificate[0];
-            }
-        }};
-
-        // Install the all-trusting trust manager
-        final SSLContext sslContext = SSLContext.getInstance("TLS");
-        sslContext.init(null, trustAllCerts,
-                new java.security.SecureRandom());
-        // Create an ssl socket factory with our all-trusting manager
-        return sslContext
-                .getSocketFactory();
-    }
 
 
-    //使用自定义SSLSocketFactory
-    private void onHttps(OkHttpClient.Builder builder) {
-        try {
-            builder.sslSocketFactory(getSSLSocketFactory()).hostnameVerifier(org.apache.http.conn.ssl.SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
 
 }

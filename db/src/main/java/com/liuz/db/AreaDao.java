@@ -46,14 +46,14 @@ public interface AreaDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertUser(AreaBean area);
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(List<AreaBean> areas);
 
 
     @Query("DELETE FROM areas")
     void deleteAllAreas();
 
-    @Query("SELECT * FROM areas order by  count desc LIMIT 10")
+    @Query("SELECT * FROM areas order by  count desc LIMIT 12")
     List<AreaBean> getAreas12();
 
     @Query("SELECT  * FROM areas  WHERE pinyinfull LIKE :letter|| '%' ORDER BY pinyinfull")

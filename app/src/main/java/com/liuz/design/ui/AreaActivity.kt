@@ -1,5 +1,6 @@
 package com.liuz.design.ui
 
+import android.text.TextUtils
 import com.liuz.db.AreaBean
 import com.liuz.db.AreasDatabase
 import com.liuz.design.R
@@ -10,6 +11,9 @@ import com.liuz.lotus.net.ViseHttp
 import com.liuz.lotus.net.callback.ACallback
 import com.liuz.lotus.net.subscriber.ApiCallbackSubscriber
 import com.vise.log.ViseLog
+import io.reactivex.Observable
+import io.reactivex.ObservableOnSubscribe
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import java.util.*
 
@@ -22,23 +26,35 @@ class AreaActivity : TranslucentBarBaseActivity() {
         return R.layout.activity_area_layout
     }
 
+    val citysList = ArrayList<List<AreaBean>>()
     override fun initEventAndData() {
         setTitle("城市选择")
-
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        supportActionBar!!.setHomeButtonEnabled(true);
         initData()
     }
 
     private fun initData() {
 
 
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        supportActionBar!!.setHomeButtonEnabled(true);
+        val limeits = "abcdefghijklmnopqrstuvwxyz"
 
+        Observable.create(ObservableOnSubscribe<List<AreaBean>> { emitter ->
+            var list = AreasDatabase.getInstance(mContext).areaDao().areas12
+            emitter.onNext(list)
+            for (a in limeits.split("".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()) {
+                if (!TextUtils.isEmpty(a)) {
+                    list = AreasDatabase.getInstance(mContext).areaDao().getAreasDes(a)
+                    emitter.onNext(list)
+                }
+            }
+        })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { areaBeans ->
+                    citysList.add(areaBeans)
+                }
 
-        val citysList = ArrayList<List<AreaBean>>()
-
-
-//        citysList.add(AreasDatabase.getInstance(mContext).areaDao().getAreas12())
 
         ViseHttp.RETROFIT<Any>()
                 .addHeader("Host", "api-m.mtime.cn")
@@ -52,7 +68,6 @@ class AreaActivity : TranslucentBarBaseActivity() {
                         if (authorModel == null) {
                             return
                         } else {
-                            AreasDatabase.getInstance(baseContext).areaDao().deleteAllAreas()
                             AreasDatabase.getInstance(mContext).areaDao().insertAll(authorModel.p)
 
                         }

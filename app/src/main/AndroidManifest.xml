@@ -38,7 +38,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.GuideActivity"/>
-        <activity android:name=".ui.AreaActivity"/>
+        <activity
+            android:name=".ui.AreaActivity"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"
+            android:configChanges="orientation|keyboardHidden"/>
 
         <activity
             android:name=".ui.MainActivity"

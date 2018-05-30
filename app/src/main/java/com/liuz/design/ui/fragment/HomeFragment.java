@@ -2,12 +2,10 @@ package com.liuz.design.ui.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Button;
 
 import com.liuz.db.AreaBean;
-import com.liuz.db.AreasDatabase;
 import com.liuz.design.R;
 import com.liuz.design.base.BaseFragment;
 import com.liuz.design.ui.AreaActivity;
@@ -96,10 +94,6 @@ public class HomeFragment extends BaseFragment {
 
     @OnClick({R.id.btn_area})
     void onViewClick() {
-
         startActivity(new Intent(mContext, AreaActivity.class));
-
-
-
     }
 }

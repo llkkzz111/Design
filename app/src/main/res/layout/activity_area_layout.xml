@@ -13,7 +13,7 @@
         android:padding="5dp">
 
         <EditText
-            android:id="@+id/editText"
+            android:id="@+id/et_city"
             android:layout_width="0dp"
             android:layout_height="45dp"
             android:layout_weight="1"
@@ -24,6 +24,7 @@
             />
 
         <TextView
+            android:id="@+id/tv_clear"
             android:layout_width="60dp"
             android:layout_height="45dp"
             android:gravity="center"
@@ -32,11 +33,12 @@
     </LinearLayout>
 
     <View
-        android:layout_width="1px"
-        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
         android:background="@color/color_AAA"/>
 
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_areas"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 </LinearLayout>

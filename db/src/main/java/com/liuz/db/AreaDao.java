@@ -56,7 +56,7 @@ public interface AreaDao {
     @Query("SELECT * FROM areas order by  count desc LIMIT 12")
     List<AreaBean> getAreas12();
 
-    @Query("SELECT  * FROM areas  WHERE pinyinfull LIKE :letter|| '%' ORDER BY pinyinfull")
+    @Query("SELECT  * FROM areas  WHERE pinyinfull LIKE :letter|| '%' ORDER BY count DESC")
     List<AreaBean> getAreasDes(String letter);
 
 }

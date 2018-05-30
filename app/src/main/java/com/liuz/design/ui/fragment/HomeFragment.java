@@ -8,13 +8,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.amap.api.location.AMapLocation;
-import com.amap.api.location.AMapLocationClient;
-import com.amap.api.location.AMapLocationClientOption;
-import com.amap.api.location.AMapLocationListener;
-import com.liuz.db.AreaBean;
 import com.liuz.design.R;
 import com.liuz.design.base.BaseFragment;
 import com.liuz.design.ui.AreaActivity;
@@ -23,13 +21,10 @@ import com.liuz.design.view.Banners;
 import com.liuz.lotus.permission.Permission;
 import com.liuz.lotus.permission.RxPermissions;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Unbinder;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -47,11 +42,10 @@ import static android.support.constraint.Constraints.TAG;
 public class HomeFragment extends BaseFragment {
 
 
-
-
-
     String areaJson = "file:///android_asset/area.json";
     @BindView(R.id.btn_area) Button btnArea;
+    @BindView(R.id.btn_hot) Button btnHot;
+
 
     public HomeFragment() {
 
@@ -68,8 +62,6 @@ public class HomeFragment extends BaseFragment {
     protected int getlayoutId() {
         return R.layout.fragment_home_layout;
     }
-
-    List<List<AreaBean>> citysList = new ArrayList<>();
 
     @Override
     protected void initEventAndData() {
@@ -109,7 +101,9 @@ public class HomeFragment extends BaseFragment {
 
 
     }
+
     private String[] permissions = {Manifest.permission.ACCESS_COARSE_LOCATION};
+
     @OnClick({R.id.btn_area})
     void onViewClick() {
 
@@ -152,7 +146,6 @@ public class HomeFragment extends BaseFragment {
         } else {
             startActivity(new Intent(mContext, AreaActivity.class));
         }
-
 
     }
 }

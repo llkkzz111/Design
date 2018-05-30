@@ -21,6 +21,7 @@ import com.liuz.design.bean.AreasBean
 import com.liuz.design.bindView
 import com.liuz.design.ui.adapter.AreasAdapter
 import com.liuz.design.ui.adapter.SearchCityAdapter
+import com.liuz.design.utils.PreferencesUtils
 import com.liuz.design.utils.Utils
 import com.liuz.lotus.net.ViseHttp
 import com.liuz.lotus.net.callback.ACallback
@@ -29,6 +30,7 @@ import com.vise.log.ViseLog
 import io.reactivex.Observable
 import io.reactivex.ObservableOnSubscribe
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.Schedulers
 import java.text.SimpleDateFormat
 import java.util.*
@@ -116,8 +118,19 @@ class AreaActivity : TranslucentBarBaseActivity() {
                     val df = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
                     val date = Date(amapLocation.time)
                     df.format(date)//定位时间
-                    tvCity.setText(amapLocation.city.substring(0, amapLocation.city.length - 1))
+                    var city = amapLocation.city.substring(0, amapLocation.city.length - 1)
+                    tvCity.setText(city)
                     mlocationClient.stopLocation()
+
+                    Observable.create(ObservableOnSubscribe<String> { emitter ->
+                        var list = AreasDatabase.getInstance(mContext).areaDao().areas
+                        for (bean in list) {
+                            if (bean.n.equals(city)){
+                                PreferencesUtils.setLocationID(bean.id)
+                                break
+                            }
+                        }
+                    }).subscribeOn(Schedulers.io()).subscribe(Consumer {  })
                 } else {
                     //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
                     Log.e("AmapError", "location Error, ErrCode:"

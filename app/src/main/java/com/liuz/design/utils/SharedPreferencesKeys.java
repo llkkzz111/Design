@@ -15,11 +15,11 @@ public class SharedPreferencesKeys {
      */
     public static final String IS_LOGIN = "islogin";
     /**
-     * 是否登录
+     * location
      */
-    public static final String USER_ID = "user_id";
+    public static final String LOCATION_ID = "location_id";
     /**
-     * 是否登录
+     * 当前版本
      */
     public static final String CURRENT_VERSION = "current_version";
 

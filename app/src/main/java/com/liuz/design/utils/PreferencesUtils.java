@@ -30,22 +30,22 @@ public class PreferencesUtils {
     }
 
     /**
-     * 读取UserId
+     * 读取location_Id
      *
      * @return
      */
-    public static int getUserId() {
-        return getInt(SharedPreferencesKeys.USER_ID);
+    public static int getLocationID() {
+        return getInt(SharedPreferencesKeys.LOCATION_ID);
     }
 
     /**
-     * 设置UserId
+     * 设置location_Id
      *
-     * @param UserId
+     * @param locationId
      * @return
      */
-    public static boolean setUserId(int UserId) {
-        return putInt(SharedPreferencesKeys.USER_ID, UserId);
+    public static boolean setLocationID(int locationId) {
+        return putInt(SharedPreferencesKeys.LOCATION_ID, locationId);
     }
 
 

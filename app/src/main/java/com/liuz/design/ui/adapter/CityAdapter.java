@@ -10,11 +10,13 @@ import android.widget.TextView;
 
 import com.liuz.db.AreaBean;
 import com.liuz.design.R;
+import com.liuz.design.utils.PreferencesUtils;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * date: 2018/5/30 12:00
@@ -44,7 +46,7 @@ public class CityAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         AreaBean areaBean = areaList.get(position);
         ViewHolder viewHolder = (ViewHolder) holder;
-        viewHolder.tvCity.setText(areaBean.getN());
+        viewHolder.showView(areaBean);
     }
 
     @Override
@@ -55,10 +57,20 @@ public class CityAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.tv_city) TextView tvCity;
-
+        private AreaBean areaBean;
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+        }
+
+        @OnClick(R.id.tv_city)
+        void onViewClick() {
+            PreferencesUtils.setLocationID(areaBean.getId());
+        }
+
+        public void showView(AreaBean areaBean) {
+            this.areaBean = areaBean;
+            tvCity.setText(areaBean.getN());
         }
     }
 

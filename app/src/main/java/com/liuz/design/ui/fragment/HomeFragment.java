@@ -1,17 +1,31 @@
 package com.liuz.design.ui.fragment;
 
+import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.widget.Button;
 
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationClientOption;
+import com.amap.api.location.AMapLocationListener;
 import com.liuz.db.AreaBean;
 import com.liuz.design.R;
 import com.liuz.design.base.BaseFragment;
 import com.liuz.design.ui.AreaActivity;
+import com.liuz.design.utils.DialogUtils;
 import com.liuz.design.view.Banners;
+import com.liuz.lotus.permission.Permission;
+import com.liuz.lotus.permission.RxPermissions;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -32,11 +46,15 @@ import static android.support.constraint.Constraints.TAG;
  */
 public class HomeFragment extends BaseFragment {
 
+
+
+
+
     String areaJson = "file:///android_asset/area.json";
     @BindView(R.id.btn_area) Button btnArea;
 
     public HomeFragment() {
-        // Required empty public constructor
+
     }
 
     public static HomeFragment newInstance(Banners banner) {
@@ -91,9 +109,50 @@ public class HomeFragment extends BaseFragment {
 
 
     }
-
+    private String[] permissions = {Manifest.permission.ACCESS_COARSE_LOCATION};
     @OnClick({R.id.btn_area})
     void onViewClick() {
-        startActivity(new Intent(mContext, AreaActivity.class));
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && getActivity() != null) {
+            RxPermissions rxPermissions = new RxPermissions(getActivity());
+            rxPermissions.requestEach(permissions).subscribe(new Consumer<Permission>() {
+                @Override
+                public void accept(Permission permission) throws Exception {
+                    if (permission.granted) {
+                        startActivity(new Intent(mContext, AreaActivity.class));
+                    } else if (permission.shouldShowRequestPermissionRationale) {
+                        // 重新获取权限
+                        startActivity(new Intent(mContext, AreaActivity.class));
+                    } else {
+                        //提示
+                        DialogUtils.showTips(getActivity(), R.string.permission_storage_title, R.string.permission_storage_des,
+                                R.string.permission_cancel, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        getActivity().finish();
+                                    }
+
+
+                                },
+                                R.string.permission_ok, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Uri packageURI = Uri.parse("package:" + "com.liuz.design");
+                                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, packageURI);
+                                        startActivity(intent);
+                                        getActivity().finish();
+                                    }
+
+                                });
+
+
+                    }
+                }
+            });
+        } else {
+            startActivity(new Intent(mContext, AreaActivity.class));
+        }
+
+
     }
 }

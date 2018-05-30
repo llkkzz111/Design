@@ -4,9 +4,12 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.liuz.db.AreaBean;
@@ -50,6 +53,22 @@ public class AreasAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         } else {
             viewHolder.tvLetter.setText(list.get(0).getPinyinShort().substring(0, 1).toUpperCase());
         }
+        new EditText(mContext).addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         viewHolder.rvCity.setLayoutManager(new GridLayoutManager(mContext, 4));
         viewHolder.rvCity.setAdapter(new CityAdapter(mContext, list));
 

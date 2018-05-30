@@ -59,4 +59,7 @@ public interface AreaDao {
     @Query("SELECT  * FROM areas  WHERE pinyinfull LIKE :letter|| '%' ORDER BY count DESC")
     List<AreaBean> getAreasDes(String letter);
 
+    @Query("SELECT  * FROM areas  WHERE pinyinfull LIKE  '%' || :letter|| '%'OR pinyinShort LIKE '%' ||  :letter|| '%' OR n LIKE  '%' ||  :letter|| '%'  ORDER BY count DESC")
+    List<AreaBean> getSearchAreasDes(String letter);
+
 }

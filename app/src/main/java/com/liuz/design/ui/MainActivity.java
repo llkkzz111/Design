@@ -9,7 +9,9 @@ import com.liuz.design.R;
 import com.liuz.design.base.TranslucentBarBaseActivity;
 import com.liuz.design.ui.adapter.PageTableFragmentAdapter;
 import com.liuz.design.utils.BottomNavigationViewHelper;
+import com.liuz.design.utils.Utils;
 import com.liuz.design.view.CustomViewPager;
+import com.vise.log.ViseLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,6 +69,7 @@ public class MainActivity extends TranslucentBarBaseActivity {
         PageTableFragmentAdapter adapter = new PageTableFragmentAdapter(getSupportFragmentManager(), listMain);
         vpMain.setAdapter(adapter);
         vpMain.setScanScroll(false);
+        ViseLog.e(Utils.sHA1(mContext));
     }
 
 }

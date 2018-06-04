@@ -122,7 +122,7 @@ class AreaActivity : TranslucentBarBaseActivity() {
                     tvCity.setText(city)
                     mlocationClient.stopLocation()
 
-                    Observable.create(ObservableOnSubscribe<String> { emitter ->
+                    Observable.create(ObservableOnSubscribe<String> { _ ->
                         var list = AreasDatabase.getInstance(mContext).areaDao().areas
                         for (bean in list) {
                             if (bean.n.equals(city)){

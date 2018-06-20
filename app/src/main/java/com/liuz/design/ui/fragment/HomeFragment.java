@@ -14,7 +14,7 @@ import android.widget.Button;
 import com.liuz.design.R;
 import com.liuz.design.base.BaseFragment;
 import com.liuz.design.ui.AreaActivity;
-import com.liuz.design.ui.MTimesMoviesActivity;
+import com.liuz.design.ui.movies.MTimesMoviesActivity;
 import com.liuz.design.utils.DialogUtils;
 import com.liuz.design.view.Banners;
 import com.liuz.lotus.permission.Permission;

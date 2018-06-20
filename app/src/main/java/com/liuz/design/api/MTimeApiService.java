@@ -26,5 +26,5 @@ public interface MTimeApiService {
             "Host:api-m.mtime.cn"
     })
     @GET("http://api-m.mtime.cn/PageSubArea/HotPlayMovies.api")
-    Observable<HotMoviesBean> getAreas(@QueryMap Map<String,Object> filters);
+    Observable<HotMoviesBean> getHotPlayMovies(@QueryMap Map<String, Object> filters);
 }

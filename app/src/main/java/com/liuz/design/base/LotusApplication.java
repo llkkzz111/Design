@@ -7,6 +7,7 @@ import android.support.multidex.MultiDex;
 import com.facebook.stetho.Stetho;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.liuz.design.R;
+import com.liuz.design.di.DaggerAppComponent;
 import com.liuz.design.utils.UIManager;
 import com.liuz.lotus.net.ViseHttp;
 import com.vise.log.ViseLog;
@@ -21,6 +22,8 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManagerFactory;
 
+import dagger.android.AndroidInjector;
+import dagger.android.DaggerApplication;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 
@@ -28,7 +31,9 @@ import okhttp3.logging.HttpLoggingInterceptor;
  * date: 2018/5/17 16:19
  * author liuzhao
  */
-public class LotusApplication extends Application {
+public class LotusApplication extends DaggerApplication {
+
+
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -42,6 +47,11 @@ public class LotusApplication extends Application {
         init();
         initLog();
         initNet();
+    }
+
+    @Override
+    protected AndroidInjector<? extends DaggerApplication> applicationInjector() {
+        return DaggerAppComponent.builder().application(this).build();
     }
 
     protected static SSLSocketFactory getSSLSocketFactory(Context context, int[] certificates) {

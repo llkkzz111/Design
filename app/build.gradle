@@ -55,7 +55,7 @@ android {
 
 dependencies {
 
-    implementation 'com.amap.api:location:latest.integration'
+    implementation 'com.amap.api:location:3.8.0'
 
     def support_version = "27.1.1"
     implementation fileTree(include: ['*.jar'], dir: 'libs')
@@ -106,7 +106,7 @@ dependencies {
 
     // optional - RxJava support, currently in alpha
     implementation 'android.arch.paging:rxjava2:1.0.0-alpha1'
-    def nav_version = "1.0.0-alpha01"
+    def nav_version = "1.0.0-alpha02"
     implementation "android.arch.navigation:navigation-fragment:$nav_version"
 
     // use -ktx for Kotlin
@@ -119,8 +119,18 @@ dependencies {
 
     // use -ktx for Kotlin
     implementation 'com.android.support:multidex:1.0.3'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     api 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     implementation project(':common')
+
+
+    annotationProcessor "com.google.dagger:dagger-compiler:2.16"
+    implementation 'org.glassfish:javax.annotation:10.0-b28'
+    implementation "com.google.dagger:dagger:2.16"
+    implementation "com.google.dagger:dagger-android:2.16"
+    implementation "com.google.dagger:dagger-android-support:2.16"
+    annotationProcessor "com.google.dagger:dagger-android-processor:2.16"
+
+
 }

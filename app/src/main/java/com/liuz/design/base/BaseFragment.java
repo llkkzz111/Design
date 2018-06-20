@@ -1,5 +1,6 @@
 package com.liuz.design.base;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,14 +12,20 @@ import com.liuz.lotus.loader.GlideApp;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.trello.rxlifecycle2.components.support.RxFragment;
 
+import javax.inject.Inject;
+
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import dagger.android.AndroidInjector;
+import dagger.android.DispatchingAndroidInjector;
+import dagger.android.support.AndroidSupportInjection;
+import dagger.android.support.HasSupportFragmentInjector;
 
 /**
  * date: 2018/5/28 14:46
  * author liuzhao
  */
-public abstract class BaseFragment  extends RxFragment {
+public abstract class BaseFragment  extends RxFragment  implements HasSupportFragmentInjector {
     protected RxAppCompatActivity mContext;
     protected String title;
     private Unbinder unbinder;
@@ -59,5 +66,20 @@ public abstract class BaseFragment  extends RxFragment {
     public void onPause() {
         super.onPause();
         GlideApp.with(mContext).pauseRequests();
+    }
+
+
+
+    @Inject DispatchingAndroidInjector<Fragment> childFragmentInjector;
+
+    @Override
+    public void onAttach(Context context) {
+        AndroidSupportInjection.inject(this);
+        super.onAttach(context);
+    }
+
+    @Override
+    public AndroidInjector<Fragment> supportFragmentInjector() {
+        return childFragmentInjector;
     }
 }

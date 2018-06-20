@@ -5,15 +5,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.movies.MTimesMoviesActivity">
 
-    tools:context=".ui.MTimesMoviesActivity">
-
+    <TextView
+        android:textColor="@color/colorAccent"
+        android:id="@+id/tv_hint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_hot_movies"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="170dp"
         android:orientation="horizontal"
-        android:padding="5dp"
         app:layoutManager="android.support.v7.widget.LinearLayoutManager"/>
 </LinearLayout>

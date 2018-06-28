@@ -38,6 +38,7 @@ public class BannerItemFragment extends Fragment {
     @BindView(R.id.iv_des) ImageView ivDes;
     private Banners banner;
     private Unbinder unbinder;
+    private String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
     public BannerItemFragment() {
         // Required empty public constructor
@@ -59,7 +60,6 @@ public class BannerItemFragment extends Fragment {
         }
     }
 
-    private String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
     @OnClick(R.id.iv_btn)
     void onViewClick() {
         getPermission();
@@ -124,7 +124,7 @@ public class BannerItemFragment extends Fragment {
             ivLogo.setVisibility(View.GONE);
             ivBtn.setBackgroundResource(banner.getTipBtnRes());
             ivDes.setBackgroundResource(banner.getTipDesRes());
-        }else{
+        } else {
             ivBtn.setVisibility(View.GONE);
             ivDes.setVisibility(View.GONE);
         }

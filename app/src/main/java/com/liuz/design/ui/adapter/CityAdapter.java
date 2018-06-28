@@ -58,6 +58,7 @@ public class CityAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.tv_city) TextView tvCity;
         private AreaBean areaBean;
+
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);

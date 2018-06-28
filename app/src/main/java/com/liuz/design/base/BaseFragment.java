@@ -25,9 +25,10 @@ import dagger.android.support.HasSupportFragmentInjector;
  * date: 2018/5/28 14:46
  * author liuzhao
  */
-public abstract class BaseFragment  extends RxFragment  implements HasSupportFragmentInjector {
+public abstract class BaseFragment extends RxFragment implements HasSupportFragmentInjector {
     protected RxAppCompatActivity mContext;
     protected String title;
+    @Inject DispatchingAndroidInjector<Fragment> childFragmentInjector;
     private Unbinder unbinder;
 
     @Override
@@ -35,7 +36,6 @@ public abstract class BaseFragment  extends RxFragment  implements HasSupportFra
         super.onCreate(savedInstanceState);
         mContext = (RxAppCompatActivity) getActivity();
     }
-
 
     @Nullable
     @Override
@@ -50,7 +50,6 @@ public abstract class BaseFragment  extends RxFragment  implements HasSupportFra
         //在此方法中获取数据为懒加载模式,如不需要懒加载,请在initEventAndData获取数据,GankFragment有使用实例
         return view;
     }
-
 
     protected abstract int getlayoutId();
 
@@ -67,10 +66,6 @@ public abstract class BaseFragment  extends RxFragment  implements HasSupportFra
         super.onPause();
         GlideApp.with(mContext).pauseRequests();
     }
-
-
-
-    @Inject DispatchingAndroidInjector<Fragment> childFragmentInjector;
 
     @Override
     public void onAttach(Context context) {

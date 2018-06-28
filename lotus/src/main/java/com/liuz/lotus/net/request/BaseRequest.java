@@ -152,17 +152,6 @@ public abstract class BaseRequest<R extends BaseRequest> {
     }
 
     /**
-     * 设置是否进行HTTP缓存
-     *
-     * @param isHttpCache
-     * @return
-     */
-    public R setHttpCache(boolean isHttpCache) {
-        this.isHttpCache = isHttpCache;
-        return (R) this;
-    }
-
-    /**
      * 局部设置拦截器
      *
      * @param interceptor
@@ -210,6 +199,17 @@ public abstract class BaseRequest<R extends BaseRequest> {
 
     public boolean isHttpCache() {
         return isHttpCache;
+    }
+
+    /**
+     * 设置是否进行HTTP缓存
+     *
+     * @param isHttpCache
+     * @return
+     */
+    public R setHttpCache(boolean isHttpCache) {
+        this.isHttpCache = isHttpCache;
+        return (R) this;
     }
 
     /**

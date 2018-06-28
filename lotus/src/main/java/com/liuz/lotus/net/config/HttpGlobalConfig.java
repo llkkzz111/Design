@@ -30,6 +30,7 @@ import retrofit2.Converter;
  * @date: 2017-04-28 17:17
  */
 public class HttpGlobalConfig {
+    private static HttpGlobalConfig instance;
     private CallAdapter.Factory callAdapterFactory;//Call适配器工厂
     private Converter.Factory converterFactory;//转换工厂
     private Factory callFactory;//Call工厂
@@ -46,8 +47,6 @@ public class HttpGlobalConfig {
     private String baseUrl;//基础域名
     private int retryDelayMillis;//请求失败重试间隔时间
     private int retryCount;//请求失败重试次数
-
-    private static HttpGlobalConfig instance;
 
     private HttpGlobalConfig() {
     }
@@ -156,28 +155,6 @@ public class HttpGlobalConfig {
     }
 
     /**
-     * 设置是否添加HTTP缓存
-     *
-     * @param isHttpCache
-     * @return
-     */
-    public HttpGlobalConfig setHttpCache(boolean isHttpCache) {
-        this.isHttpCache = isHttpCache;
-        return this;
-    }
-
-    /**
-     * 设置HTTP缓存路径
-     *
-     * @param httpCacheDirectory
-     * @return
-     */
-    public HttpGlobalConfig setHttpCacheDirectory(File httpCacheDirectory) {
-        this.httpCacheDirectory = httpCacheDirectory;
-        return this;
-    }
-
-    /**
      * 设置HTTP缓存
      *
      * @param httpCache
@@ -185,17 +162,6 @@ public class HttpGlobalConfig {
      */
     public HttpGlobalConfig httpCache(Cache httpCache) {
         this.httpCache = httpCache;
-        return this;
-    }
-
-    /**
-     * 设置是否添加Cookie
-     *
-     * @param isCookie
-     * @return
-     */
-    public HttpGlobalConfig setCookie(boolean isCookie) {
-        this.isCookie = isCookie;
         return this;
     }
 
@@ -457,12 +423,34 @@ public class HttpGlobalConfig {
         return isCookie;
     }
 
+    /**
+     * 设置是否添加Cookie
+     *
+     * @param isCookie
+     * @return
+     */
+    public HttpGlobalConfig setCookie(boolean isCookie) {
+        this.isCookie = isCookie;
+        return this;
+    }
+
     public ApiCookie getApiCookie() {
         return apiCookie;
     }
 
     public Cache getHttpCache() {
         return httpCache;
+    }
+
+    /**
+     * 设置是否添加HTTP缓存
+     *
+     * @param isHttpCache
+     * @return
+     */
+    public HttpGlobalConfig setHttpCache(boolean isHttpCache) {
+        this.isHttpCache = isHttpCache;
+        return this;
     }
 
     public String getBaseUrl() {
@@ -485,6 +473,17 @@ public class HttpGlobalConfig {
 
     public File getHttpCacheDirectory() {
         return httpCacheDirectory;
+    }
+
+    /**
+     * 设置HTTP缓存路径
+     *
+     * @param httpCacheDirectory
+     * @return
+     */
+    public HttpGlobalConfig setHttpCacheDirectory(File httpCacheDirectory) {
+        this.httpCacheDirectory = httpCacheDirectory;
+        return this;
     }
 
     private <T> T checkNotNull(T t, String message) {

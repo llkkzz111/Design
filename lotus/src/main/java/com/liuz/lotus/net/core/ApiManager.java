@@ -15,6 +15,10 @@ public class ApiManager {
 
     private ConcurrentHashMap<Object, Disposable> arrayMaps;
 
+    private ApiManager() {
+        arrayMaps = new ConcurrentHashMap<>();
+    }
+
     public static ApiManager get() {
         if (sInstance == null) {
             synchronized (ApiManager.class) {
@@ -24,10 +28,6 @@ public class ApiManager {
             }
         }
         return sInstance;
-    }
-
-    private ApiManager() {
-        arrayMaps = new ConcurrentHashMap<>();
     }
 
     public void add(Object tag, Disposable disposable) {

@@ -1,9 +1,7 @@
 package com.liuz.design.bean;
 
 import com.liuz.db.AreaBean;
-import com.liuz.db.AreasDatabase;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

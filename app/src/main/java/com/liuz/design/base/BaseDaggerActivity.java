@@ -19,6 +19,7 @@ public abstract class BaseDaggerActivity extends TranslucentBarBaseActivity impl
 
     @Inject
     DispatchingAndroidInjector<Fragment> supportFragmentInjector;
+
     @Inject
     DispatchingAndroidInjector<android.app.Fragment> frameworkFragmentInjector;
 

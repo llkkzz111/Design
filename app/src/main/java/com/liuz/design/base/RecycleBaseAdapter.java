@@ -16,9 +16,8 @@ import java.util.List;
  */
 public abstract class RecycleBaseAdapter<T, K extends BaseViewHolder> extends RecyclerView.Adapter<K> {
     public Context mContext;
-    View item;
     protected List<T> list;
-
+    View item;
 
 
     protected RecycleBaseAdapter() {

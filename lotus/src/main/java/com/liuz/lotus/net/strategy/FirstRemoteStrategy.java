@@ -26,7 +26,7 @@ public class FirstRemoteStrategy<T> extends CacheStrategy<T> {
             }
         });
         Observable<CacheResult<T>> cache = loadCache(apiCache, cacheKey, type);
-        return Observable.concatDelayError(Arrays.asList(remote,cache)).filter(new Predicate<CacheResult<T>>() {
+        return Observable.concatDelayError(Arrays.asList(remote, cache)).filter(new Predicate<CacheResult<T>>() {
             @Override
             public boolean test(CacheResult<T> tCacheResult) throws Exception {
                 return tCacheResult != null && tCacheResult.getCacheData() != null;

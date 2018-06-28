@@ -23,9 +23,6 @@ import java.util.TimeZone;
  * @date: 17/5/1 21:03.
  */
 public class HttpHeaders implements Serializable {
-    private static final String FORMAT_HTTP_DATA = "EEE, dd MMM y HH:mm:ss 'GMT'";
-    private static final TimeZone GMT_TIME_ZONE = TimeZone.getTimeZone("GMT");
-
     public static final String HEAD_KEY_RESPONSE_CODE = "ResponseCode";
     public static final String HEAD_KEY_RESPONSE_MESSAGE = "ResponseMessage";
     public static final String HEAD_KEY_ACCEPT = "Accept";
@@ -54,13 +51,10 @@ public class HttpHeaders implements Serializable {
     public static final String HEAD_KEY_COOKIE2 = "Cookie2";
     public static final String HEAD_KEY_SET_COOKIE = "Set-Cookie";
     public static final String HEAD_KEY_SET_COOKIE2 = "Set-Cookie2";
-
-    public LinkedHashMap<String, String> headersMap;
+    private static final String FORMAT_HTTP_DATA = "EEE, dd MMM y HH:mm:ss 'GMT'";
+    private static final TimeZone GMT_TIME_ZONE = TimeZone.getTimeZone("GMT");
     private static String acceptLanguage;
-
-    private void init() {
-        headersMap = new LinkedHashMap<>();
-    }
+    public LinkedHashMap<String, String> headersMap;
 
     public HttpHeaders() {
         init();
@@ -69,6 +63,81 @@ public class HttpHeaders implements Serializable {
     public HttpHeaders(String key, String value) {
         init();
         put(key, value);
+    }
+
+    public static long getDate(String gmtTime) {
+        try {
+            return parseGMTToMillis(gmtTime);
+        } catch (ParseException e) {
+            return 0;
+        }
+    }
+
+    public static String getDate(long milliseconds) {
+        return formatMillisToGMT(milliseconds);
+    }
+
+    public static long getExpiration(String expiresTime) {
+        try {
+            return parseGMTToMillis(expiresTime);
+        } catch (ParseException e) {
+            return -1;
+        }
+    }
+
+    public static long getLastModified(String lastModified) {
+        try {
+            return parseGMTToMillis(lastModified);
+        } catch (ParseException e) {
+            return 0;
+        }
+    }
+
+    public static String getCacheControl(String cacheControl, String pragma) {
+        // first http1.1, second http1.0
+        if (cacheControl != null) return cacheControl;
+        else if (pragma != null) return pragma;
+        else return null;
+    }
+
+    /**
+     * Accept-Language: zh-CN,zh;q=0.8
+     */
+    public static String getAcceptLanguage() {
+        if (TextUtils.isEmpty(acceptLanguage)) {
+            Locale locale = Locale.getDefault();
+            String language = locale.getLanguage();
+            String country = locale.getCountry();
+            StringBuilder acceptLanguageBuilder = new StringBuilder(language);
+            if (!TextUtils.isEmpty(country))
+                acceptLanguageBuilder.append('-').append(country).append(',').append(language).append(";q=0.8");
+            acceptLanguage = acceptLanguageBuilder.toString();
+            return acceptLanguage;
+        }
+        return acceptLanguage;
+    }
+
+    public static void setAcceptLanguage(String language) {
+        acceptLanguage = language;
+    }
+
+    private static long parseGMTToMillis(String gmtTime) throws ParseException {
+        if (TextUtils.isEmpty(gmtTime)) return 0;
+        SimpleDateFormat formatter = new SimpleDateFormat(FORMAT_HTTP_DATA, Locale.US);
+        formatter.setTimeZone(GMT_TIME_ZONE);
+        Date date = formatter.parse(gmtTime);
+        return date.getTime();
+    }
+
+    private static String formatMillisToGMT(long milliseconds) {
+        Date date = new Date(milliseconds);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(FORMAT_HTTP_DATA, Locale.US);
+        simpleDateFormat.setTimeZone(GMT_TIME_ZONE);
+        return simpleDateFormat.format(date);
+    }
+
+    private void init() {
+        headersMap = new LinkedHashMap<>();
     }
 
     public void put(String key, String value) {
@@ -116,77 +185,6 @@ public class HttpHeaders implements Serializable {
             ViseLog.e(e);
         }
         return jsonObject.toString();
-    }
-
-    public static long getDate(String gmtTime) {
-        try {
-            return parseGMTToMillis(gmtTime);
-        } catch (ParseException e) {
-            return 0;
-        }
-    }
-
-    public static String getDate(long milliseconds) {
-        return formatMillisToGMT(milliseconds);
-    }
-
-    public static long getExpiration(String expiresTime) {
-        try {
-            return parseGMTToMillis(expiresTime);
-        } catch (ParseException e) {
-            return -1;
-        }
-    }
-
-    public static long getLastModified(String lastModified) {
-        try {
-            return parseGMTToMillis(lastModified);
-        } catch (ParseException e) {
-            return 0;
-        }
-    }
-
-    public static String getCacheControl(String cacheControl, String pragma) {
-        // first http1.1, second http1.0
-        if (cacheControl != null) return cacheControl;
-        else if (pragma != null) return pragma;
-        else return null;
-    }
-
-    public static void setAcceptLanguage(String language) {
-        acceptLanguage = language;
-    }
-
-    /**
-     * Accept-Language: zh-CN,zh;q=0.8
-     */
-    public static String getAcceptLanguage() {
-        if (TextUtils.isEmpty(acceptLanguage)) {
-            Locale locale = Locale.getDefault();
-            String language = locale.getLanguage();
-            String country = locale.getCountry();
-            StringBuilder acceptLanguageBuilder = new StringBuilder(language);
-            if (!TextUtils.isEmpty(country))
-                acceptLanguageBuilder.append('-').append(country).append(',').append(language).append(";q=0.8");
-            acceptLanguage = acceptLanguageBuilder.toString();
-            return acceptLanguage;
-        }
-        return acceptLanguage;
-    }
-
-    private static long parseGMTToMillis(String gmtTime) throws ParseException {
-        if (TextUtils.isEmpty(gmtTime)) return 0;
-        SimpleDateFormat formatter = new SimpleDateFormat(FORMAT_HTTP_DATA, Locale.US);
-        formatter.setTimeZone(GMT_TIME_ZONE);
-        Date date = formatter.parse(gmtTime);
-        return date.getTime();
-    }
-
-    private static String formatMillisToGMT(long milliseconds) {
-        Date date = new Date(milliseconds);
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(FORMAT_HTTP_DATA, Locale.US);
-        simpleDateFormat.setTimeZone(GMT_TIME_ZONE);
-        return simpleDateFormat.format(date);
     }
 
     @Override

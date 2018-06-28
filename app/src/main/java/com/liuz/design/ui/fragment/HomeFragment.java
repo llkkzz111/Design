@@ -52,7 +52,7 @@ public class HomeFragment extends BaseFragment {
     String areaJson = "file:///android_asset/area.json";
     @BindView(R.id.btn_area) Button btnArea;
     @BindView(R.id.btn_hot) Button btnHot;
-
+    private String[] permissions = {Manifest.permission.ACCESS_COARSE_LOCATION};
 
     public HomeFragment() {
 
@@ -108,8 +108,6 @@ public class HomeFragment extends BaseFragment {
 
 
     }
-
-    private String[] permissions = {Manifest.permission.ACCESS_COARSE_LOCATION};
 
     @OnClick({R.id.btn_area, R.id.btn_hot, R.id.btn_rxtest})
     void onViewClick(View v) {
@@ -203,7 +201,7 @@ public class HomeFragment extends BaseFragment {
                 }
 
 
-                return Observable.fromIterable(list).delay(10,TimeUnit.MILLISECONDS);
+                return Observable.fromIterable(list).delay(10, TimeUnit.MILLISECONDS);
             }
         }).subscribe(new Consumer<String>() {
             @Override

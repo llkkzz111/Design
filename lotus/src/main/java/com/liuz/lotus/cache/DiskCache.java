@@ -46,6 +46,32 @@ public class DiskCache implements ICache {
         }
     }
 
+    private static File getDiskCacheDir(Context context, String dirName) {
+        String cachePath;
+        if ((Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())
+                || !Environment.isExternalStorageRemovable())
+                && context.getExternalCacheDir() != null) {
+            cachePath = context.getExternalCacheDir().getPath();
+        } else {
+            cachePath = context.getCacheDir().getPath();
+        }
+        return new File(cachePath + File.separator + dirName);
+    }
+
+    private static long calculateDiskCacheSize(File dir) {
+        long size = 0;
+        try {
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+            StatFs statFs = new StatFs(dir.getAbsolutePath());
+            long available = ((long) statFs.getBlockCount()) * statFs.getBlockSize();
+            size = available / 50;
+        } catch (IllegalArgumentException ignored) {
+        }
+        return Math.max(Math.min(size, MAX_DISK_CACHE_SIZE), MIN_DISK_CACHE_SIZE);
+    }
+
     public void put(String key, String value) {
         if (TextUtils.isEmpty(key) || TextUtils.isEmpty(value)) return;
 
@@ -145,32 +171,6 @@ public class DiskCache implements ICache {
 
     private String getMd5Key(String key) {
         return MD5.getMessageDigest(key.getBytes());
-    }
-
-    private static File getDiskCacheDir(Context context, String dirName) {
-        String cachePath;
-        if ((Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())
-                || !Environment.isExternalStorageRemovable())
-                && context.getExternalCacheDir() != null) {
-            cachePath = context.getExternalCacheDir().getPath();
-        } else {
-            cachePath = context.getCacheDir().getPath();
-        }
-        return new File(cachePath + File.separator + dirName);
-    }
-
-    private static long calculateDiskCacheSize(File dir) {
-        long size = 0;
-        try {
-            if (!dir.exists()) {
-                dir.mkdirs();
-            }
-            StatFs statFs = new StatFs(dir.getAbsolutePath());
-            long available = ((long) statFs.getBlockCount()) * statFs.getBlockSize();
-            size = available / 50;
-        } catch (IllegalArgumentException ignored) {
-        }
-        return Math.max(Math.min(size, MAX_DISK_CACHE_SIZE), MIN_DISK_CACHE_SIZE);
     }
 
 }

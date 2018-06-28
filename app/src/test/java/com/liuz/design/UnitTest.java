@@ -20,12 +20,12 @@ public class UnitTest {
 
 
     @Test
-   public  void  addition_isCorrect() {
+    public void addition_isCorrect() {
         assertEquals(4, 2 + 2);
     }
 
 
-    private void  rxMap(){
+    private void rxMap() {
         Observable.create(new ObservableOnSubscribe<Integer>() {
             @Override
             public void subscribe(ObservableEmitter<Integer> emitter) throws Exception {
@@ -36,7 +36,7 @@ public class UnitTest {
         }).map(new Function<Integer, String>() {
             @Override
             public String apply(Integer integer) throws Exception {
-                return "This is result" +integer;
+                return "This is result" + integer;
             }
         }).subscribe(new Consumer<String>() {
             @Override
@@ -46,11 +46,11 @@ public class UnitTest {
         });
     }
 
-    private void  rxFlatMap(){
+    private void rxFlatMap() {
 
     }
 
-    private void  rxConcatMapMap(){
+    private void rxConcatMapMap() {
 
     }
 }

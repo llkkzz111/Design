@@ -57,7 +57,7 @@ public class GlideLoader implements ILoader {
         if (options == null) options = Options.defaultOptions();
 
         if (options.loadingResId != Options.RES_NONE) {
-        request.placeholder(options.loadingResId);
+            request.placeholder(options.loadingResId);
         }
         if (options.loadErrorResId != Options.RES_NONE) {
             request.error(options.loadErrorResId);

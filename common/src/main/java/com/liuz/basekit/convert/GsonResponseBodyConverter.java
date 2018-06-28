@@ -8,7 +8,6 @@ import com.google.gson.stream.JsonReader;
 import com.liuz.basekit.common.ResponseHelper;
 import com.liuz.basekit.mode.ApiResult;
 
-
 import java.io.IOException;
 import java.net.UnknownServiceException;
 

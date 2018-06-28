@@ -54,7 +54,7 @@ public class MoviesPresenter implements MoviesContract.Presenter {
                 .subscribe(new ApiCallbackSubscriber<>(new ACallback<HotMoviesBean>() {
                     @Override
                     public void onSuccess(HotMoviesBean data) {
-                       moviesView.showView(data);
+                        moviesView.showView(data);
                     }
 
                     @Override

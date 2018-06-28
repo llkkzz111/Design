@@ -193,17 +193,6 @@ public abstract class BaseHttpRequest<R extends BaseHttpRequest> extends BaseReq
     }
 
     /**
-     * 设置是否进行本地缓存
-     *
-     * @param isLocalCache
-     * @return
-     */
-    public R setLocalCache(boolean isLocalCache) {
-        this.isLocalCache = isLocalCache;
-        return (R) this;
-    }
-
-    /**
      * 设置本地缓存类型
      *
      * @param cacheMode
@@ -250,6 +239,17 @@ public abstract class BaseHttpRequest<R extends BaseHttpRequest> extends BaseReq
 
     public boolean isLocalCache() {
         return isLocalCache;
+    }
+
+    /**
+     * 设置是否进行本地缓存
+     *
+     * @param isLocalCache
+     * @return
+     */
+    public R setLocalCache(boolean isLocalCache) {
+        this.isLocalCache = isLocalCache;
+        return (R) this;
     }
 
     public CacheMode getCacheMode() {

@@ -28,13 +28,12 @@ import retrofit2.Retrofit;
  * @date: 2017-04-28 15:07
  */
 public class ViseHttp {
+    private static final HttpGlobalConfig NET_GLOBAL_CONFIG = HttpGlobalConfig.getInstance();
     private static Context context;
     private static OkHttpClient.Builder okHttpBuilder;
     private static Retrofit.Builder retrofitBuilder;
     private static ApiCache.Builder apiCacheBuilder;
     private static OkHttpClient okHttpClient;
-
-    private static final HttpGlobalConfig NET_GLOBAL_CONFIG = HttpGlobalConfig.getInstance();
 
     public static HttpGlobalConfig CONFIG() {
         return NET_GLOBAL_CONFIG;

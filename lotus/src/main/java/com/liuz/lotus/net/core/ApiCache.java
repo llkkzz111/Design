@@ -32,30 +32,6 @@ public class ApiCache {
     private final DiskCache diskCache;
     private String cacheKey;
 
-    private static abstract class SimpleSubscribe<T> implements ObservableOnSubscribe<T> {
-        @Override
-        public void subscribe(ObservableEmitter<T> subscriber) throws Exception {
-            try {
-                T data = execute();
-                if (!subscriber.isDisposed() && data != null) {
-                    subscriber.onNext(data);
-                }
-            } catch (Throwable e) {
-                ViseLog.e(e);
-                Exceptions.throwIfFatal(e);
-                if (!subscriber.isDisposed()) {
-                    subscriber.onError(e);
-                }
-                return;
-            }
-            if (!subscriber.isDisposed()) {
-                subscriber.onComplete();
-            }
-        }
-
-        abstract T execute() throws Throwable;
-    }
-
     private ApiCache(Context context, String cacheKey, long time) {
         this.cacheKey = cacheKey;
         this.diskCache = new DiskCache(context).setCacheTime(time);
@@ -76,7 +52,6 @@ public class ApiCache {
             }
         };
     }
-
 
     public Observable<String> get(final String key) {
         return Observable.create(new SimpleSubscribe<String>() {
@@ -131,6 +106,30 @@ public class ApiCache {
         } catch (Exception e) {
             throw new RuntimeException("loadStrategy(" + cacheMode + ") err!!" + e.getMessage());
         }
+    }
+
+    private static abstract class SimpleSubscribe<T> implements ObservableOnSubscribe<T> {
+        @Override
+        public void subscribe(ObservableEmitter<T> subscriber) throws Exception {
+            try {
+                T data = execute();
+                if (!subscriber.isDisposed() && data != null) {
+                    subscriber.onNext(data);
+                }
+            } catch (Throwable e) {
+                ViseLog.e(e);
+                Exceptions.throwIfFatal(e);
+                if (!subscriber.isDisposed()) {
+                    subscriber.onError(e);
+                }
+                return;
+            }
+            if (!subscriber.isDisposed()) {
+                subscriber.onComplete();
+            }
+        }
+
+        abstract T execute() throws Throwable;
     }
 
     public static final class Builder {

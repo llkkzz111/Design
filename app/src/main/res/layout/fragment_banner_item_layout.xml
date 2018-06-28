@@ -22,11 +22,11 @@
 
     <ImageView
         android:id="@+id/iv_btn"
-        android:layout_above="@+id/iv_tips"
         android:layout_width="wrap_content"
-        android:layout_marginBottom="25dp"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"/>
+        android:layout_above="@+id/iv_tips"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="25dp"/>
 
     <ImageView
         android:id="@+id/iv_des"
@@ -35,14 +35,15 @@
         android:layout_above="@+id/iv_btn"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="20dp"/>
+
     <ImageView
         android:id="@+id/iv_logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
         app:srcCompat="@drawable/logo_164x52"/>
 
 </RelativeLayout>

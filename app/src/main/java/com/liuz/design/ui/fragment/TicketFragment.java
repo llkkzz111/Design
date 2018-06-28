@@ -23,6 +23,7 @@ public class TicketFragment extends BaseFragment {
         fragment.setArguments(args);
         return fragment;
     }
+
     @Override
     protected int getlayoutId() {
         return R.layout.fragment_ticket_layout;

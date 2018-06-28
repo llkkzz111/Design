@@ -1,6 +1,5 @@
 package com.liuz.design.base;
 
-import android.app.Application;
 import android.content.Context;
 import android.support.multidex.MultiDex;
 
@@ -33,26 +32,6 @@ import okhttp3.logging.HttpLoggingInterceptor;
  */
 public class LotusApplication extends DaggerApplication {
 
-
-
-    @Override
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(base);
-        MultiDex.install(base);
-    }
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        init();
-        initLog();
-        initNet();
-    }
-
-    @Override
-    protected AndroidInjector<? extends DaggerApplication> applicationInjector() {
-        return DaggerAppComponent.builder().application(this).build();
-    }
 
     protected static SSLSocketFactory getSSLSocketFactory(Context context, int[] certificates) {
 
@@ -91,6 +70,26 @@ public class LotusApplication extends DaggerApplication {
         }
         return null;
     }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(base);
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        init();
+        initLog();
+        initNet();
+    }
+
+    @Override
+    protected AndroidInjector<? extends DaggerApplication> applicationInjector() {
+        return DaggerAppComponent.builder().application(this).build();
+    }
+
     private void initLog() {
         ViseLog.getLogConfig()
                 .configAllowLog(true)//是否输出日志
@@ -133,9 +132,6 @@ public class LotusApplication extends DaggerApplication {
                                 Stetho.defaultInspectorModulesProvider(this))
                         .build());
     }
-
-
-
 
 
 }

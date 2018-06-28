@@ -11,8 +11,8 @@ import com.vise.log.ViseLog;
  * @date: 2016-12-19 15:08
  */
 public class MemoryCache implements ICache {
-    private LruCache<String, Object> cache;
     private static MemoryCache instance;
+    private LruCache<String, Object> cache;
 
     private MemoryCache() {
         int maxMemory = (int) Runtime.getRuntime().maxMemory();

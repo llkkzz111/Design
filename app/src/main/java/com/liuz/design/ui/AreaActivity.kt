@@ -125,12 +125,12 @@ class AreaActivity : TranslucentBarBaseActivity() {
                     Observable.create(ObservableOnSubscribe<String> { _ ->
                         var list = AreasDatabase.getInstance(mContext).areaDao().areas
                         for (bean in list) {
-                            if (bean.n.equals(city)){
+                            if (bean.n.equals(city)) {
                                 PreferencesUtils.setLocationID(bean.id)
                                 break
                             }
                         }
-                    }).subscribeOn(Schedulers.io()).subscribe(Consumer {  })
+                    }).subscribeOn(Schedulers.io()).subscribe(Consumer { })
                 } else {
                     //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
                     Log.e("AmapError", "location Error, ErrCode:"
@@ -204,10 +204,10 @@ class AreaActivity : TranslucentBarBaseActivity() {
                         if (authorModel == null) {
                             return
                         } else {
-                            if(AreasDatabase.getInstance(mContext).areaDao().areas.size == 0){
+                            if (AreasDatabase.getInstance(mContext).areaDao().areas.size == 0) {
                                 AreasDatabase.getInstance(mContext).areaDao().insertAll(authorModel.p)
                                 getCacheList()
-                            }else{
+                            } else {
                                 AreasDatabase.getInstance(mContext).areaDao().insertAll(authorModel.p)
                             }
 

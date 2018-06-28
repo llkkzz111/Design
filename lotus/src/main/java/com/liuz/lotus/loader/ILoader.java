@@ -34,13 +34,13 @@ public interface ILoader {
         public int loadingResId = RES_NONE;//加载中的资源id
         public int loadErrorResId = RES_NONE;//加载失败的资源id
 
-        public static Options defaultOptions() {
-            return new Options(ViseConfig.IL_LOADING_RES, ViseConfig.IL_ERROR_RES);
-        }
-
         public Options(int loadingResId, int loadErrorResId) {
             this.loadingResId = loadingResId;
             this.loadErrorResId = loadErrorResId;
+        }
+
+        public static Options defaultOptions() {
+            return new Options(ViseConfig.IL_LOADING_RES, ViseConfig.IL_ERROR_RES);
         }
     }
 }

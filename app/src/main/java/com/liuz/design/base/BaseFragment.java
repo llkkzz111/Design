@@ -1,6 +1,5 @@
 package com.liuz.design.base;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -16,16 +15,13 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
-import dagger.android.support.AndroidSupportInjection;
-import dagger.android.support.HasSupportFragmentInjector;
 
 /**
  * date: 2018/5/28 14:46
  * author liuzhao
  */
-public abstract class BaseFragment extends RxFragment implements HasSupportFragmentInjector {
+public abstract class BaseFragment extends RxFragment {
     protected RxAppCompatActivity mContext;
     protected String title;
     @Inject DispatchingAndroidInjector<Fragment> childFragmentInjector;
@@ -65,16 +61,5 @@ public abstract class BaseFragment extends RxFragment implements HasSupportFragm
     public void onPause() {
         super.onPause();
         GlideApp.with(mContext).pauseRequests();
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        AndroidSupportInjection.inject(this);
-        super.onAttach(context);
-    }
-
-    @Override
-    public AndroidInjector<Fragment> supportFragmentInjector() {
-        return childFragmentInjector;
     }
 }

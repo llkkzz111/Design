@@ -1,12 +1,12 @@
 package com.liuz.design.base;
 
+import android.app.Application;
 import android.content.Context;
 import android.support.multidex.MultiDex;
 
 import com.facebook.stetho.Stetho;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.liuz.design.R;
-import com.liuz.design.di.DaggerAppComponent;
 import com.liuz.design.utils.UIManager;
 import com.liuz.lotus.net.ViseHttp;
 import com.vise.log.ViseLog;
@@ -21,8 +21,6 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManagerFactory;
 
-import dagger.android.AndroidInjector;
-import dagger.android.DaggerApplication;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 
@@ -30,7 +28,7 @@ import okhttp3.logging.HttpLoggingInterceptor;
  * date: 2018/5/17 16:19
  * author liuzhao
  */
-public class LotusApplication extends DaggerApplication {
+public class LotusApplication extends Application {
 
 
     protected static SSLSocketFactory getSSLSocketFactory(Context context, int[] certificates) {
@@ -85,10 +83,6 @@ public class LotusApplication extends DaggerApplication {
         initNet();
     }
 
-    @Override
-    protected AndroidInjector<? extends DaggerApplication> applicationInjector() {
-        return DaggerAppComponent.builder().application(this).build();
-    }
 
     private void initLog() {
         ViseLog.getLogConfig()

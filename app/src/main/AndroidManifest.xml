@@ -51,11 +51,17 @@
         <activity android:name=".ui.movies.MTimesMoviesActivity">
         </activity>
 
-        <service android:name="com.amap.api.location.APSService"></service>
-        <!--高德地图 -->
+        <service android:name="com.amap.api.location.APSService"/>
+        <!-- 高德地图 -->
         <meta-data
             android:name="com.amap.api.v2.apikey"
             android:value="8cd6f3531c8b39f9c75168def81e597d"/>
+
+        <activity
+            android:name=".ui.WanMainActivity"
+            android:label="@string/title_activity_wan_main"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
     </application>
 
 </manifest>

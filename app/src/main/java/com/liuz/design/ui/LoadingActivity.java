@@ -55,7 +55,7 @@ public class LoadingActivity extends TranslucentBarBaseActivity {
                 if (PreferencesUtils.getFirstVisitState()) {
                     intent.setClass(mContext, GuideActivity.class);
                 } else {
-                    intent.setClass(mContext, MainActivity.class);
+                    intent.setClass(mContext, WanMainActivity.class);
                 }
                 startActivity(intent);
                 finish();

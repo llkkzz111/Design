@@ -6,25 +6,25 @@ package com.liuz.basekit.mode;
  * @date: 2016-12-30 16:43
  */
 public class ApiResult<T> {
-    private int code;
-    private String msg;
+    private int errorCode;
+    private String errorMsg;
     private T data;
 
     public int getCode() {
-        return code;
+        return errorCode;
     }
 
-    public ApiResult setCode(int code) {
-        this.code = code;
+    public ApiResult setCode(int errorCode) {
+        this.errorCode = errorCode;
         return this;
     }
 
     public String getMsg() {
-        return msg;
+        return errorMsg;
     }
 
     public ApiResult setMsg(String msg) {
-        this.msg = msg;
+        this.errorMsg = msg;
         return this;
     }
 
@@ -40,8 +40,8 @@ public class ApiResult<T> {
     @Override
     public String toString() {
         return "ApiResult{" +
-                "code=" + code +
-                ", msg='" + msg + '\'' +
+                "errorCode=" + errorCode +
+                ", errorMsg='" + errorMsg + '\'' +
                 ", data=" + data +
                 '}';
     }

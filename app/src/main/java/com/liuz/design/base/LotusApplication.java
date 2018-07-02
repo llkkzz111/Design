@@ -6,6 +6,7 @@ import android.support.multidex.MultiDex;
 
 import com.facebook.stetho.Stetho;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
+import com.liuz.basekit.convert.GsonConverterFactory;
 import com.liuz.design.R;
 import com.liuz.design.utils.UIManager;
 import com.liuz.lotus.net.ViseHttp;
@@ -104,12 +105,13 @@ public class LotusApplication extends Application {
         ViseHttp.init(this);
         ViseHttp.CONFIG()
                 //配置请求主机地址
-                .baseUrl("http://192.168.1.105/")
+                .baseUrl("http://www.wanandroid.com/")
                 .setCookie(true)
+                .converterFactory(GsonConverterFactory.create())
                 //配置日志拦截器
                 .networkInterceptor(new StethoInterceptor())
                 .interceptor(new HttpLoggingInterceptor()
-                        .setLevel(HttpLoggingInterceptor.Level.HEADERS));
+                        .setLevel(HttpLoggingInterceptor.Level.BODY));
         initStetho();
 
     }

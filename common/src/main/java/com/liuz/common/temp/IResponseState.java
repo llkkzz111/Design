@@ -1,4 +1,4 @@
-package com.liuz.basekit.temp;
+package com.liuz.common.temp;
 
 import java.util.List;
 

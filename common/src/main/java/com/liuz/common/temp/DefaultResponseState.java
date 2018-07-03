@@ -1,6 +1,6 @@
-package com.liuz.basekit.temp;
+package com.liuz.common.temp;
 
-import com.liuz.basekit.mode.ResponseCode;
+import com.liuz.common.mode.ResponseCode;
 
 import java.util.List;
 

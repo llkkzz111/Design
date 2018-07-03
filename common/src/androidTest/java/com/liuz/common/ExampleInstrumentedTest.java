@@ -1,4 +1,4 @@
-package com.liuz.basekit;
+package com.liuz.common;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

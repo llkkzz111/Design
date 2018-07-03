@@ -1,12 +1,12 @@
-package com.liuz.basekit.interceptor;
+package com.liuz.common.interceptor;
 
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
-import com.liuz.basekit.mode.ApiResult;
-import com.liuz.basekit.temp.DefaultResponseState;
-import com.liuz.basekit.temp.IResponseState;
-import com.liuz.basekit.temp.Utils;
+import com.liuz.common.mode.ApiResult;
+import com.liuz.common.temp.DefaultResponseState;
+import com.liuz.common.temp.IResponseState;
+import com.liuz.common.temp.Utils;
 import com.liuz.lotus.common.GsonUtil;
 import com.vise.log.ViseLog;
 

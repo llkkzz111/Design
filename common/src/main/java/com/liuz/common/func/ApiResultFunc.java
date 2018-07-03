@@ -1,9 +1,9 @@
-package com.liuz.basekit.func;
+package com.liuz.common.func;
 
 import android.text.TextUtils;
 
-import com.liuz.basekit.mode.ApiResult;
-import com.liuz.basekit.mode.ResponseCode;
+import com.liuz.common.mode.ApiResult;
+import com.liuz.common.mode.ResponseCode;
 import com.liuz.lotus.common.GsonUtil;
 
 import org.json.JSONException;

@@ -13,8 +13,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.liuz.basekit.mode.ApiResult;
-import com.liuz.basekit.request.ApiPostRequest;
+import com.liuz.common.mode.ApiResult;
+import com.liuz.common.request.ApiPostRequest;
 import com.liuz.design.R;
 import com.liuz.design.api.WanApiServices;
 import com.liuz.design.base.TranslucentBarBaseActivity;

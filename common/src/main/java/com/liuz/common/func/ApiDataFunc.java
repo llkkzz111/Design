@@ -1,7 +1,7 @@
-package com.liuz.basekit.func;
+package com.liuz.common.func;
 
-import com.liuz.basekit.common.ResponseHelper;
-import com.liuz.basekit.mode.ApiResult;
+import com.liuz.common.ResponseHelper;
+import com.liuz.common.mode.ApiResult;
 
 import io.reactivex.functions.Function;
 

@@ -1,4 +1,4 @@
-package com.liuz.basekit.convert;
+package com.liuz.common.convert;
 
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;

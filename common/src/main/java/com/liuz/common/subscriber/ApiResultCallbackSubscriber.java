@@ -1,6 +1,6 @@
-package com.liuz.basekit.subscriber;
+package com.liuz.common.subscriber;
 
-import com.liuz.basekit.mode.ApiResult;
+import com.liuz.common.mode.ApiResult;
 import com.liuz.lotus.net.callback.ACallback;
 import com.liuz.lotus.net.exception.ApiException;
 import com.liuz.lotus.net.subscriber.ApiCallbackSubscriber;

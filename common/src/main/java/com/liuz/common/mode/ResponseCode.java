@@ -1,4 +1,4 @@
-package com.liuz.basekit.mode;
+package com.liuz.common.mode;
 
 /**
  * @Description: Response响应码（根据服务器提供文档进行定义）

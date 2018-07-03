@@ -1,12 +1,12 @@
-package com.liuz.basekit.convert;
+package com.liuz.common.convert;
 
 import android.support.annotation.NonNull;
 
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
-import com.liuz.basekit.common.ResponseHelper;
-import com.liuz.basekit.mode.ApiResult;
+import com.liuz.common.ResponseHelper;
+import com.liuz.common.mode.ApiResult;
 
 import java.io.IOException;
 import java.net.UnknownServiceException;

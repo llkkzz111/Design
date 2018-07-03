@@ -1,7 +1,7 @@
-package com.liuz.basekit.request;
+package com.liuz.common.request;
 
-import com.liuz.basekit.func.ApiDataFunc;
-import com.liuz.basekit.mode.ApiResult;
+import com.liuz.common.func.ApiDataFunc;
+import com.liuz.common.mode.ApiResult;
 import com.liuz.lotus.net.func.ApiRetryFunc;
 import com.liuz.lotus.net.request.BaseHttpRequest;
 

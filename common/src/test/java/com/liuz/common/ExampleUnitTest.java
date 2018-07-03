@@ -1,4 +1,4 @@
-package com.liuz.basekit;
+package com.liuz.common;
 
 import org.junit.Test;
 

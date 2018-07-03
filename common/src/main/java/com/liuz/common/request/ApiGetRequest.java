@@ -1,6 +1,6 @@
-package com.liuz.basekit.request;
+package com.liuz.common.request;
 
-import com.liuz.basekit.func.ApiResultFunc;
+import com.liuz.common.func.ApiResultFunc;
 import com.liuz.lotus.net.ViseHttp;
 import com.liuz.lotus.net.callback.ACallback;
 import com.liuz.lotus.net.core.ApiManager;

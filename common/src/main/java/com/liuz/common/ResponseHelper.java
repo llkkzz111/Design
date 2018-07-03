@@ -1,7 +1,7 @@
-package com.liuz.basekit.common;
+package com.liuz.common;
 
-import com.liuz.basekit.mode.ApiResult;
-import com.liuz.basekit.mode.ResponseCode;
+import com.liuz.common.mode.ApiResult;
+import com.liuz.common.mode.ResponseCode;
 
 /**
  * @Description: 响应处理帮助类

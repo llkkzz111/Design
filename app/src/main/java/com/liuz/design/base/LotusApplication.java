@@ -6,7 +6,7 @@ import android.support.multidex.MultiDex;
 
 import com.facebook.stetho.Stetho;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
-import com.liuz.basekit.convert.GsonConverterFactory;
+import com.liuz.common.convert.GsonConverterFactory;
 import com.liuz.design.R;
 import com.liuz.design.utils.UIManager;
 import com.liuz.lotus.net.ViseHttp;

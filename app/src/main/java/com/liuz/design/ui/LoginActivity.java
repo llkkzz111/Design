@@ -11,19 +11,25 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.liuz.common.ApiResultTransformer;
 import com.liuz.common.subscriber.ApiResultSubscriber;
+import com.liuz.db.WanDataBase;
+import com.liuz.db.wan.AccountBean;
 import com.liuz.design.R;
 import com.liuz.design.api.WanApiServices;
 import com.liuz.design.base.TranslucentBarBaseActivity;
-import com.liuz.design.bean.AccountBean;
 import com.liuz.lotus.net.ViseHttp;
 import com.liuz.lotus.net.exception.ApiException;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.OnEditorAction;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * A login screen that offers login via email/password.
@@ -103,11 +109,22 @@ public class LoginActivity extends TranslucentBarBaseActivity {
 
                         @Override
                         public void onSuccess(AccountBean data) {
-
+                            saveAccount(data);
+                            Toast.makeText(mContext, data.getUsername(), Toast.LENGTH_SHORT).show();
+                            finish();
                         }
                     });
 
         }
+    }
+
+    private void saveAccount(final AccountBean data) {
+        Observable.create(new ObservableOnSubscribe<String>() {
+            @Override
+            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
+                WanDataBase.getInstance(mContext).accountDao().insertAccount(data);
+            }
+        }).subscribeOn(Schedulers.io()).unsubscribeOn(Schedulers.io()).subscribe();
     }
 
 

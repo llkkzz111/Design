@@ -1,7 +1,7 @@
 package com.liuz.design.api;
 
 import com.liuz.common.mode.ApiResult;
-import com.liuz.design.bean.AccountBean;
+import com.liuz.db.wan.AccountBean;
 
 import io.reactivex.Observable;
 import retrofit2.http.Field;

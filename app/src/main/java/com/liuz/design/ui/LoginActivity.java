@@ -11,18 +11,15 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.liuz.common.mode.ApiResult;
-import com.liuz.common.request.ApiPostRequest;
+import com.liuz.common.ApiResultTransformer;
+import com.liuz.common.subscriber.ApiResultSubscriber;
 import com.liuz.design.R;
 import com.liuz.design.api.WanApiServices;
 import com.liuz.design.base.TranslucentBarBaseActivity;
-import com.liuz.design.bean.HotMoviesBean;
+import com.liuz.design.bean.AccountBean;
 import com.liuz.lotus.net.ViseHttp;
-import com.liuz.lotus.net.callback.ACallback;
-import com.liuz.lotus.net.core.ApiTransformer;
-import com.liuz.lotus.net.subscriber.ApiCallbackSubscriber;
+import com.liuz.lotus.net.exception.ApiException;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -97,35 +94,18 @@ public class LoginActivity extends TranslucentBarBaseActivity {
             ViseHttp.RETROFIT()
                     .create(WanApiServices.class)
                     .userLogin(email, password)
-                    .compose(ApiTransformer.<HotMoviesBean>norTransformer())
-                    .subscribe(new ApiCallbackSubscriber<>(new ACallback<HotMoviesBean>() {
+                    .compose(ApiResultTransformer.<AccountBean>norTransformer())
+                    .subscribe(new ApiResultSubscriber<AccountBean>() {
                         @Override
-                        public void onSuccess(HotMoviesBean data) {
+                        protected void onError(ApiException e) {
 
                         }
 
                         @Override
-                        public void onFail(int errCode, String errMsg) {
+                        public void onSuccess(AccountBean data) {
 
                         }
-                    }));
-
-
-            ViseHttp.BASE(new ApiPostRequest("user/login")
-                    .addParam("username", email)
-                    .addParam("password", password))
-                    .request(
-                            new ACallback<ApiResult>() {
-                                @Override
-                                public void onSuccess(ApiResult data) {
-                                    Toast.makeText(mContext, data.getData().toString(), Toast.LENGTH_SHORT).show();
-                                }
-
-                                @Override
-                                public void onFail(int errCode, String errMsg) {
-                                    Toast.makeText(mContext, errMsg, Toast.LENGTH_SHORT).show();
-                                }
-                            });
+                    });
 
         }
     }

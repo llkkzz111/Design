@@ -1,6 +1,7 @@
 package com.liuz.design.api;
 
-import com.liuz.design.bean.HotMoviesBean;
+import com.liuz.common.mode.ApiResult;
+import com.liuz.design.bean.AccountBean;
 
 import io.reactivex.Observable;
 import retrofit2.http.Field;
@@ -15,5 +16,5 @@ public interface WanApiServices {
 
     @FormUrlEncoded
     @POST("user/login")
-    Observable<HotMoviesBean> userLogin(@Field("username") String username, @Field("password") String password);
+    Observable<ApiResult<AccountBean>> userLogin(@Field("username") String username, @Field("password") String password);
 }

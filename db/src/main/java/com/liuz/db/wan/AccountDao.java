@@ -53,5 +53,6 @@ public interface AccountDao {
     @Query("DELETE FROM account")
     void deleteAllAccount();
 
-
+    @Query("SELECT * FROM account WHERE username = :userName")
+    AccountBean getAccountBean(String userName);
 }

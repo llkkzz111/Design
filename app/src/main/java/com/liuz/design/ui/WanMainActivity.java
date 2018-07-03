@@ -1,5 +1,6 @@
 package com.liuz.design.ui;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -8,26 +9,40 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.liuz.db.WanDataBase;
+import com.liuz.db.wan.AccountBean;
 import com.liuz.design.R;
 import com.liuz.design.base.TranslucentBarBaseActivity;
+import com.liuz.design.utils.PreferencesUtils;
+import com.liuz.lotus.loader.LoaderFactory;
 
 import butterknife.BindView;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 public class WanMainActivity extends TranslucentBarBaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    private final int ACCOUNT_LOGIN = 100;
     @BindView(R.id.nav_view) NavigationView navigationView;
     @BindView(R.id.drawer_layout) DrawerLayout drawer;
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.fab) FloatingActionButton fab;
+    private ImageView ivHeader;
+    private TextView tvName;
+    private AccountBean account;
 
-    ImageView ivHeader;
-    TextView tvName;
     @Override
     protected int getLayoutResId() {
         return R.layout.activity_wan_main_layout;
@@ -35,6 +50,7 @@ public class WanMainActivity extends TranslucentBarBaseActivity
 
     @Override
     protected void initEventAndData() {
+
         setSupportActionBar(toolbar);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,20 +70,32 @@ public class WanMainActivity extends TranslucentBarBaseActivity
         ivHeader.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(mContext, LoginActivity.class);
-                startActivity(intent);
+                profileClick();
             }
         });
 
         tvName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(mContext, LoginActivity.class);
-                startActivity(intent);
+                profileClick();
             }
         });
+
+        String userName = PreferencesUtils.getUserName();
+        if (!TextUtils.isEmpty(userName)) {
+            getAccount(userName);
+        }
+    }
+
+    private void profileClick() {
+        Intent intent = new Intent();
+        if (account != null) {
+            intent.setClass(mContext, LoginActivity.class);
+        } else {
+            intent.setClass(mContext, LoginActivity.class);
+            startActivityForResult(intent, ACCOUNT_LOGIN);
+        }
+
     }
 
     @Override
@@ -116,6 +144,42 @@ public class WanMainActivity extends TranslucentBarBaseActivity
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK)
+            switch (requestCode) {
+                case ACCOUNT_LOGIN:
+                    String userName = data.getStringExtra("username");
+                    getAccount(userName);
+                    break;
+            }
+    }
+
+    private void getAccount(final String userName) {
+        tvName.setText(userName);
+
+        Observable.create(new ObservableOnSubscribe<AccountBean>() {
+            @Override
+            public void subscribe(ObservableEmitter<AccountBean> emitter) throws Exception {
+                AccountBean bean = WanDataBase.getInstance(mContext).accountDao().getAccountBean(userName);
+                emitter.onNext(bean);
+            }
+        })
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<AccountBean>() {
+                    @Override
+                    public void accept(@NonNull AccountBean accountBean) throws Exception {
+                        account = accountBean;
+                        if (!TextUtils.isEmpty(accountBean.getIcon())) {
+                            LoaderFactory.getLoader().loadNet(ivHeader, accountBean.getIcon(), null);
+                        }
+                    }
+                });
     }
 
 

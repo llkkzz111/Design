@@ -11,6 +11,25 @@ public class PreferencesUtils {
 
 
     /**
+     * 读取username
+     *
+     * @return
+     */
+    public static String getUserName() {
+        return getString(SharedPreferencesKeys.USER_NAME_KEY);
+    }
+
+    /**
+     * 设置username
+     *
+     * @param username
+     * @return
+     */
+    public static boolean setUsername(String username) {
+        return putString(SharedPreferencesKeys.USER_NAME_KEY, username);
+    }
+
+    /**
      * 读取Access_token
      *
      * @return

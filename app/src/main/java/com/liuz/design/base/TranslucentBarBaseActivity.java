@@ -36,8 +36,10 @@ public abstract class TranslucentBarBaseActivity extends RxAppCompatActivity {
             // 设置根布局的参数
             ViewGroup rootView = (ViewGroup) ((ViewGroup) activity
                     .findViewById(android.R.id.content)).getChildAt(0);
-            rootView.setFitsSystemWindows(true);
-            rootView.setClipToPadding(true);
+            if (rootView != null) {
+                rootView.setFitsSystemWindows(true);
+                rootView.setClipToPadding(true);
+            }
         }
     }
 
@@ -64,12 +66,15 @@ public abstract class TranslucentBarBaseActivity extends RxAppCompatActivity {
             View StatusView = createStatusView(color);
             // 添加statusView到布局中
             ViewGroup decorView = (ViewGroup) getWindow().getDecorView();
-            decorView.addView(StatusView);
+            if (decorView != null)
+                decorView.addView(StatusView);
             // 设置根布局的参数
             ViewGroup rootView = (ViewGroup) ((ViewGroup) findViewById(android.R.id.content))
                     .getChildAt(0);
-            rootView.setFitsSystemWindows(true);
-            rootView.setClipToPadding(true);
+            if (rootView != null) {
+                rootView.setFitsSystemWindows(true);
+                rootView.setClipToPadding(true);
+            }
         }
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(color));
     }
@@ -99,7 +104,7 @@ public abstract class TranslucentBarBaseActivity extends RxAppCompatActivity {
 
 
     private void initWindowsFlag() {
-
+//        setColor(R.color.color_f97d3f);
     }
 
     // 设置布局

@@ -9,6 +9,10 @@ public class SharedPreferencesKeys {
      * access_token
      */
     public static final String ACCESS_TOKEN_KEY = "access_token";
+    /**
+     * user_name
+     */
+    public static final String USER_NAME_KEY = "user_name";
 
     /**
      * 是否登录

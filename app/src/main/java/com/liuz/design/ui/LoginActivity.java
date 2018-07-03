@@ -2,6 +2,8 @@ package com.liuz.design.ui;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.app.Activity;
+import android.content.Intent;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -11,7 +13,6 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.liuz.common.ApiResultTransformer;
 import com.liuz.common.subscriber.ApiResultSubscriber;
@@ -20,6 +21,7 @@ import com.liuz.db.wan.AccountBean;
 import com.liuz.design.R;
 import com.liuz.design.api.WanApiServices;
 import com.liuz.design.base.TranslucentBarBaseActivity;
+import com.liuz.design.utils.PreferencesUtils;
 import com.liuz.lotus.net.ViseHttp;
 import com.liuz.lotus.net.exception.ApiException;
 
@@ -68,23 +70,17 @@ public class LoginActivity extends TranslucentBarBaseActivity {
 
 
     private void attemptLogin() {
-
         mEmailView.setError(null);
         mPasswordView.setError(null);
-
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
-
         boolean cancel = false;
         View focusView = null;
-
-
         if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;
         }
-
         // Check for a valid email address.
         if (TextUtils.isEmpty(email)) {
             mEmailView.setError(getString(R.string.error_field_required));
@@ -95,8 +91,6 @@ public class LoginActivity extends TranslucentBarBaseActivity {
             focusView.requestFocus();
         } else {
             showProgress(true);
-
-
             ViseHttp.RETROFIT()
                     .create(WanApiServices.class)
                     .userLogin(email, password)
@@ -110,7 +104,10 @@ public class LoginActivity extends TranslucentBarBaseActivity {
                         @Override
                         public void onSuccess(AccountBean data) {
                             saveAccount(data);
-                            Toast.makeText(mContext, data.getUsername(), Toast.LENGTH_SHORT).show();
+                            PreferencesUtils.setUsername(data.getUsername());
+                            Intent intent = new Intent();
+                            intent.putExtra("username", data.getUsername());
+                            setResult(Activity.RESULT_OK, intent);
                             finish();
                         }
                     });

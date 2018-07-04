@@ -6,22 +6,28 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.liuz.common.ApiResultTransformer;
+import com.liuz.common.subscriber.ApiResultSubscriber;
 import com.liuz.db.WanDataBase;
 import com.liuz.db.wan.AccountBean;
 import com.liuz.design.R;
+import com.liuz.design.api.WanApiServices;
 import com.liuz.design.base.TranslucentBarBaseActivity;
+import com.liuz.design.bean.BannerBean;
 import com.liuz.design.utils.PreferencesUtils;
 import com.liuz.lotus.loader.LoaderFactory;
+import com.liuz.lotus.net.ViseHttp;
+import com.liuz.lotus.net.exception.ApiException;
 
 import butterknife.BindView;
 import io.reactivex.Observable;
@@ -35,10 +41,13 @@ import io.reactivex.schedulers.Schedulers;
 public class WanMainActivity extends TranslucentBarBaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private final int ACCOUNT_LOGIN = 100;
+
     @BindView(R.id.nav_view) NavigationView navigationView;
     @BindView(R.id.drawer_layout) DrawerLayout drawer;
     @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.tab_banner) ViewPager tabBanner;
     @BindView(R.id.fab) FloatingActionButton fab;
+
     private ImageView ivHeader;
     private TextView tvName;
     private AccountBean account;
@@ -85,6 +94,24 @@ public class WanMainActivity extends TranslucentBarBaseActivity
         if (!TextUtils.isEmpty(userName)) {
             getAccount(userName);
         }
+
+        getBannerInfo();
+    }
+
+    private void getBannerInfo() {
+        ViseHttp.RETROFIT().create(WanApiServices.class).getBanner().compose(ApiResultTransformer.<BannerBean>norTransformer()).subscribe(new ApiResultSubscriber<BannerBean>() {
+            @Override
+            protected void onError(ApiException e) {
+
+            }
+
+            @Override
+            public void onSuccess(BannerBean data) {
+
+            }
+
+
+        });
     }
 
     private void profileClick() {
@@ -98,36 +125,6 @@ public class WanMainActivity extends TranslucentBarBaseActivity
 
     }
 
-    @Override
-    public void onBackPressed() {
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.wan_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -182,5 +179,14 @@ public class WanMainActivity extends TranslucentBarBaseActivity
                 });
     }
 
+
+    @Override
+    public void onBackPressed() {
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
 
 }

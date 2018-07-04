@@ -16,7 +16,7 @@ import com.liuz.design.base.BaseFragment;
 import com.liuz.design.ui.AreaActivity;
 import com.liuz.design.ui.movies.MTimesMoviesActivity;
 import com.liuz.design.utils.DialogUtils;
-import com.liuz.design.view.Banners;
+import com.liuz.design.view.Guides;
 import com.liuz.lotus.permission.Permission;
 import com.liuz.lotus.permission.RxPermissions;
 import com.vise.log.ViseLog;
@@ -58,7 +58,7 @@ public class HomeFragment extends BaseFragment {
 
     }
 
-    public static HomeFragment newInstance(Banners banner) {
+    public static HomeFragment newInstance(Guides banner) {
         HomeFragment fragment = new HomeFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);

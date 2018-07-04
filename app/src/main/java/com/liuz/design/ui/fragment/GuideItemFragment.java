@@ -17,7 +17,7 @@ import com.liuz.design.R;
 import com.liuz.design.ui.MainActivity;
 import com.liuz.design.utils.DialogUtils;
 import com.liuz.design.utils.PreferencesUtils;
-import com.liuz.design.view.Banners;
+import com.liuz.design.view.Guides;
 import com.liuz.lotus.permission.Permission;
 import com.liuz.lotus.permission.RxPermissions;
 
@@ -28,7 +28,7 @@ import butterknife.Unbinder;
 import io.reactivex.functions.Consumer;
 
 
-public class BannerItemFragment extends Fragment {
+public class GuideItemFragment extends Fragment {
 
     private static final String bannerStr = "bannerItem";
     @BindView(R.id.iv_banner) ImageView ivBanner;
@@ -36,16 +36,16 @@ public class BannerItemFragment extends Fragment {
     @BindView(R.id.iv_logo) ImageView ivLogo;
     @BindView(R.id.iv_tips) ImageView ivTips;
     @BindView(R.id.iv_des) ImageView ivDes;
-    private Banners banner;
+    private Guides banner;
     private Unbinder unbinder;
     private String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
-    public BannerItemFragment() {
+    public GuideItemFragment() {
         // Required empty public constructor
     }
 
-    public static BannerItemFragment newInstance(Banners banner) {
-        BannerItemFragment fragment = new BannerItemFragment();
+    public static GuideItemFragment newInstance(Guides banner) {
+        GuideItemFragment fragment = new GuideItemFragment();
         Bundle args = new Bundle();
         args.putParcelable(bannerStr, banner);
         fragment.setArguments(args);
@@ -116,7 +116,7 @@ public class BannerItemFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_banner_item_layout, container, false);
+        View view = inflater.inflate(R.layout.fragment_guide_item_layout, container, false);
         unbinder = ButterKnife.bind(this, view);
         ivBanner.setBackgroundResource(banner.getBannerRes());
         ivTips.setBackgroundResource(banner.getTipsRes());

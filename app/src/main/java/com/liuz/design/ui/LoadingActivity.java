@@ -30,6 +30,7 @@ public class LoadingActivity extends TranslucentBarBaseActivity {
 
     @Override
     protected void initEventAndData() {
+
         getSupportActionBar().hide();
 
 

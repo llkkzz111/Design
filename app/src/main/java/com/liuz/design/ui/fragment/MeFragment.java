@@ -4,7 +4,7 @@ import android.os.Bundle;
 
 import com.liuz.design.R;
 import com.liuz.design.base.BaseFragment;
-import com.liuz.design.view.Banners;
+import com.liuz.design.view.Guides;
 
 
 /**
@@ -17,7 +17,7 @@ public class MeFragment extends BaseFragment {
         // Required empty public constructor
     }
 
-    public static MeFragment newInstance(Banners banner) {
+    public static MeFragment newInstance(Guides banner) {
         MeFragment fragment = new MeFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);

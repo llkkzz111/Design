@@ -7,16 +7,16 @@ import android.os.Parcelable;
  * date: 2018/5/23 11:25
  * author liuzhao
  */
-public class Banners implements Parcelable {
-    public static final Creator<Banners> CREATOR = new Creator<Banners>() {
+public class Guides implements Parcelable {
+    public static final Creator<Guides> CREATOR = new Creator<Guides>() {
         @Override
-        public Banners createFromParcel(Parcel source) {
-            return new Banners(source);
+        public Guides createFromParcel(Parcel source) {
+            return new Guides(source);
         }
 
         @Override
-        public Banners[] newArray(int size) {
-            return new Banners[size];
+        public Guides[] newArray(int size) {
+            return new Guides[size];
         }
     };
     private int bannerRes;
@@ -24,7 +24,7 @@ public class Banners implements Parcelable {
     private int tipBtnRes;
     private int tipDesRes;
 
-    public Banners(int bannerRes, int tipsRes, int tipBtnRes, int tipDesRes) {
+    public Guides(int bannerRes, int tipsRes, int tipBtnRes, int tipDesRes) {
         this.bannerRes = bannerRes;
         this.tipsRes = tipsRes;
         this.tipBtnRes = tipBtnRes;
@@ -32,13 +32,13 @@ public class Banners implements Parcelable {
     }
 
 
-    public Banners(int bannerRes, int tipBtnRes) {
+    public Guides(int bannerRes, int tipBtnRes) {
         this.bannerRes = bannerRes;
         this.tipsRes = tipBtnRes;
         this.tipBtnRes = -1;
     }
 
-    protected Banners(Parcel in) {
+    protected Guides(Parcel in) {
         this.bannerRes = in.readInt();
         this.tipsRes = in.readInt();
         this.tipBtnRes = in.readInt();

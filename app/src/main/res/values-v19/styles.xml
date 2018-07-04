@@ -7,6 +7,10 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
 
     </style>
+    <!-- Base application theme. -->
+    <style name="AppTheme.NoStatusBar" parent="Theme.AppCompat.Light.DarkActionBar">
+    </style>
+
 
     <style name="noActionBar" parent="Theme.AppCompat.Light.NoActionBar">
 

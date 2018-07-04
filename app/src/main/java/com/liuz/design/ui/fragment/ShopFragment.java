@@ -4,7 +4,7 @@ import android.os.Bundle;
 
 import com.liuz.design.R;
 import com.liuz.design.base.BaseFragment;
-import com.liuz.design.view.Banners;
+import com.liuz.design.view.Guides;
 
 
 /**
@@ -16,7 +16,7 @@ public class ShopFragment extends BaseFragment {
         // Required empty public constructor
     }
 
-    public static ShopFragment newInstance(Banners banner) {
+    public static ShopFragment newInstance(Guides banner) {
         ShopFragment fragment = new ShopFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);

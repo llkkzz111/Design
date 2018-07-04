@@ -2,9 +2,7 @@ package com.liuz.design.ui;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -24,10 +22,13 @@ import com.liuz.design.R;
 import com.liuz.design.api.WanApiServices;
 import com.liuz.design.base.TranslucentBarBaseActivity;
 import com.liuz.design.bean.BannerBean;
+import com.liuz.design.ui.adapter.BannerFragmentAdapter;
 import com.liuz.design.utils.PreferencesUtils;
 import com.liuz.lotus.loader.LoaderFactory;
 import com.liuz.lotus.net.ViseHttp;
 import com.liuz.lotus.net.exception.ApiException;
+
+import java.util.List;
 
 import butterknife.BindView;
 import io.reactivex.Observable;
@@ -46,7 +47,7 @@ public class WanMainActivity extends TranslucentBarBaseActivity
     @BindView(R.id.drawer_layout) DrawerLayout drawer;
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.tab_banner) ViewPager tabBanner;
-    @BindView(R.id.fab) FloatingActionButton fab;
+
 
     private ImageView ivHeader;
     private TextView tvName;
@@ -61,13 +62,7 @@ public class WanMainActivity extends TranslucentBarBaseActivity
     protected void initEventAndData() {
 
         setSupportActionBar(toolbar);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -99,15 +94,16 @@ public class WanMainActivity extends TranslucentBarBaseActivity
     }
 
     private void getBannerInfo() {
-        ViseHttp.RETROFIT().create(WanApiServices.class).getBanner().compose(ApiResultTransformer.<BannerBean>norTransformer()).subscribe(new ApiResultSubscriber<BannerBean>() {
+        ViseHttp.RETROFIT().create(WanApiServices.class).getBanner().compose(ApiResultTransformer.<List<BannerBean>>norTransformer()).subscribe(new ApiResultSubscriber<List<BannerBean>>() {
             @Override
             protected void onError(ApiException e) {
 
             }
 
             @Override
-            public void onSuccess(BannerBean data) {
-
+            public void onSuccess(List<BannerBean> data) {
+                BannerFragmentAdapter adapter = new BannerFragmentAdapter(getSupportFragmentManager(), data);
+                tabBanner.setAdapter(adapter);
             }
 
 

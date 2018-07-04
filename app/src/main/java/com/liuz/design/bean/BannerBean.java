@@ -1,10 +1,13 @@
 package com.liuz.design.bean;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * date: 2018/7/3 18:44
  * author liuzhao
  */
-public class BannerBean {
+public class BannerBean implements Parcelable {
     /**
      * desc :
      * id : 6
@@ -88,4 +91,47 @@ public class BannerBean {
     public void setUrl(String url) {
         this.url = url;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.desc);
+        dest.writeInt(this.id);
+        dest.writeString(this.imagePath);
+        dest.writeInt(this.isVisible);
+        dest.writeInt(this.order);
+        dest.writeString(this.title);
+        dest.writeInt(this.type);
+        dest.writeString(this.url);
+    }
+
+    public BannerBean() {
+    }
+
+    protected BannerBean(Parcel in) {
+        this.desc = in.readString();
+        this.id = in.readInt();
+        this.imagePath = in.readString();
+        this.isVisible = in.readInt();
+        this.order = in.readInt();
+        this.title = in.readString();
+        this.type = in.readInt();
+        this.url = in.readString();
+    }
+
+    public static final Parcelable.Creator<BannerBean> CREATOR = new Parcelable.Creator<BannerBean>() {
+        @Override
+        public BannerBean createFromParcel(Parcel source) {
+            return new BannerBean(source);
+        }
+
+        @Override
+        public BannerBean[] newArray(int size) {
+            return new BannerBean[size];
+        }
+    };
 }

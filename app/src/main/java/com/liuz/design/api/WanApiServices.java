@@ -4,6 +4,8 @@ import com.liuz.common.mode.ApiResult;
 import com.liuz.db.wan.AccountBean;
 import com.liuz.design.bean.BannerBean;
 
+import java.util.List;
+
 import io.reactivex.Observable;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -21,5 +23,5 @@ public interface WanApiServices {
     Observable<ApiResult<AccountBean>> userLogin(@Field("username") String username, @Field("password") String password);
 
     @GET("banner/json")
-    Observable<ApiResult<BannerBean>> getBanner();
+    Observable<ApiResult<List<BannerBean>>> getBanner();
 }

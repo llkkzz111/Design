@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
@@ -22,8 +21,8 @@ import com.liuz.design.R;
 import com.liuz.design.api.WanApiServices;
 import com.liuz.design.base.TranslucentBarBaseActivity;
 import com.liuz.design.bean.BannerBean;
-import com.liuz.design.ui.adapter.BannerFragmentAdapter;
 import com.liuz.design.utils.PreferencesUtils;
+import com.liuz.design.view.BannerView;
 import com.liuz.lotus.loader.LoaderFactory;
 import com.liuz.lotus.net.ViseHttp;
 import com.liuz.lotus.net.exception.ApiException;
@@ -46,7 +45,7 @@ public class WanMainActivity extends TranslucentBarBaseActivity
     @BindView(R.id.nav_view) NavigationView navigationView;
     @BindView(R.id.drawer_layout) DrawerLayout drawer;
     @BindView(R.id.toolbar) Toolbar toolbar;
-    @BindView(R.id.tab_banner) ViewPager tabBanner;
+    @BindView(R.id.bannerView) BannerView tabBanner;
 
 
     private ImageView ivHeader;
@@ -102,13 +101,15 @@ public class WanMainActivity extends TranslucentBarBaseActivity
 
             @Override
             public void onSuccess(List<BannerBean> data) {
-                BannerFragmentAdapter adapter = new BannerFragmentAdapter(getSupportFragmentManager(), data);
-                tabBanner.setAdapter(adapter);
+
+                tabBanner.setData(data);
+
             }
 
 
         });
     }
+
 
     private void profileClick() {
         Intent intent = new Intent();

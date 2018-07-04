@@ -18,7 +18,7 @@ import butterknife.BindView;
 public class GuideActivity extends TranslucentBarBaseActivity {
 
     private static List<Guides> list;
-    @BindView(R.id.vp_banner) ViewPager vpBanner;
+    @BindView(R.id.vp_guide) ViewPager vpGuide;
 
     @Override
     protected int getLayoutResId() {
@@ -33,12 +33,12 @@ public class GuideActivity extends TranslucentBarBaseActivity {
         list.add(new Guides(R.drawable.lead_bg2, R.drawable.lead_bg2_iv));
         list.add(new Guides(R.drawable.lead_bg3, R.drawable.lead_bg3_iv));
         list.add(new Guides(R.drawable.lead_bg4, R.drawable.lead_bg4_iv, R.drawable.lead_bg4_btn, R.drawable.lead_bg4_des));
-        vpBanner.setAdapter(new BannerAdapter(getSupportFragmentManager()));
+        vpGuide.setAdapter(new GuideAdapter(getSupportFragmentManager()));
     }
 
-    static class BannerAdapter extends FragmentPagerAdapter {
+    static class GuideAdapter extends FragmentPagerAdapter {
 
-        public BannerAdapter(FragmentManager fm) {
+        public GuideAdapter(FragmentManager fm) {
             super(fm);
         }
 

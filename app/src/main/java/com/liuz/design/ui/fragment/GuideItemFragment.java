@@ -30,13 +30,13 @@ import io.reactivex.functions.Consumer;
 
 public class GuideItemFragment extends Fragment {
 
-    private static final String bannerStr = "bannerItem";
-    @BindView(R.id.iv_banner) ImageView ivBanner;
+    private static final String guideStr = "guideItem";
+    @BindView(R.id.iv_guide) ImageView ivBanner;
     @BindView(R.id.iv_btn) ImageView ivBtn;
     @BindView(R.id.iv_logo) ImageView ivLogo;
     @BindView(R.id.iv_tips) ImageView ivTips;
     @BindView(R.id.iv_des) ImageView ivDes;
-    private Guides banner;
+    private Guides guide;
     private Unbinder unbinder;
     private String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
@@ -47,7 +47,7 @@ public class GuideItemFragment extends Fragment {
     public static GuideItemFragment newInstance(Guides banner) {
         GuideItemFragment fragment = new GuideItemFragment();
         Bundle args = new Bundle();
-        args.putParcelable(bannerStr, banner);
+        args.putParcelable(guideStr, banner);
         fragment.setArguments(args);
         return fragment;
     }
@@ -56,7 +56,7 @@ public class GuideItemFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            banner = getArguments().getParcelable(bannerStr);
+            guide = getArguments().getParcelable(guideStr);
         }
     }
 
@@ -118,12 +118,12 @@ public class GuideItemFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_guide_item_layout, container, false);
         unbinder = ButterKnife.bind(this, view);
-        ivBanner.setBackgroundResource(banner.getBannerRes());
-        ivTips.setBackgroundResource(banner.getTipsRes());
-        if (banner.getTipBtnRes() > 0) {
+        ivBanner.setBackgroundResource(guide.getBannerRes());
+        ivTips.setBackgroundResource(guide.getTipsRes());
+        if (guide.getTipBtnRes() > 0) {
             ivLogo.setVisibility(View.GONE);
-            ivBtn.setBackgroundResource(banner.getTipBtnRes());
-            ivDes.setBackgroundResource(banner.getTipDesRes());
+            ivBtn.setBackgroundResource(guide.getTipBtnRes());
+            ivDes.setBackgroundResource(guide.getTipDesRes());
         } else {
             ivBtn.setVisibility(View.GONE);
             ivDes.setVisibility(View.GONE);

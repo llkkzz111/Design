@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.liuz.common.ApiResultTransformer;
 import com.liuz.common.subscriber.ApiResultSubscriber;
@@ -20,9 +21,11 @@ import com.liuz.db.wan.AccountBean;
 import com.liuz.design.R;
 import com.liuz.design.api.WanApiServices;
 import com.liuz.design.base.TranslucentBarBaseActivity;
+import com.liuz.design.bean.ArticleBeans;
 import com.liuz.design.bean.BannerBean;
 import com.liuz.design.utils.PreferencesUtils;
 import com.liuz.design.view.BannerView;
+import com.liuz.design.view.listener.OnBannerListener;
 import com.liuz.lotus.loader.LoaderFactory;
 import com.liuz.lotus.net.ViseHttp;
 import com.liuz.lotus.net.exception.ApiException;
@@ -51,6 +54,7 @@ public class WanMainActivity extends TranslucentBarBaseActivity
     private ImageView ivHeader;
     private TextView tvName;
     private AccountBean account;
+    private int pageNo = 0;
 
     @Override
     protected int getLayoutResId() {
@@ -103,11 +107,35 @@ public class WanMainActivity extends TranslucentBarBaseActivity
             public void onSuccess(List<BannerBean> data) {
 
                 tabBanner.setData(data);
+                tabBanner.setOnBannerListener(new OnBannerListener() {
+                    @Override
+                    public void OnBannerClick(BannerBean bean) {
+                        Toast.makeText(mContext, bean.getTitle(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
 
             }
 
 
         });
+
+        ViseHttp.RETROFIT().create(WanApiServices.class).getArticleList(pageNo)
+                .compose(ApiResultTransformer.<List<ArticleBeans>>norTransformer())
+                .subscribe(new ApiResultSubscriber<List<ArticleBeans>>() {
+                    @Override
+                    protected void onError(ApiException e) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(List<ArticleBeans> data) {
+
+
+                    }
+
+
+                });
     }
 
 

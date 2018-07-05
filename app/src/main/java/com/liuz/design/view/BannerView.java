@@ -8,6 +8,7 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +38,7 @@ public class BannerView extends FrameLayout implements ViewPager.OnPageChangeLis
     private List<View> imageViews;
     private int count;
     private ViewPager tabBanner;
+    private LinearLayout llDots;
     private ViewPager.OnPageChangeListener mOnPageChangeListener;
     private int currentItem = -1;
 
@@ -73,7 +75,7 @@ public class BannerView extends FrameLayout implements ViewPager.OnPageChangeLis
         imageViews = new ArrayList<>();
         View view = LayoutInflater.from(mContext).inflate(R.layout.view_banner_layout, this, true);
         tabBanner = view.findViewById(R.id.tab_banner);
-        LinearLayout llDots = view.findViewById(R.id.ll_dots);
+        llDots = view.findViewById(R.id.ll_dots);
 //        tabBanner.setAdapter(new BannerPagerAdapter());
     }
 
@@ -86,7 +88,8 @@ public class BannerView extends FrameLayout implements ViewPager.OnPageChangeLis
 
         }
 
-        for (BannerBean bean : beanList) {
+        for (int i = 0; i < beanList.size(); i++) {
+            final BannerBean bean = beanList.get(i);
             View view = LayoutInflater.from(mContext).inflate(R.layout.fragment_banner_item_layout, null, true);
             ImageView ivBanner = view.findViewById(R.id.iv_banner);
             LoaderFactory.getLoader().loadNet(ivBanner, bean.getImagePath(), null);
@@ -95,13 +98,25 @@ public class BannerView extends FrameLayout implements ViewPager.OnPageChangeLis
             ivBanner.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    listener.OnBannerClick(bean);
                 }
             });
             imageViews.add(view);
+            ImageView ivDot = new ImageView(mContext);
+            LayoutParams layoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+            ivDot.setPadding(5, 0, 5, 0);
+            ivDot.setImageResource(R.drawable.img_dots_bg);
+            layoutParams.gravity = Gravity.CENTER;
+            ivDot.setLayoutParams(layoutParams);
+            llDots.addView(ivDot);
+
         }
 
         tabBanner.setAdapter(adapter);
+    }
+
+    public void setOnBannerListener(OnBannerListener listener) {
+        this.listener = listener;
     }
 
     @Override
@@ -169,21 +184,10 @@ public class BannerView extends FrameLayout implements ViewPager.OnPageChangeLis
             return view == object;
         }
 
-
         @Override
         public Object instantiateItem(ViewGroup container, final int position) {
-
             container.addView(imageViews.get(position));
             View view = imageViews.get(position);
-
-            if (listener != null) {
-                view.setOnClickListener(new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        listener.OnBannerClick(toRealPosition(position));
-                    }
-                });
-            }
             return view;
         }
 

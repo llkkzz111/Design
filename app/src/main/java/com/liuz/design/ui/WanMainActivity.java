@@ -105,7 +105,6 @@ public class WanMainActivity extends TranslucentBarBaseActivity
 
             @Override
             public void onSuccess(List<BannerBean> data) {
-
                 tabBanner.setData(data);
                 tabBanner.setOnBannerListener(new OnBannerListener() {
                     @Override

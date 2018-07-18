@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.liuz.design.R;
@@ -29,23 +28,19 @@ import java.util.List;
  * date: 2018/7/4 17:15
  * author liuzhao
  */
-public class BannerView extends FrameLayout implements ViewPager.OnPageChangeListener {
+public class BannerView extends FrameLayout {
 
     BannerPagerAdapter adapter = null;
     private List<BannerBean> beanList = null;
     private Context mContext;
     private OnBannerListener listener;
-    private List<View> imageViews;
-    private List<ImageView> listDots;
+    private List<View> views;
+
     private int count;
     private ViewPager tabBanner;
-    private LinearLayout llDots;
+
     private ViewPager.OnPageChangeListener mOnPageChangeListener;
     private int currentItem = -1;
-
-    public void setOnPageChangeListener(ViewPager.OnPageChangeListener onPageChangeListener) {
-        mOnPageChangeListener = onPageChangeListener;
-    }
 
     public BannerView(@NonNull Context context) {
         super(context);
@@ -71,13 +66,16 @@ public class BannerView extends FrameLayout implements ViewPager.OnPageChangeLis
         this.mContext = context;
     }
 
+    public void setOnPageChangeListener(ViewPager.OnPageChangeListener onPageChangeListener) {
+        mOnPageChangeListener = onPageChangeListener;
+    }
+
     void init() {
         beanList = new ArrayList<>();
-        imageViews = new ArrayList<>();
-        listDots = new ArrayList<>();
+        views = new ArrayList<>();
         View view = LayoutInflater.from(mContext).inflate(R.layout.view_banner_layout, this, true);
         tabBanner = view.findViewById(R.id.tab_banner);
-        llDots = view.findViewById(R.id.ll_dots);
+
 //        tabBanner.setAdapter(new BannerPagerAdapter());
     }
 
@@ -85,92 +83,17 @@ public class BannerView extends FrameLayout implements ViewPager.OnPageChangeLis
         this.beanList = beanList;
         this.count = beanList.size();
         if (adapter == null) {
-            adapter = new BannerPagerAdapter();
-            tabBanner.addOnPageChangeListener(this);
+            adapter = new BannerPagerAdapter(beanList);
 
         }
-
-        for (int i = 0; i < beanList.size(); i++) {
-            final BannerBean bean = beanList.get(i);
-            View view = LayoutInflater.from(mContext).inflate(R.layout.fragment_banner_item_layout, null, true);
-            ImageView ivBanner = view.findViewById(R.id.iv_banner);
-            LoaderFactory.getLoader().loadNet(ivBanner, bean.getImagePath(), null);
-            TextView tvTitle = view.findViewById(R.id.tv_banner_title);
-            tvTitle.setText(bean.getTitle());
-            ivBanner.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    listener.OnBannerClick(bean);
-                }
-            });
-            imageViews.add(view);
-            ImageView ivDot = new ImageView(mContext);
-            LayoutParams layoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-            ivDot.setPadding(5, 0, 5, 0);
-            ivDot.setImageResource(R.drawable.img_dots_bg);
-            layoutParams.gravity = Gravity.CENTER;
-            ivDot.setLayoutParams(layoutParams);
-            llDots.addView(ivDot);
-            if (listDots.size() == 0)
-                ivDot.setSelected(true);
-            listDots.add(ivDot);
-
-        }
-
         tabBanner.setAdapter(adapter);
+        tabBanner.addOnPageChangeListener(adapter);
     }
 
     public void setOnBannerListener(OnBannerListener listener) {
         this.listener = listener;
     }
 
-    @Override
-    public void onPageScrollStateChanged(int state) {
-        if (mOnPageChangeListener != null) {
-            mOnPageChangeListener.onPageScrollStateChanged(state);
-        }
-        switch (state) {
-            case 0://No operation
-                if (currentItem == 0) {
-                    tabBanner.setCurrentItem(count, false);
-                } else if (currentItem == count + 1) {
-                    tabBanner.setCurrentItem(1, false);
-                }
-                break;
-            case 1://start Sliding
-                if (currentItem == count + 1) {
-                    tabBanner.setCurrentItem(1, false);
-                } else if (currentItem == 0) {
-                    tabBanner.setCurrentItem(count, false);
-                }
-                break;
-            case 2://end Sliding
-                break;
-        }
-    }
-
-    @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-        if (mOnPageChangeListener != null) {
-            mOnPageChangeListener.onPageScrolled(toRealPosition(position), positionOffset, positionOffsetPixels);
-        }
-    }
-
-    @Override
-    public void onPageSelected(int position) {
-        currentItem = position;
-        if (mOnPageChangeListener != null) {
-            mOnPageChangeListener.onPageSelected(toRealPosition(position));
-        }
-        for (int i = 0; i < listDots.size(); i++) {
-            if (listDots.get(position) == listDots.get(i)) {
-                listDots.get(i).setSelected(true);
-            } else {
-                listDots.get(i).setSelected(false);
-            }
-        }
-
-    }
 
     /**
      * 返回真实的位置
@@ -185,7 +108,41 @@ public class BannerView extends FrameLayout implements ViewPager.OnPageChangeLis
         return realPosition;
     }
 
-    class BannerPagerAdapter extends PagerAdapter {
+    class BannerPagerAdapter extends PagerAdapter implements ViewPager.OnPageChangeListener {
+
+
+        public BannerPagerAdapter(List<BannerBean> beanList) {
+            //        如果数据大于一条
+            if (beanList.size() > 1) {
+//            添加最后一页到第一页
+                beanList.add(0, beanList.get(beanList.size() - 1));
+//            添加第一页(经过上行的添加已经是第二页了)到最后一页
+                beanList.add(beanList.get(1));
+            }
+
+            for (int i = 0; i < beanList.size(); i++) {
+                final BannerBean bean = beanList.get(i);
+                View view = LayoutInflater.from(mContext).inflate(R.layout.fragment_banner_item_layout, null, true);
+                ImageView ivBanner = view.findViewById(R.id.iv_banner);
+                LoaderFactory.getLoader().loadNet(ivBanner, bean.getImagePath(), null);
+                TextView tvTitle = view.findViewById(R.id.tv_banner_title);
+                tvTitle.setText(bean.getTitle());
+                ivBanner.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        listener.OnBannerClick(bean);
+                    }
+                });
+                views.add(view);
+                ImageView ivDot = new ImageView(mContext);
+                LayoutParams layoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+                ivDot.setPadding(5, 0, 5, 0);
+                ivDot.setImageResource(R.drawable.img_dots_bg);
+                layoutParams.gravity = Gravity.CENTER;
+                ivDot.setLayoutParams(layoutParams);
+
+            }
+        }
 
         @Override
         public int getCount() {
@@ -199,8 +156,8 @@ public class BannerView extends FrameLayout implements ViewPager.OnPageChangeLis
 
         @Override
         public Object instantiateItem(ViewGroup container, final int position) {
-            container.addView(imageViews.get(position));
-            View view = imageViews.get(position);
+            container.addView(views.get(position));
+            View view = views.get(position);
             return view;
         }
 
@@ -209,6 +166,37 @@ public class BannerView extends FrameLayout implements ViewPager.OnPageChangeLis
             container.removeView((View) object);
         }
 
+        @Override
+        public void onPageScrollStateChanged(int state) {
+            if (mOnPageChangeListener != null) {
+                mOnPageChangeListener.onPageScrollStateChanged(state);
+            }
+
+            //        若viewpager滑动未停止，直接返回
+            if (state != ViewPager.SCROLL_STATE_IDLE) return;
+//        若当前为第一张，设置页面为倒数第二张
+            if (currentItem == 0) {
+                tabBanner.setCurrentItem(views.size() - 2, false);
+            } else if (currentItem == views.size() - 1) {
+//        若当前为倒数第一张，设置页面为第二张
+                tabBanner.setCurrentItem(1, false);
+            }
+        }
+
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            if (mOnPageChangeListener != null) {
+                mOnPageChangeListener.onPageScrolled(toRealPosition(position), positionOffset, positionOffsetPixels);
+            }
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+            currentItem = position;
+            if (mOnPageChangeListener != null) {
+                mOnPageChangeListener.onPageSelected(toRealPosition(position));
+            }
+        }
     }
 
 }

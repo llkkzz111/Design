@@ -36,6 +36,7 @@ public class BannerView extends FrameLayout implements ViewPager.OnPageChangeLis
     private Context mContext;
     private OnBannerListener listener;
     private List<View> imageViews;
+    private List<ImageView> listDots;
     private int count;
     private ViewPager tabBanner;
     private LinearLayout llDots;
@@ -73,6 +74,7 @@ public class BannerView extends FrameLayout implements ViewPager.OnPageChangeLis
     void init() {
         beanList = new ArrayList<>();
         imageViews = new ArrayList<>();
+        listDots = new ArrayList<>();
         View view = LayoutInflater.from(mContext).inflate(R.layout.view_banner_layout, this, true);
         tabBanner = view.findViewById(R.id.tab_banner);
         llDots = view.findViewById(R.id.ll_dots);
@@ -109,6 +111,9 @@ public class BannerView extends FrameLayout implements ViewPager.OnPageChangeLis
             layoutParams.gravity = Gravity.CENTER;
             ivDot.setLayoutParams(layoutParams);
             llDots.addView(ivDot);
+            if (listDots.size() == 0)
+                ivDot.setSelected(true);
+            listDots.add(ivDot);
 
         }
 
@@ -157,6 +162,14 @@ public class BannerView extends FrameLayout implements ViewPager.OnPageChangeLis
         if (mOnPageChangeListener != null) {
             mOnPageChangeListener.onPageSelected(toRealPosition(position));
         }
+        for (int i = 0; i < listDots.size(); i++) {
+            if (listDots.get(position) == listDots.get(i)) {
+                listDots.get(i).setSelected(true);
+            } else {
+                listDots.get(i).setSelected(false);
+            }
+        }
+
     }
 
     /**

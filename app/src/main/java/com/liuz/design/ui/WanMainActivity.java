@@ -136,7 +136,6 @@ public class WanMainActivity extends TranslucentBarBaseActivity
             @Override
             public void onSuccess(List<BannerBean> data) {
                 rlSmart.finishRefresh();
-
                 tabBanner.setData(data);
                 tabBanner.setOnBannerListener(new OnBannerListener() {
                     @Override

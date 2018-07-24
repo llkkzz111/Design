@@ -6,6 +6,8 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.MenuItem;
@@ -21,15 +23,22 @@ import com.liuz.db.wan.AccountBean;
 import com.liuz.design.R;
 import com.liuz.design.api.WanApiServices;
 import com.liuz.design.base.TranslucentBarBaseActivity;
+import com.liuz.design.bean.ArticleBean;
 import com.liuz.design.bean.ArticleBeans;
 import com.liuz.design.bean.BannerBean;
+import com.liuz.design.ui.adapter.WanArticleAdapter;
 import com.liuz.design.utils.PreferencesUtils;
 import com.liuz.design.view.BannerView;
 import com.liuz.design.view.listener.OnBannerListener;
 import com.liuz.lotus.loader.LoaderFactory;
 import com.liuz.lotus.net.ViseHttp;
 import com.liuz.lotus.net.exception.ApiException;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -49,12 +58,16 @@ public class WanMainActivity extends TranslucentBarBaseActivity
     @BindView(R.id.drawer_layout) DrawerLayout drawer;
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.bannerView) BannerView tabBanner;
+    @BindView(R.id.rv_article) RecyclerView rvArticle;
+    @BindView(R.id.rl_smart) SmartRefreshLayout rlSmart;
 
 
     private ImageView ivHeader;
     private TextView tvName;
     private AccountBean account;
     private int pageNo = 0;
+    private List<ArticleBean> beanList;
+    private WanArticleAdapter articleAdapter;
 
     @Override
     protected int getLayoutResId() {
@@ -87,24 +100,43 @@ public class WanMainActivity extends TranslucentBarBaseActivity
                 profileClick();
             }
         });
-
+        rvArticle.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
+        beanList = new ArrayList<>();
+        articleAdapter = new WanArticleAdapter(mContext, beanList);
+        rvArticle.setAdapter(articleAdapter);
         String userName = PreferencesUtils.getUserName();
         if (!TextUtils.isEmpty(userName)) {
             getAccount(userName);
         }
-
         getBannerInfo();
+
+        rlSmart.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(@android.support.annotation.NonNull RefreshLayout refreshLayout) {
+                getBannerInfo();
+            }
+        });
+
+        rlSmart.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore(@android.support.annotation.NonNull RefreshLayout refreshLayout) {
+                pageNo++;
+                getArticleList();
+            }
+        });
     }
 
     private void getBannerInfo() {
         ViseHttp.RETROFIT().create(WanApiServices.class).getBanner().compose(ApiResultTransformer.<List<BannerBean>>norTransformer()).subscribe(new ApiResultSubscriber<List<BannerBean>>() {
             @Override
             protected void onError(ApiException e) {
-
+                rlSmart.finishRefresh();
             }
 
             @Override
             public void onSuccess(List<BannerBean> data) {
+                rlSmart.finishRefresh();
+
                 tabBanner.setData(data);
                 tabBanner.setOnBannerListener(new OnBannerListener() {
                     @Override
@@ -112,25 +144,28 @@ public class WanMainActivity extends TranslucentBarBaseActivity
                         Toast.makeText(mContext, bean.getTitle(), Toast.LENGTH_SHORT).show();
                     }
                 });
-
-
             }
-
-
         });
 
+        getArticleList();
+    }
+
+    private void getArticleList() {
         ViseHttp.RETROFIT().create(WanApiServices.class).getArticleList(pageNo)
-                .compose(ApiResultTransformer.<List<ArticleBeans>>norTransformer())
-                .subscribe(new ApiResultSubscriber<List<ArticleBeans>>() {
+                .compose(ApiResultTransformer.<ArticleBeans>norTransformer())
+                .subscribe(new ApiResultSubscriber<ArticleBeans>() {
                     @Override
                     protected void onError(ApiException e) {
-
+                        rlSmart.finishLoadMore(false);
                     }
 
                     @Override
-                    public void onSuccess(List<ArticleBeans> data) {
-
-
+                    public void onSuccess(ArticleBeans data) {
+                        if (pageNo == 1)
+                            beanList.clear();
+                        beanList.addAll(data.getDatas());
+                        articleAdapter.notifyDataSetChanged();
+                        rlSmart.finishLoadMore(true);
                     }
 
 

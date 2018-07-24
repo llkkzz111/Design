@@ -28,5 +28,5 @@ public interface WanApiServices {
     Observable<ApiResult<List<BannerBean>>> getBanner();
 
     @GET("article/list/{page}/json")
-    Observable<ApiResult<List<ArticleBeans>>> getArticleList(@Path("page") int page);
+    Observable<ApiResult<ArticleBeans>> getArticleList(@Path("page") int page);
 }

@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.liuz.common.ApiResultTransformer;
+import com.liuz.common.mode.ApiResult;
 import com.liuz.common.subscriber.ApiResultSubscriber;
 import com.liuz.db.WanDataBase;
 import com.liuz.db.wan.AccountBean;
@@ -45,6 +46,8 @@ import butterknife.BindView;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.ObservableSource;
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
@@ -127,24 +130,33 @@ public class WanMainActivity extends TranslucentBarBaseActivity
     }
 
     private void getBannerInfo() {
-        ViseHttp.RETROFIT().create(WanApiServices.class).getBanner().compose(ApiResultTransformer.<List<BannerBean>>norTransformer()).subscribe(new ApiResultSubscriber<List<BannerBean>>() {
-            @Override
-            protected void onError(ApiException e) {
-                rlSmart.finishRefresh();
-            }
-
-            @Override
-            public void onSuccess(List<BannerBean> data) {
-                rlSmart.finishRefresh();
-                tabBanner.setData(data);
-                tabBanner.setOnBannerListener(new OnBannerListener() {
+        ViseHttp.RETROFIT().create(WanApiServices.class)
+                .getBanner()
+                .compose(ApiResultTransformer.<List<BannerBean>>norTransformer())
+                .mergeWith(new ObservableSource<ApiResult<List<BannerBean>>>() {
                     @Override
-                    public void OnBannerClick(BannerBean bean) {
-                        Toast.makeText(mContext, bean.getTitle(), Toast.LENGTH_SHORT).show();
+                    public void subscribe(Observer<? super ApiResult<List<BannerBean>>> observer) {
+
+                    }
+                })
+                .subscribe(new ApiResultSubscriber<List<BannerBean>>() {
+                    @Override
+                    protected void onError(ApiException e) {
+                        rlSmart.finishRefresh();
+                    }
+
+                    @Override
+                    public void onSuccess(List<BannerBean> data) {
+                        rlSmart.finishRefresh();
+                        tabBanner.setData(data);
+                        tabBanner.setOnBannerListener(new OnBannerListener() {
+                            @Override
+                            public void OnBannerClick(BannerBean bean) {
+                                Toast.makeText(mContext, bean.getTitle(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }
                 });
-            }
-        });
 
         getArticleList();
     }

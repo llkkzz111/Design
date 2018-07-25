@@ -6,15 +6,12 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.liuz.common.ApiResultTransformer;
 import com.liuz.common.mode.ApiResult;
@@ -29,15 +26,12 @@ import com.liuz.design.bean.ArticleBeans;
 import com.liuz.design.bean.BannerBean;
 import com.liuz.design.ui.adapter.WanArticleAdapter;
 import com.liuz.design.utils.PreferencesUtils;
-import com.liuz.design.view.BannerView;
-import com.liuz.design.view.listener.OnBannerListener;
 import com.liuz.lotus.loader.LoaderFactory;
 import com.liuz.lotus.net.ViseHttp;
+import com.liuz.lotus.net.config.HttpGlobalConfig;
 import com.liuz.lotus.net.exception.ApiException;
-import com.scwang.smartrefresh.layout.SmartRefreshLayout;
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
-import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+import com.liuz.lotus.net.func.ApiRetryFunc;
+import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,12 +40,13 @@ import butterknife.BindView;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.ObservableSource;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+
 
 public class WanMainActivity extends TranslucentBarBaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -60,9 +55,7 @@ public class WanMainActivity extends TranslucentBarBaseActivity
     @BindView(R.id.nav_view) NavigationView navigationView;
     @BindView(R.id.drawer_layout) DrawerLayout drawer;
     @BindView(R.id.toolbar) Toolbar toolbar;
-    @BindView(R.id.bannerView) BannerView tabBanner;
-    @BindView(R.id.rv_article) RecyclerView rvArticle;
-    @BindView(R.id.rl_smart) SmartRefreshLayout rlSmart;
+    @BindView(R.id.rv_article) PullLoadMoreRecyclerView rvArticle;
 
 
     private ImageView ivHeader;
@@ -103,62 +96,81 @@ public class WanMainActivity extends TranslucentBarBaseActivity
                 profileClick();
             }
         });
-        rvArticle.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
+        rvArticle.setLinearLayout();
         beanList = new ArrayList<>();
         articleAdapter = new WanArticleAdapter(mContext, beanList);
         rvArticle.setAdapter(articleAdapter);
+        rvArticle.setPushRefreshEnable(true);
+        rvArticle.setFooterViewText("加载中。。");
         String userName = PreferencesUtils.getUserName();
         if (!TextUtils.isEmpty(userName)) {
             getAccount(userName);
         }
         getBannerInfo();
-
-        rlSmart.setOnRefreshListener(new OnRefreshListener() {
+        rvArticle.setOnPullLoadMoreListener(new PullLoadMoreRecyclerView.PullLoadMoreListener() {
             @Override
-            public void onRefresh(@android.support.annotation.NonNull RefreshLayout refreshLayout) {
+            public void onRefresh() {
                 getBannerInfo();
             }
-        });
 
-        rlSmart.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
-            public void onLoadMore(@android.support.annotation.NonNull RefreshLayout refreshLayout) {
+            public void onLoadMore() {
                 pageNo++;
                 getArticleList();
             }
         });
+
     }
 
     private void getBannerInfo() {
-        ViseHttp.RETROFIT().create(WanApiServices.class)
-                .getBanner()
-                .compose(ApiResultTransformer.<List<BannerBean>>norTransformer())
-                .mergeWith(new ObservableSource<ApiResult<List<BannerBean>>>() {
+        Observable<ApiResult<List<BannerBean>>> observableBanner = ViseHttp.RETROFIT().create(WanApiServices.class)
+                .getBanner();
+        Observable<ApiResult<ArticleBeans>> observableArticle = ViseHttp.RETROFIT().create(WanApiServices.class)
+                .getArticleList(pageNo);
+        Observable.concat(observableBanner, observableArticle)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .retryWhen(new ApiRetryFunc(HttpGlobalConfig.getInstance().getRetryCount(),
+                        HttpGlobalConfig.getInstance().getRetryDelayMillis()))
+                .subscribe(new Observer<ApiResult<? extends Object>>() {
                     @Override
-                    public void subscribe(Observer<? super ApiResult<List<BannerBean>>> observer) {
+                    public void onSubscribe(Disposable d) {
 
                     }
-                })
-                .subscribe(new ApiResultSubscriber<List<BannerBean>>() {
-                    @Override
-                    protected void onError(ApiException e) {
-                        rlSmart.finishRefresh();
-                    }
 
                     @Override
-                    public void onSuccess(List<BannerBean> data) {
-                        rlSmart.finishRefresh();
-                        tabBanner.setData(data);
-                        tabBanner.setOnBannerListener(new OnBannerListener() {
-                            @Override
-                            public void OnBannerClick(BannerBean bean) {
-                                Toast.makeText(mContext, bean.getTitle(), Toast.LENGTH_SHORT).show();
+                    public void onNext(ApiResult<?> apiResult) {
+                        if (apiResult.getData() != null)
+                            if (apiResult.getData() instanceof ArticleBeans) {
+
+                                beanList.addAll(((ArticleBeans) apiResult.getData()).getDatas());
+                                articleAdapter.notifyDataSetChanged();
+//                                rlSmart.finishLoadMore(true);
+                            } else {
+                                beanList.clear();
+                                beanList.add(new ArticleBean());
+                                articleAdapter.setBannerBean((List<BannerBean>) apiResult.getData());
+//                                tabBanner.setData((List<BannerBean>) apiResult.getData());
+//                                tabBanner.setOnBannerListener(new OnBannerListener() {
+//                                    @Override
+//                                    public void OnBannerClick(BannerBean bean) {
+//                                        Toast.makeText(mContext, bean.getTitle(), Toast.LENGTH_SHORT).show();
+//                                    }
+//                                });
                             }
-                        });
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        rvArticle.setPullLoadMoreCompleted();
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        rvArticle.setPullLoadMoreCompleted();
                     }
                 });
-
-        getArticleList();
     }
 
     private void getArticleList() {
@@ -167,7 +179,7 @@ public class WanMainActivity extends TranslucentBarBaseActivity
                 .subscribe(new ApiResultSubscriber<ArticleBeans>() {
                     @Override
                     protected void onError(ApiException e) {
-                        rlSmart.finishLoadMore(false);
+                        rvArticle.setPullLoadMoreCompleted();
                     }
 
                     @Override
@@ -176,7 +188,7 @@ public class WanMainActivity extends TranslucentBarBaseActivity
                             beanList.clear();
                         beanList.addAll(data.getDatas());
                         articleAdapter.notifyDataSetChanged();
-                        rlSmart.finishLoadMore(true);
+                        rvArticle.setPullLoadMoreCompleted();
                     }
 
 

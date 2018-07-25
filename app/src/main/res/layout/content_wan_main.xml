@@ -1,28 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.scwang.smartrefresh.layout.SmartRefreshLayout
+<com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rv_article"
     android:layout_width="match_parent"
-    android:id="@+id/rl_smart"
     android:layout_height="match_parent"
     android:fillViewport="true"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".ui.WanMainActivity"
     tools:showIn="@layout/app_bar_wan_main">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <com.liuz.design.view.BannerView
-            android:id="@+id/bannerView"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"/>
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_article"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-    </LinearLayout>
-</com.scwang.smartrefresh.layout.SmartRefreshLayout>
+</com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView>

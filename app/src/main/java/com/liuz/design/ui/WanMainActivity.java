@@ -6,6 +6,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.MenuItem;
@@ -26,6 +27,7 @@ import com.liuz.design.bean.ArticleBeans;
 import com.liuz.design.bean.BannerBean;
 import com.liuz.design.ui.adapter.WanArticleAdapter;
 import com.liuz.design.utils.PreferencesUtils;
+import com.liuz.design.view.DividerItemDecoration;
 import com.liuz.lotus.loader.LoaderFactory;
 import com.liuz.lotus.net.ViseHttp;
 import com.liuz.lotus.net.config.HttpGlobalConfig;
@@ -74,7 +76,7 @@ public class WanMainActivity extends TranslucentBarBaseActivity
     protected void initEventAndData() {
 
         setSupportActionBar(toolbar);
-
+        toolbar.setTitle("Wan");
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -97,6 +99,8 @@ public class WanMainActivity extends TranslucentBarBaseActivity
             }
         });
         rvArticle.setLinearLayout();
+        rvArticle.addItemDecoration(new DividerItemDecoration(mContext, LinearLayoutManager.HORIZONTAL, 15,
+                getResources().getColor(R.color.color_F0F0F0), true));
         beanList = new ArrayList<>();
         articleAdapter = new WanArticleAdapter(mContext, beanList);
         rvArticle.setAdapter(articleAdapter);
@@ -136,17 +140,14 @@ public class WanMainActivity extends TranslucentBarBaseActivity
                 .subscribe(new Observer<ApiResult<? extends Object>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
-
                     }
 
                     @Override
                     public void onNext(ApiResult<?> apiResult) {
                         if (apiResult.getData() != null)
                             if (apiResult.getData() instanceof ArticleBeans) {
-
                                 beanList.addAll(((ArticleBeans) apiResult.getData()).getDatas());
                                 articleAdapter.notifyDataSetChanged();
-//                                rlSmart.finishLoadMore(true);
                             } else {
                                 beanList.clear();
                                 beanList.add(new ArticleBean());
@@ -244,7 +245,8 @@ public class WanMainActivity extends TranslucentBarBaseActivity
             @Override
             public void subscribe(ObservableEmitter<AccountBean> emitter) throws Exception {
                 AccountBean bean = WanDataBase.getInstance(mContext).accountDao().getAccountBean(userName);
-                emitter.onNext(bean);
+                if (bean != null)
+                    emitter.onNext(bean);
             }
         })
                 .subscribeOn(Schedulers.io())

@@ -88,11 +88,13 @@ public class BannerView extends FrameLayout {
         this.count = beanList.size();
         if (adapter == null) {
             adapter = new BannerPagerAdapter(beanList);
-
+            tabBanner.setAdapter(adapter);
+            tabBanner.setCurrentItem(1);
+            tabBanner.addOnPageChangeListener(adapter);
+        } else {
+            adapter.notifyDataSetChanged();
         }
-        tabBanner.setAdapter(adapter);
-        tabBanner.setCurrentItem(1);
-        tabBanner.addOnPageChangeListener(adapter);
+
     }
 
     public void setOnBannerListener(OnBannerListener listener) {

@@ -75,6 +75,8 @@
         </activity>
         <activity android:name=".ViewModelActivity">
         </activity>
+        <activity android:name=".ui.WebViewActivity">
+        </activity>
     </application>
 
 </manifest>

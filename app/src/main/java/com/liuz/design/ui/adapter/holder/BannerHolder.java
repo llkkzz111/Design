@@ -1,11 +1,12 @@
 package com.liuz.design.ui.adapter.holder;
 
+import android.content.Intent;
 import android.view.View;
-import android.widget.Toast;
 
 import com.liuz.design.R;
 import com.liuz.design.base.BaseViewHolder;
 import com.liuz.design.bean.BannerBean;
+import com.liuz.design.ui.WebViewActivity;
 import com.liuz.design.view.BannerView;
 import com.liuz.design.view.listener.OnBannerListener;
 
@@ -31,7 +32,10 @@ public class BannerHolder extends BaseViewHolder<List<BannerBean>> {
         tabBanner.setOnBannerListener(new OnBannerListener() {
             @Override
             public void OnBannerClick(BannerBean bean) {
-                Toast.makeText(itemView.getContext(), bean.getUrl(), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(itemView.getContext(), WebViewActivity.class);
+                intent.putExtra("URL", bean.getUrl());
+                intent.putExtra("TITLE", bean.getTitle());
+                itemView.getContext().startActivity(intent);
             }
         });
     }

@@ -37,6 +37,11 @@ public class AticleHolder extends BaseViewHolder<ArticleBean> {
         tvTitle.setText(bean.getTitle());
         tvAuthor.setText(bean.getAuthor());
         tvTime.setText(TimeUtils.friednlyTime(bean.getPublishTime()));
+        if (bean.isCollect()) {
+            ivCollector.setImageResource(R.drawable.iv_collectored);
+        } else {
+            ivCollector.setImageResource(R.drawable.iv_collector);
+        }
     }
 
     @OnClick({R.id.ll_article_content, R.id.tv_article_title, R.id.iv_collector})

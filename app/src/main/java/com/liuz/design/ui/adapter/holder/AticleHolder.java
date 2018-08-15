@@ -5,12 +5,18 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.liuz.common.ApiResultTransformer;
+import com.liuz.common.subscriber.ApiResultSubscriber;
 import com.liuz.design.R;
+import com.liuz.design.api.WanApiServices;
 import com.liuz.design.base.BaseViewHolder;
 import com.liuz.design.bean.ArticleBean;
 import com.liuz.design.ui.WebViewActivity;
 import com.liuz.design.utils.TimeUtils;
+import com.liuz.lotus.net.ViseHttp;
+import com.liuz.lotus.net.exception.ApiException;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -54,6 +60,35 @@ public class AticleHolder extends BaseViewHolder<ArticleBean> {
                 itemView.getContext().startActivity(intent);
                 break;
             case R.id.tv_article_title:
+                if (bean.isCollect()) {
+                    ViseHttp.RETROFIT().create(WanApiServices.class).delCollect(bean.getId())
+                            .compose(ApiResultTransformer.<String>norTransformer())
+                            .subscribe(new ApiResultSubscriber<String>() {
+                                @Override
+                                protected void onError(ApiException e) {
+
+                                }
+
+                                @Override
+                                public void onSuccess(String data) {
+                                    Toast.makeText(itemView.getContext(), "取消收藏成功", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                } else {
+                    ViseHttp.RETROFIT().create(WanApiServices.class).addCollect(bean.getId())
+                            .compose(ApiResultTransformer.<String>norTransformer())
+                            .subscribe(new ApiResultSubscriber<String>() {
+                                @Override
+                                protected void onError(ApiException e) {
+
+                                }
+
+                                @Override
+                                public void onSuccess(String data) {
+                                    Toast.makeText(itemView.getContext(), "收藏成功", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                }
 
                 break;
             case R.id.iv_collector:

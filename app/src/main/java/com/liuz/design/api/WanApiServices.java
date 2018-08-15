@@ -29,4 +29,10 @@ public interface WanApiServices {
 
     @GET("article/list/{page}/json")
     Observable<ApiResult<ArticleBeans>> getArticleList(@Path("page") int page);
+
+    @POST("lg/collect/{page}/json")
+    Observable<ApiResult<String>> addCollect(@Path("page") int page);
+
+    @POST("lg/uncollect_originId/{page}/json")
+    Observable<ApiResult<String>> delCollect(@Path("page") int page);
 }

@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.support.multidex.MultiDex;
 
+import com.activeandroid.ActiveAndroid;
 import com.facebook.stetho.Stetho;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.liuz.common.convert.GsonConverterFactory;
@@ -82,6 +83,7 @@ public class LotusApplication extends Application {
         init();
         initLog();
         initNet();
+        ActiveAndroid.initialize(this);
     }
 
 

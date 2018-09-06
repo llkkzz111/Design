@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -46,6 +47,7 @@ public abstract class TranslucentBarBaseActivity extends RxAppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.e(getLocalClassName(), "onCreate");
         initWindowsFlag();
         mContext = this;
         ActivityStack.getInstance().add(this);
@@ -113,8 +115,40 @@ public abstract class TranslucentBarBaseActivity extends RxAppCompatActivity {
     protected abstract void initEventAndData();
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        Log.e(getLocalClassName(), "onStart");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.e(getLocalClassName(), "onResume");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.e(getLocalClassName(), "onPause");
+    }
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.e(getLocalClassName(), "onStop");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.e(getLocalClassName(), "onRestart");
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
+        Log.e(getLocalClassName(), "onDestroy");
         ActivityStack.getInstance().remove(this);
     }
 

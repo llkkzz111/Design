@@ -10,7 +10,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -25,6 +24,7 @@ import com.liuz.design.base.TranslucentBarBaseActivity;
 import com.liuz.design.bean.ArticleBean;
 import com.liuz.design.bean.ArticleBeans;
 import com.liuz.design.bean.BannerBean;
+import com.liuz.design.db.Category;
 import com.liuz.design.ui.adapter.WanArticleAdapter;
 import com.liuz.design.utils.PreferencesUtils;
 import com.liuz.design.view.DividerItemDecoration;
@@ -40,13 +40,10 @@ import java.util.List;
 
 import butterknife.BindView;
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 
@@ -85,19 +82,8 @@ public class WanMainActivity extends TranslucentBarBaseActivity
         navigationView.setNavigationItemSelectedListener(this);
         ivHeader = navigationView.getHeaderView(0).findViewById(R.id.iv_header);
         tvName = navigationView.getHeaderView(0).findViewById(R.id.tv_user_name);
-        ivHeader.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                profileClick();
-            }
-        });
-
-        tvName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                profileClick();
-            }
-        });
+        ivHeader.setOnClickListener(v -> profileClick());
+        tvName.setOnClickListener(v -> profileClick());
         rvArticle.setLinearLayout();
         rvArticle.addItemDecoration(new DividerItemDecoration(mContext, LinearLayoutManager.HORIZONTAL, 15,
                 getResources().getColor(R.color.color_F0F0F0), true));
@@ -147,6 +133,7 @@ public class WanMainActivity extends TranslucentBarBaseActivity
                         if (apiResult.getData() != null)
                             if (apiResult.getData() instanceof ArticleBeans) {
                                 beanList.addAll(((ArticleBeans) apiResult.getData()).getDatas());
+                                addData();
                                 articleAdapter.notifyDataSetChanged();
                             } else {
                                 beanList.clear();
@@ -172,6 +159,19 @@ public class WanMainActivity extends TranslucentBarBaseActivity
                         rvArticle.setPullLoadMoreCompleted();
                     }
                 });
+    }
+
+
+    private void addData() {
+        Observable.create((ObservableOnSubscribe<String>) emitter -> {
+            for (ArticleBean bean : beanList) {
+                if (bean == null) {
+                    new Category("----").save();
+                } else {
+                    new Category(bean.getTitle()).save();
+                }
+            }
+        }).subscribeOn(Schedulers.io()).unsubscribeOn(Schedulers.io()).subscribe();
     }
 
     private void getArticleList() {
@@ -241,24 +241,18 @@ public class WanMainActivity extends TranslucentBarBaseActivity
     private void getAccount(final String userName) {
         tvName.setText(userName);
 
-        Observable.create(new ObservableOnSubscribe<AccountBean>() {
-            @Override
-            public void subscribe(ObservableEmitter<AccountBean> emitter) throws Exception {
-                AccountBean bean = WanDataBase.getInstance(mContext).accountDao().getAccountBean(userName);
-                if (bean != null)
-                    emitter.onNext(bean);
-            }
+        Observable.create((ObservableOnSubscribe<AccountBean>) emitter -> {
+            AccountBean bean = WanDataBase.getInstance(mContext).accountDao().getAccountBean(userName);
+            if (bean != null)
+                emitter.onNext(bean);
         })
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<AccountBean>() {
-                    @Override
-                    public void accept(@NonNull AccountBean accountBean) throws Exception {
-                        account = accountBean;
-                        if (!TextUtils.isEmpty(accountBean.getIcon())) {
-                            LoaderFactory.getLoader().loadNet(ivHeader, accountBean.getIcon(), null);
-                        }
+                .subscribe(accountBean -> {
+                    account = accountBean;
+                    if (!TextUtils.isEmpty(accountBean.getIcon())) {
+                        LoaderFactory.getLoader().loadNet(ivHeader, accountBean.getIcon(), null);
                     }
                 });
     }

@@ -73,10 +73,23 @@
             android:name=".ui.LoginActivity"
             android:label="@string/title_activity_login">
         </activity>
-        <activity android:name=".ViewModelActivity">
-        </activity>
-        <activity android:name=".ui.WebViewActivity">
-        </activity>
+        <activity android:name=".ui.WebViewActivity"/>
+
+        <meta-data
+            android:name="AA_DB_NAME"
+            android:value="Pickrand"/>
+        <meta-data
+            android:name="AA_DB_VERSION"
+            android:value="1"/>
+        <meta-data
+            android:name="AA_MODELS"
+            android:value="com.liuz.design.db.Item,com.liuz.design.db.Category"/>
+
+        <provider
+            android:name="com.activeandroid.content.ContentProvider"
+            android:authorities="${applicationId}"
+            android:enabled="true"
+            android:exported="false"/>
     </application>
 
 </manifest>

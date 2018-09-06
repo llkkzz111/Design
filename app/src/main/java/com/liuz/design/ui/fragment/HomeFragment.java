@@ -1,7 +1,6 @@
 package com.liuz.design.ui.fragment;
 
 import android.Manifest;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -28,13 +27,11 @@ import java.util.concurrent.TimeUnit;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.ObservableSource;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
@@ -72,38 +69,22 @@ public class HomeFragment extends BaseFragment {
 
     @Override
     protected void initEventAndData() {
-        Observable<Integer> observable = Observable.create(new ObservableOnSubscribe<Integer>() {
-            @Override
-            public void subscribe(ObservableEmitter<Integer> emitter) throws Exception {
-                Log.d(TAG, "Observable thread is : " + Thread.currentThread().getName());
-                Log.d(TAG, "emit 1");
-                emitter.onNext(1);
-            }
+        Observable<Integer> observable = Observable.create(emitter -> {
+            Log.d(TAG, "Observable thread is : " + Thread.currentThread().getName());
+            Log.d(TAG, "emit 1");
+            emitter.onNext(1);
         });
 
-        Consumer<Integer> consumer = new Consumer<Integer>() {
-            @Override
-            public void accept(Integer integer) throws Exception {
-                Log.d(TAG, "Observer thread is :" + Thread.currentThread().getName());
-                Log.d(TAG, "onNext: " + integer);
-            }
+        Consumer<Integer> consumer = integer -> {
+            Log.d(TAG, "Observer thread is :" + Thread.currentThread().getName());
+            Log.d(TAG, "onNext: " + integer);
         };
         observable.subscribeOn(Schedulers.newThread())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext(new Consumer<Integer>() {
-                    @Override
-                    public void accept(Integer integer) throws Exception {
-                        Log.d(TAG, "After observeOn(mainThread), current thread is: " + Thread.currentThread().getName());
-                    }
-                })
+                .doOnNext(integer -> Log.d(TAG, "After observeOn(mainThread), current thread is: " + Thread.currentThread().getName()))
                 .observeOn(Schedulers.io())
-                .doOnNext(new Consumer<Integer>() {
-                    @Override
-                    public void accept(Integer integer) throws Exception {
-                        Log.d(TAG, "After observeOn(io), current thread is : " + Thread.currentThread().getName());
-                    }
-                })
+                .doOnNext(integer -> Log.d(TAG, "After observeOn(io), current thread is : " + Thread.currentThread().getName()))
                 .subscribe(consumer);
 
 
@@ -126,23 +107,12 @@ public class HomeFragment extends BaseFragment {
                             } else {
                                 //提示
                                 DialogUtils.showTips(getActivity(), R.string.permission_storage_title, R.string.permission_storage_des,
-                                        R.string.permission_cancel, new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                getActivity().finish();
-                                            }
-
-
-                                        },
-                                        R.string.permission_ok, new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                Uri packageURI = Uri.parse("package:" + "com.liuz.design");
-                                                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, packageURI);
-                                                startActivity(intent);
-                                                getActivity().finish();
-                                            }
-
+                                        R.string.permission_cancel, (dialog, which) -> getActivity().finish(),
+                                        R.string.permission_ok, (dialog, which) -> {
+                                            Uri packageURI = Uri.parse("package:" + "com.liuz.design");
+                                            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, packageURI);
+                                            startActivity(intent);
+                                            getActivity().finish();
                                         });
 
                             }
@@ -164,19 +134,11 @@ public class HomeFragment extends BaseFragment {
 
 
     private void rxMap() {
-        Observable.create(new ObservableOnSubscribe<Integer>() {
-            @Override
-            public void subscribe(ObservableEmitter<Integer> emitter) throws Exception {
-                emitter.onNext(1);
-                emitter.onNext(2);
-                emitter.onNext(3);
-            }
-        }).map(new Function<Integer, String>() {
-            @Override
-            public String apply(Integer integer) throws Exception {
-                return "This is result  " + integer;
-            }
-        }).subscribe(new Consumer<String>() {
+        Observable.create((ObservableOnSubscribe<Integer>) emitter -> {
+            emitter.onNext(1);
+            emitter.onNext(2);
+            emitter.onNext(3);
+        }).map(integer -> "This is result  " + integer).subscribe(new Consumer<String>() {
             @Override
             public void accept(String s) throws Exception {
                 ViseLog.e(s);
@@ -185,69 +147,47 @@ public class HomeFragment extends BaseFragment {
     }
 
     private void rxFlatMap() {
-        Observable.create(new ObservableOnSubscribe<Integer>() {
-            @Override
-            public void subscribe(ObservableEmitter<Integer> emitter) throws Exception {
-                emitter.onNext(1);
-                emitter.onNext(2);
-                emitter.onNext(3);
+        Observable.create((ObservableOnSubscribe<Integer>) emitter -> {
+            emitter.onNext(1);
+            emitter.onNext(2);
+            emitter.onNext(3);
+        }).flatMap((Function<Integer, ObservableSource<String>>) integer -> {
+            final List<String> list = new ArrayList<>();
+            for (int i = 0; i < 3; i++) {
+                list.add("I am value " + integer);
             }
-        }).flatMap(new Function<Integer, ObservableSource<String>>() {
-            @Override
-            public ObservableSource<String> apply(Integer integer) throws Exception {
-                final List<String> list = new ArrayList<>();
-                for (int i = 0; i < 3; i++) {
-                    list.add("I am value " + integer);
-                }
 
 
-                return Observable.fromIterable(list).delay(10, TimeUnit.MILLISECONDS);
-            }
-        }).subscribe(new Consumer<String>() {
-            @Override
-            public void accept(String s) throws Exception {
-                ViseLog.e(s);
-            }
-        });
+            return Observable.fromIterable(list).delay(10, TimeUnit.MILLISECONDS);
+        }).subscribe(s -> ViseLog.e(s));
     }
 
     private void rxZip() {
-        Observable<Integer> observable1 = Observable.create(new ObservableOnSubscribe<Integer>() {
-            @Override
-            public void subscribe(ObservableEmitter<Integer> emitter) throws Exception {
-                Log.d(TAG, "emit 1");
-                emitter.onNext(1);
-                Log.d(TAG, "emit 2");
-                emitter.onNext(2);
-                Log.d(TAG, "emit 3");
-                emitter.onNext(3);
-                Log.d(TAG, "emit 4");
-                emitter.onNext(4);
-                Log.d(TAG, "emit complete1");
-                emitter.onComplete();
-            }
+        Observable<Integer> observable1 = Observable.create(emitter -> {
+            Log.d(TAG, "emit 1");
+            emitter.onNext(1);
+            Log.d(TAG, "emit 2");
+            emitter.onNext(2);
+            Log.d(TAG, "emit 3");
+            emitter.onNext(3);
+            Log.d(TAG, "emit 4");
+            emitter.onNext(4);
+            Log.d(TAG, "emit complete1");
+            emitter.onComplete();
         });
 
-        Observable<String> observable2 = Observable.create(new ObservableOnSubscribe<String>() {
-            @Override
-            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
-                Log.d(TAG, "emit A");
-                emitter.onNext("A");
-                Log.d(TAG, "emit B");
-                emitter.onNext("B");
-                Log.d(TAG, "emit C");
-                emitter.onNext("C");
-                Log.d(TAG, "emit complete2");
-                emitter.onComplete();
-            }
+        Observable<String> observable2 = Observable.create(emitter -> {
+            Log.d(TAG, "emit A");
+            emitter.onNext("A");
+            Log.d(TAG, "emit B");
+            emitter.onNext("B");
+            Log.d(TAG, "emit C");
+            emitter.onNext("C");
+            Log.d(TAG, "emit complete2");
+            emitter.onComplete();
         });
 
-        Observable.zip(observable1, observable2, new BiFunction<Integer, String, String>() {
-            @Override
-            public String apply(Integer integer, String s) throws Exception {
-                return integer + s;
-            }
-        }).subscribe(new Observer<String>() {
+        Observable.zip(observable1, observable2, (integer, s) -> integer + s).subscribe(new Observer<String>() {
             @Override
             public void onSubscribe(Disposable d) {
                 Log.d(TAG, "onSubscribe");

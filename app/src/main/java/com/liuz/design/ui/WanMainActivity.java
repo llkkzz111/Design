@@ -218,6 +218,7 @@ public class WanMainActivity extends TranslucentBarBaseActivity
             case R.id.nav_about:
                 break;
             case R.id.nav_like:
+                startActivity(new Intent(this, LikeActivity.class));
                 break;
             case R.id.nav_share:
                 break;

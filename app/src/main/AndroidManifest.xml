@@ -90,6 +90,9 @@
             android:authorities="${applicationId}"
             android:enabled="true"
             android:exported="false"/>
+
+        <activity android:name=".ui.LikeActivity">
+        </activity>
     </application>
 
 </manifest>

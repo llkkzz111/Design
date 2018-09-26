@@ -9,10 +9,8 @@ import android.graphics.Rect;
 import android.support.v7.widget.AppCompatTextView;
 import android.text.Html;
 import android.text.Layout;
-import android.text.Spanned;
 import android.text.StaticLayout;
 import android.text.TextPaint;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.widget.TextView;
@@ -24,7 +22,6 @@ import com.liuz.design.utils.CustomMovementMethod;
  * author liuzhao
  */
 public class ExpandTextView extends AppCompatTextView {
-
 
     /**
      * 展开状态 true：展开，false：收起
@@ -51,12 +48,15 @@ public class ExpandTextView extends AppCompatTextView {
     private float lineSpacingMultiplier = 1.0f;
     private float lineSpacingAdd = 0.0f;
     private float textWidth = 0;
+    private int mPaddingTop;
+    private int mPaddingBottom;
+    private int mPaddingLeft;
+    private int mPaddingRight;
 
     public ExpandTextView(Context context) {
         super(context);
         initTextView();
     }
-
     public ExpandTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
         int[] attributes = new int[]{android.R.attr.lineSpacingExtra, android.R.attr.lineSpacingMultiplier};
@@ -66,7 +66,6 @@ public class ExpandTextView extends AppCompatTextView {
         arr.recycle();
         initTextView();
     }
-
     public ExpandTextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         int[] attributes = new int[]{android.R.attr.lineSpacingExtra, android.R.attr.lineSpacingMultiplier};
@@ -83,6 +82,10 @@ public class ExpandTextView extends AppCompatTextView {
 
     private void initTextView() {
         setMovementMethod(CustomMovementMethod.getInstance());
+        mPaddingTop = getPaddingTop();
+        mPaddingBottom = getPaddingBottom();
+        mPaddingLeft = getPaddingLeft();
+        mPaddingRight = getPaddingRight();
     }
 
     @Override
@@ -93,26 +96,22 @@ public class ExpandTextView extends AppCompatTextView {
             setMeasuredDimension(getMeasuredWidth(), getMeasuredHeight());
         }
         //StaticLayout对象
-        StaticLayout sl = new StaticLayout(Html.fromHtml(mText).toString().trim(), getPaint(), getMeasuredWidth() - getPaddingLeft() - getPaddingRight(), Layout.Alignment.ALIGN_CENTER, 1f, 0f, true);
+        StaticLayout sl = new StaticLayout(Html.fromHtml(mText).toString().trim(), getPaint(), getMeasuredWidth() - mPaddingLeft - mPaddingRight, Layout.Alignment.ALIGN_CENTER, 1f, 0f, true);
         // 总计行数
         int lineCount = sl.getLineCount();
         //总行数大于最大行数
-        if (lineCount > maxLineCount) {
-            if (!expandState) {
-                lineCount = maxLineCount;
-            }
-            Spanned newEndLineText = Html.fromHtml(mText);
-            setText(newEndLineText);
-        } else {
-            setText(Html.fromHtml(mText));
+
+        if (lineCount > maxLineCount && !expandState) {
+            lineCount = maxLineCount;
         }
+        setText(Html.fromHtml(mText));
         if (lineHeight == 0) {
             for (int i = 0; i < lineCount; i++) {
                 Rect lineBound = new Rect();
                 sl.getLineBounds(i, lineBound);
                 lineHeight += lineBound.height();
             }
-            lineHeight = (int) (getPaddingTop() + getPaddingBottom() + lineHeight * lineSpacingMultiplier + lineSpacingAdd * (lineCount - 1));
+            lineHeight = (int) (mPaddingTop + mPaddingBottom + lineHeight * lineSpacingMultiplier + lineSpacingAdd * (lineCount - 1));
             setMeasuredDimension(getMeasuredWidth(), lineHeight);
         }
     }
@@ -120,7 +119,7 @@ public class ExpandTextView extends AppCompatTextView {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        if (!expandState) {
+        if (!expandState && originalLineCount > maxLineCount) {
             TextPaint paint = getPaint();
             int textColor = paint.getColor();
             paint.setColor(Color.WHITE);
@@ -128,7 +127,7 @@ public class ExpandTextView extends AppCompatTextView {
             canvas.drawRect(textWidth, (textHeight + lineSpacingAdd) * (maxLineCount - 1), textWidth + textHeight, (textHeight + lineSpacingAdd) * (maxLineCount - 1) + textHeight, paint);
             paint.setColor(textColor);
             paint.drawableState = getDrawableState();
-            canvas.drawText(ellipsizeText, textWidth + 3, (textHeight + lineSpacingAdd) * (maxLineCount - 1) + textHeight / 2 + getPaddingTop(), paint);
+            canvas.drawText(ellipsizeText, textWidth + 3, (textHeight + lineSpacingAdd) * (maxLineCount - 1) + textHeight / 2 + mPaddingTop, paint);
         }
     }
 
@@ -137,9 +136,10 @@ public class ExpandTextView extends AppCompatTextView {
         super.onLayout(changed, left, top, right, bottom);
         //使用替代textview计算原始高度与行数
         TextPaint paint = getPaint();
-        measureTextViewHeight(mText, paint.getTextSize(), getMeasuredWidth() - getPaddingLeft() - getPaddingRight());
+        measureTextViewHeight(mText, paint.getTextSize(), getMeasuredWidth() - mPaddingLeft - mPaddingRight);
         //获取行高
         textHeight = 1.0f * originalHeight / originalLineCount;
+
         textLineSpaceExtra = textHeight * (lineSpacingMultiplier - 1) + lineSpacingAdd;
 
     }
@@ -154,30 +154,34 @@ public class ExpandTextView extends AppCompatTextView {
      */
     private void measureTextViewHeight(String text, float textSize, int deviceWidth) {
         TextView textView = new TextView(getContext());
-        textView.setText(Html.fromHtml(text));
+        textView.setText(Html.fromHtml(text).toString().trim());
         textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
         int widthMeasureSpec = MeasureSpec.makeMeasureSpec(deviceWidth, MeasureSpec.EXACTLY);
         int heightMeasureSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
         textView.measure(widthMeasureSpec, heightMeasureSpec);
         originalLineCount = textView.getLineCount();
         originalHeight = textView.getMeasuredHeight();
-        int start = textView.getLayout().getLineStart(maxLineCount - 1);
-        int end = textView.getLayout().getLineEnd(maxLineCount - 1);
-        String lineText = Html.fromHtml(mText).toString().substring(start, end);
-        float dotWidth = getPaint().measureText(ellipsizeText);
 
-        int endIndex = 0;
-        for (int i = lineText.length() - 1; i > 0; i--) {
-            String str = lineText.substring(i, lineText.length());
-            // 找出文字宽度大于 ellipsizeText 的字符
-            if (getPaint().measureText(str) > dotWidth) {
-                endIndex = i;
-                break;
+        if (maxLineCount < originalLineCount) {
+
+            int start = textView.getLayout().getLineStart(maxLineCount - 1);
+            int end = textView.getLayout().getLineEnd(maxLineCount - 1);
+            String lineText = Html.fromHtml(mText).toString().substring(start, end);
+            float dotWidth = getPaint().measureText(ellipsizeText);
+
+            int endIndex = 0;
+            for (int i = lineText.length() - 1; i > 0; i--) {
+                String str = lineText.substring(i, lineText.length());
+                // 找出文字宽度大于 ellipsizeText 的字符
+                if (getPaint().measureText(str) > dotWidth) {
+                    endIndex = i;
+                    break;
+                }
             }
-        }
-        // 新的文字
-        textWidth = getPaint().measureText(lineText.substring(0, endIndex));
+            // 新的文字
+            textWidth = getPaint().measureText(lineText.substring(0, endIndex));
 
+        }
     }
 
     /**
@@ -190,16 +194,11 @@ public class ExpandTextView extends AppCompatTextView {
         lineHeight = 0;
         mText = text;
         expandState = expanded;
-        setText(Html.fromHtml(text));
         if (!expanded) {
             setMaxLines(maxLineCount);
-            setEllipsize(TextUtils.TruncateAt.END);
         } else {
             setMaxLines(Integer.MAX_VALUE);
-            setEllipsize(TextUtils.TruncateAt.END);
         }
-        setIncludeFontPadding(false);
-
         requestLayout();
         invalidate();
     }

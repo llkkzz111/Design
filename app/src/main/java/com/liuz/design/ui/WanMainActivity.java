@@ -1,7 +1,10 @@
 package com.liuz.design.ui;
 
 import android.app.Activity;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
+import android.os.Build;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -12,7 +15,10 @@ import android.text.TextUtils;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.liuz.common.ApiResultTransformer;
 import com.liuz.common.mode.ApiResult;
 import com.liuz.common.subscriber.ApiResultSubscriber;
@@ -55,7 +61,7 @@ public class WanMainActivity extends TranslucentBarBaseActivity
     @BindView(R.id.drawer_layout) DrawerLayout drawer;
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.rv_article) PullLoadMoreRecyclerView rvArticle;
-
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     private ImageView ivHeader;
     private TextView tvName;
@@ -71,6 +77,26 @@ public class WanMainActivity extends TranslucentBarBaseActivity
 
     @Override
     protected void initEventAndData() {
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // Create channel to show notifications.
+            String channelId = getString(R.string.default_notification_channel_id);
+            String channelName = getString(R.string.default_notification_channel_name);
+            NotificationManager notificationManager =
+                    getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(new NotificationChannel(channelId,
+                    channelName, NotificationManager.IMPORTANCE_LOW));
+        }
+
+
+        // Get token
+        String token = FirebaseInstanceId.getInstance().getToken();
+
+        // Log and toast
+        String msg = token;
+
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+
 
         setSupportActionBar(toolbar);
         toolbar.setTitle("Wan");

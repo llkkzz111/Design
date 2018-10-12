@@ -3,6 +3,7 @@ apply plugin: "com.android.application"
 apply plugin: "kotlin-android"
 
 apply plugin: "kotlin-android-extensions"
+apply plugin: 'com.google.gms.google-services'
 
 Properties props = new Properties()
 props.load(new FileInputStream(file("signing.properties")))
@@ -136,4 +137,7 @@ dependencies {
 
     //最新版本
     implementation 'com.wuxiaolong.pullloadmorerecyclerview:library:1.1.2'
+    implementation 'com.google.firebase:firebase-core:16.0.4'
+    implementation 'com.google.firebase:firebase-messaging:17.3.3'
+    implementation 'com.firebase:firebase-jobdispatcher:0.8.5'
 }

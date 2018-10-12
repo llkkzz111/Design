@@ -1,7 +1,8 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    ext.kotlin_version = "1.2.60"
+
+    apply from: 'config.gradle'
     repositories {
         google()
         jcenter()
@@ -13,7 +14,7 @@ buildscript {
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
         classpath "android.arch.navigation:navigation-safe-args-gradle-plugin:1.0.0-alpha06"
-        classpath 'com.google.gms:google-services:4.0.1'
+        classpath 'com.google.gms:google-services:4.1.0'
     }
 }
 
@@ -28,17 +29,3 @@ allprojects {
     }
 }
 
-task clean(type: Delete) {
-    delete rootProject.buildDir
-}
-
-//When there is an error in code generation you will may see
-//lots of errors due too missing generated code in your logs, we increase
-//how many errors are shown here so that the real error is visible when it is near the end
-allprojects {
-    afterEvaluate {
-        tasks.withType(JavaCompile.class) {
-            options.compilerArgs << "-Xmaxerrs" << "500"
-        }
-    }
-}

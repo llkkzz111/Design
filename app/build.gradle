@@ -9,15 +9,15 @@ Properties props = new Properties()
 props.load(new FileInputStream(file("signing.properties")))
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion rootProject.compileSdkVersion
     defaultConfig {
-        applicationId "com.liuz.design"
-        minSdkVersion 16
-        targetSdkVersion 27
+        applicationId rootProject.applicationId
+        minSdkVersion rootProject.minSdkVersion
+        targetSdkVersion rootProject.targetSdkVersion
         // Enabling multidex support.
         multiDexEnabled true
-        versionCode 1
-        versionName "1.0"
+        versionCode rootProject.versionCode
+        versionName rootProject.versionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
@@ -59,21 +59,22 @@ android {
 dependencies {
     implementation 'com.amap.api:location:3.8.0'
     implementation 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
-    def support_version = "28.0.0-alpha1"
+    def support_version = "28.0.0"
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation "com.android.support:appcompat-v7:$support_version"
-    implementation "com.android.support:support-v4:$support_version"
-    implementation "com.android.support:recyclerview-v7:$support_version"
-    implementation "com.android.support:design:$support_version"
-    implementation "com.android.support:support-v4:$support_version"
-    implementation "com.android.support:design:$support_version"
-    implementation "com.android.support:support-vector-drawable:$support_version"
-    implementation "com.android.support:appcompat-v7:$support_version"
-    implementation 'android.arch.lifecycle:extensions:1.1.1'
-    testImplementation 'junit:junit:4.12'
+
+    implementation deps.support.design
+    implementation deps.support.appcompat
+    implementation deps.support.recyclerview
+    implementation deps.support.vector
+    implementation deps.support.v4
+
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+
+    implementation 'android.arch.lifecycle:extensions:1.1.1'
+    testImplementation 'junit:junit:4.12'
+
     def lifecycle_version = "1.1.1"
 
     // ViewModel and LiveData

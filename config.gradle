@@ -1,0 +1,31 @@
+/**
+ * Shared file between builds so that they can all use the same dependencies and
+ * maven repositories.
+ **/
+
+ext {
+    // Sdk and tools
+    compileSdkVersion = 28
+    minSdkVersion = 19
+    targetSdkVersion = 28
+    applicationId = "com.liuz.design"
+    versionCode = 1
+    versionName = "1.0"
+    kotlin_version = "1.2.61"
+}
+
+ext.deps = [:]
+def versions = [:]
+versions.support_version = "28.0.0"
+
+def support = [:]
+
+support.appcompat = "com.android.support:appcompat-v7:$versions.support_version"
+support.v4 = "com.android.support:support-v4:$versions.support_version"
+support.recyclerview = "com.android.support:recyclerview-v7:$versions.support_version"
+support.design = "com.android.support:design:$versions.support_version"
+support.vector = "com.android.support:support-vector-drawable:$versions.support_version"
+deps.support = support
+
+
+ext.deps = deps

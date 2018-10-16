@@ -1,27 +1,35 @@
 {
   "project_info": {
-    "project_number": "719940160514",
-    "firebase_url": "https://choudao-8617d.firebaseio.com",
-    "project_id": "choudao-8617d",
-    "storage_bucket": "choudao-8617d.appspot.com"
+    "project_number": "119076410412",
+    "firebase_url": "https://mdesign-458b8.firebaseio.com",
+    "project_id": "mdesign-458b8",
+    "storage_bucket": "mdesign-458b8.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:719940160514:android:ce579e081ea20fe1",
+        "mobilesdk_app_id": "1:119076410412:android:ce579e081ea20fe1",
         "android_client_info": {
           "package_name": "com.liuz.design"
         }
       },
       "oauth_client": [
         {
-          "client_id": "719940160514-2toq7rc1p5qo45vvqg7t8fj38a1m0sqo.apps.googleusercontent.com",
+          "client_id": "119076410412-mh38nhm38nc3u75pdlij17be25g6eil8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.liuz.design",
+            "certificate_hash": "5444cc31fb8a0f131d7645e9fdc60ab80834bf6d"
+          }
+        },
+        {
+          "client_id": "119076410412-n5jeh1bu4dlmnkirakp39caq4fvqtvou.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAewXPMqJulY_QvLhkNa7UEyW9TvpwMVDk"
+          "current_key": "AIzaSyB0o-9WFIEf82IEK2cHzDfgFRGMZH0O9LE"
         }
       ],
       "services": {
@@ -29,8 +37,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "119076410412-n5jeh1bu4dlmnkirakp39caq4fvqtvou.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2

@@ -20,6 +20,7 @@ import java.util.Map;
  * date: 2018/6/20 12:20
  * author liuzhao
  */
+
 public class MoviesPresenter implements MoviesContract.Presenter {
 
     @Nullable

@@ -5,6 +5,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Intent;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -12,13 +13,17 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.liuz.common.ApiResultTransformer;
 import com.liuz.common.mode.ApiResult;
 import com.liuz.common.subscriber.ApiResultSubscriber;
@@ -57,6 +62,8 @@ public class WanMainActivity extends TranslucentBarBaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private final int ACCOUNT_LOGIN = 100;
 
+    private static final String TAG = "WanMainActivity";
+
     @BindView(R.id.nav_view) NavigationView navigationView;
     @BindView(R.id.drawer_layout) DrawerLayout drawer;
     @BindView(R.id.toolbar) Toolbar toolbar;
@@ -88,15 +95,24 @@ public class WanMainActivity extends TranslucentBarBaseActivity
                     channelName, NotificationManager.IMPORTANCE_LOW));
         }
 
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w(TAG, "getInstanceId failed", task.getException());
+                            return;
+                        }
 
-        // Get token
-        String token = FirebaseInstanceId.getInstance().getToken();
+                        // Get new Instance ID token
+                        String token = task.getResult().getToken();
 
-        // Log and toast
-        String msg = token;
-
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-
+                        // Log and toast
+                        String msg = getString(R.string.msg_token_fmt, token);
+                        Log.d(TAG, msg);
+                        Toast.makeText(WanMainActivity.this, msg, Toast.LENGTH_SHORT).show();
+                    }
+                });
 
         setSupportActionBar(toolbar);
         toolbar.setTitle("Wan");

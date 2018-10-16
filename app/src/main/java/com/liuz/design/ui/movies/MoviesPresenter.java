@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 
 import com.liuz.design.api.MTimeApiService;
 import com.liuz.design.bean.HotMoviesBean;
+import com.liuz.design.di.ActivityScoped;
 import com.liuz.lotus.net.ViseHttp;
 import com.liuz.lotus.net.callback.ACallback;
 import com.liuz.lotus.net.core.ApiTransformer;
@@ -16,12 +17,18 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 /**
  * date: 2018/6/20 12:20
  * author liuzhao
  */
-
+@ActivityScoped
 public class MoviesPresenter implements MoviesContract.Presenter {
+
+    @Inject
+    MoviesPresenter() {
+    }
 
     @Nullable
     private MoviesContract.View moviesView;

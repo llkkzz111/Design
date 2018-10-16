@@ -2,20 +2,17 @@ package com.liuz.design.base;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.liuz.lotus.loader.GlideApp;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.trello.rxlifecycle2.components.support.RxFragment;
 
-import javax.inject.Inject;
-
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import dagger.android.DispatchingAndroidInjector;
+
+import static com.liuz.lotus.loader.GlideApp.with;
 
 /**
  * date: 2018/5/28 14:46
@@ -24,7 +21,7 @@ import dagger.android.DispatchingAndroidInjector;
 public abstract class BaseFragment extends RxFragment {
     protected RxAppCompatActivity mContext;
     protected String title;
-    @Inject DispatchingAndroidInjector<Fragment> childFragmentInjector;
+
     private Unbinder unbinder;
 
     @Override
@@ -54,12 +51,14 @@ public abstract class BaseFragment extends RxFragment {
     @Override
     public void onResume() {
         super.onResume();
-        GlideApp.with(mContext).resumeRequests();
+        with(mContext).resumeRequests();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        GlideApp.with(mContext).pauseRequests();
+        with(mContext).pauseRequests();
     }
+
+
 }

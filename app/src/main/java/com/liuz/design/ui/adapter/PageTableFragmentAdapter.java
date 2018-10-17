@@ -4,6 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
+import com.liuz.design.TabItem;
 import com.liuz.design.base.BaseFragment;
 import com.liuz.design.ui.fragment.ErrorFragment;
 import com.liuz.design.ui.fragment.HomeFragment;
@@ -19,9 +20,9 @@ import java.util.List;
  * author liuzhao
  */
 public class PageTableFragmentAdapter extends FragmentStatePagerAdapter {
-    List<String> tabs = null;
+    List<TabItem> tabs = null;
 
-    public PageTableFragmentAdapter(FragmentManager fm, List<String> listMain) {
+    public PageTableFragmentAdapter(FragmentManager fm, List<TabItem> listMain) {
         super(fm);
         this.tabs = listMain;
     }
@@ -32,7 +33,7 @@ public class PageTableFragmentAdapter extends FragmentStatePagerAdapter {
 
         BaseFragment fragment = null;
         if (tabs != null) {
-            switch (tabs.get(position)) {
+            switch (tabs.get(position).getTitle()) {
                 case "首页":
                     HomeFragment homeFragment = new HomeFragment();
                     fragment = homeFragment;

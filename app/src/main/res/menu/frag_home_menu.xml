@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/search_member"
+        android:icon="@drawable/ic_action_search"
+        android:title="@string/oper_search_member"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/action_new"
+        android:icon="@drawable/ic_action_overflow"
+        android:title=""
+        app:showAsAction="always">
+        <menu>
+            <item
+                android:id="@+id/group"
+                android:icon="@drawable/new_group"
+                android:title="@string/org_group_chat"/>
+
+            <item
+                android:id="@+id/friend"
+                android:icon="@drawable/menu_icon_add_friend"
+                android:title="@string/oper_friend_add"/>
+
+            <item
+                android:id="@+id/read"
+                android:icon="@drawable/menu_icon_msg"
+                android:title="@string/oper_msg_read"/>
+
+            <item
+                android:id="@+id/scan"
+                android:icon="@drawable/ic_menu_scan"
+                android:title="@string/oper_msg_scan"/>
+            />
+        </menu>
+    </item>
+
+</menu>

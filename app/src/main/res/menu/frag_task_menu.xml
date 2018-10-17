@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/fliterEt"
+        android:title="@string/schedule_list"
+        android:icon="@drawable/schdeule_menu_icon"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/task_refresh"
+        android:icon="@drawable/ic_task_menu_enddate"
+        android:title="@string/oper_refresh"
+        android:visible="false"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/new_task"
+        android:icon="@drawable/ic_action_new"
+        android:title="@string/oper_new_task"
+        android:visible="false"
+        app:showAsAction="always"></item>
+
+</menu>

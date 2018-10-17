@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="main_title_message">消息</string>
+    <string name="main_title_contact">联系人</string>
+    <string name="main_title_task">任务</string>
+    <string name="main_title_find">发现</string>
+    <string name="main_title_me">我</string>
+
+    <string name="menu_more">更多</string>
+    <string name="oper_new_task">新建任务</string>
+    <string name="oper_refresh">刷新</string>
+    <string name="schedule_list">列表</string>
+    <string name="oper_search_member">搜索成员</string>
+    <string name="oper_friend_add">添加好友</string>
+    <string name="oper_msg_read">设为已读</string>
+    <string name="oper_msg_scan">扫一扫</string>
+    <string name="org_group_chat">发起群聊</string>
+</resources>

@@ -6,6 +6,76 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="actionOverflowMenuStyle">@style/OverflowMenu</item>
+        <item name="toolbarStyle">@style/ToolbarStyle</item>
+        <item name="actionBarStyle">@style/ActionBarStyle</item>
+        <item name="android:dropDownListViewStyle">@style/DropDownListView.Example</item>
+        <item name="android:actionDropDownStyle">@style/DropDownNav.Example</item>
+        <item name="actionBarItemBackground">@drawable/selectable_background_example</item>
+        <item name="android:actionBarItemBackground">@drawable/selectable_background_example</item>
+        <item name="android:actionBarStyle">@style/ActionBarStyle</item>
+        <item name="toolbarNavigationButtonStyle">@style/ToolbarNavigationButtonStyle</item>
+        <item name="actionMenuTextColor">@color/color_FAFAFA</item>
+        <item name="android:actionMenuTextColor">@color/color_FAFAFA</item>
+        <item name="android:itemTextAppearance">@style/myCustomMenuTextApearance</item>
+    </style>
+
+    <style name="myCustomMenuTextApearance" parent="@android:style/TextAppearance.Widget.IconMenu.Item">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <!-- 修改popupMenu -->
+    <style name="PopupMenu.Example" parent="@style/Widget.AppCompat.Light.PopupMenu">
+        <item name="android:popupBackground">@drawable/menu_dropdown_panel_example</item>
+    </style>
+
+    <style name="ActionBarStyle" parent="@style/Widget.AppCompat.Light.ActionBar.Solid">
+        <item name="android:titleTextStyle">@style/TitleTextStyle</item>
+        <item name="android:homeAsUpIndicator">@drawable/action_back_ic</item>
+        <item name="titleTextStyle">@style/TitleTextStyle</item>
+        <item name="homeAsUpIndicator">@drawable/action_back_ic</item>
+        <item name="contentInsetStart">0dp</item>
+        <item name="contentInsetEnd">0dp</item>
+    </style>
+
+
+    <style name="TitleTextStyle" parent="Base.TextAppearance.AppCompat.Title">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/font_18sp</item>
+        <item name="android:fontFamily">@null</item>
+    </style>
+
+    <style name="DropDownListView.Example" parent="@style/Widget.AppCompat.Light.ListView.DropDown">
+        <item name="android:listSelector">@drawable/selectable_background_example</item>
+        <item name="android:showDividers">middle</item>
+        <item name="android:divider">@color/color_44000000</item>
+        <item name="android:dividerHeight">1px</item>
+    </style>
+
+    <style name="DropDownNav.Example" parent="@style/Widget.AppCompat.Light.Spinner.DropDown.ActionBar">
+        <item name="android:background">@drawable/spinner_background_ab_example</item>
+        <item name="android:popupBackground">@drawable/menu_dropdown_panel_example</item>
+        <item name="android:dropDownSelector">@drawable/selectable_background_example</item>
+    </style>
+
+
+    <style name="OverflowMenu" parent="Widget.AppCompat.PopupMenu.Overflow">
+        <item name="overlapAnchor">false</item>  <!--设置不覆盖锚点-->
+        <item name="android:dropDownVerticalOffset">4dp</item>
+        <item name="android:layout_marginRight">4dp</item>
+        <item name="android:popupBackground">@color/colorPrimary</item> <!--更改背景颜色-->"
+    </style>
+
+    <style name="ToolbarNavigationButtonStyle" parent="@style/Widget.AppCompat.Toolbar.Button.Navigation">
+        <item name="android:minWidth">0dp</item>
+        <item name="android:scaleType">centerInside</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:background">@drawable/actionbar_navigation_button_bg</item>
+    </style>
+
+    <style name="ToolbarStyle" parent="@style/Widget.AppCompat.Toolbar">
+        <item name="contentInsetStart">0dp</item>
+        <item name="contentInsetStartWithNavigation">0dp</item>
     </style>
 
     <style name="AppTheme.FullScreen" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -20,9 +90,6 @@
     </style>
 
 
-    <style name="noActionBar" parent="Theme.AppCompat.Light.NoActionBar">
-
-    </style>
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
@@ -33,4 +100,6 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
+    <dimen name="font_18sp">18sp</dimen>
+    <color name="black">#000000</color>
 </resources>

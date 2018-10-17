@@ -1,18 +1,31 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme1" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="android:actionOverflowMenuStyle">@style/OverflowMenu</item>
+        <item name="actionOverflowMenuStyle">@style/OverflowMenu</item>
+        <item name="toolbarStyle">@style/ToolbarStyle</item>
+        <item name="actionBarStyle">@style/ActionBarStyle</item>
+        <item name="android:dropDownListViewStyle">@style/DropDownListView.Example</item>
+        <item name="android:actionDropDownStyle">@style/DropDownNav.Example</item>
+        <item name="actionBarItemBackground">@drawable/selectable_background_example</item>
+        <item name="android:actionBarItemBackground">@drawable/selectable_background_example</item>
+        <item name="android:actionBarStyle">@style/ActionBarStyle</item>
+        <item name="toolbarNavigationButtonStyle">@style/ToolbarNavigationButtonStyle</item>
     </style>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme.NoStatusBar" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="ActionBarStyle" parent="@style/Widget.AppCompat.Light.ActionBar.Solid">
+        <item name="android:titleTextStyle">@style/TitleTextStyle</item>
+        <item name="android:homeAsUpIndicator">@drawable/action_back_ic</item>
+        <item name="titleTextStyle">@style/TitleTextStyle</item>
+        <item name="homeAsUpIndicator">@drawable/action_back_ic</item>
+        <item name="contentInsetStart">0dp</item>
+        <item name="contentInsetEnd">0dp</item>
     </style>
 
-
-    <style name="noActionBar" parent="Theme.AppCompat.Light.NoActionBar"></style>
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>

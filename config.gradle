@@ -19,7 +19,6 @@ def versions = [:]
 versions.support_version = "28.0.0"
 
 def support = [:]
-
 support.appcompat = "com.android.support:appcompat-v7:$versions.support_version"
 support.v4 = "com.android.support:support-v4:$versions.support_version"
 support.recyclerview = "com.android.support:recyclerview-v7:$versions.support_version"
@@ -28,9 +27,7 @@ support.vector = "com.android.support:support-vector-drawable:$versions.support_
 deps.support = support
 
 def lifecycle = [:]
-
 versions.lifecycle_version = "1.1.1"
-
 lifecycle.extensions = "android.arch.lifecycle:extensions:$versions.lifecycle_version"
 lifecycle.viewmodel = "android.arch.lifecycle:viewmodel:$versions.lifecycle_version"
 lifecycle.livedata = "android.arch.lifecycle:livedata:$versions.lifecycle_version"
@@ -40,18 +37,72 @@ lifecycle.reactivestreams = "android.arch.lifecycle:reactivestreams:$versions.li
 lifecycle.core_testing = "android.arch.core:core-testing:$versions.lifecycle_version"
 deps.lifecycle = lifecycle
 
-
 def dagger = [:]
-
 versions.dagger_version = "2.16"
-
 dagger.compiler = "com.google.dagger:dagger-compiler:$versions.dagger_version"
 dagger.dagger = "com.google.dagger:dagger:$versions.dagger_version"
 dagger.android = "com.google.dagger:dagger-android:$versions.dagger_version"
 dagger.support = "com.google.dagger:dagger-android-support:$versions.dagger_version"
 dagger.processor = "com.google.dagger:dagger-android-processor:$versions.dagger_version"
-
-
 deps.dagger = dagger
+
+def retrofit = [:]
+versions.retrofit_version = "2.4.0"
+retrofit.retrofit = "com.squareup.retrofit2:retrofit:$versions.retrofit_version"
+retrofit.converters = "com.squareup.retrofit2:retrofit-converters:$versions.retrofit_version"
+retrofit.adapters = "com.squareup.retrofit2:retrofit-adapters:$versions.retrofit_version"
+retrofit.mock = "com.squareup.retrofit2:retrofit-mock:$versions.retrofit_version"
+retrofit.rxjava2 = "com.squareup.retrofit2:adapter-rxjava2:$versions.retrofit_version"
+retrofit.gson = "com.squareup.retrofit2:converter-gson:$versions.retrofit_version"
+retrofit.moshi = "com.squareup.retrofit2:converter-moshi:$versions.retrofit_version"
+retrofit.protobuf = "com.squareup.retrofit2:converter-protobuf:$versions.retrofit_version"
+retrofit.wire = "com.squareup.retrofit2:converter-wire:$versions.retrofit_version"
+retrofit.simplexml = "com.squareup.retrofit2:converter-simplexml:$versions.retrofit_version"
+retrofit.scalars = "com.squareup.retrofit2:converter-scalars:$versions.retrofit_version"
+retrofit.jackson = "com.squareup.retrofit2:converter-jackson:$versions.retrofit_version"
+deps.retrofit = retrofit
+
+def room = [:]
+versions.room_version = "1.1.1"
+room.runtiume = "android.arch.persistence.room:runtime:$versions.room_version"
+room.compiler = "android.arch.persistence.room:compiler:$versions.room_version"
+room.rxjava2 = "android.arch.persistence.room:rxjava2:$versions.room_version"
+room.guava = "android.arch.persistence.room:guava:$versions.room_version"
+room.testing = "android.arch.persistence.room:testing:$versions.room_version"
+deps.room = room
+
+def rxlifecycle = [:]
+versions.rxlifecycle_version = "2.2.1"
+rxlifecycle.rxlifecycle = "com.trello.rxlifecycle2:rxlifecycle:$versions.rxlifecycle_version"
+rxlifecycle.android = "com.trello.rxlifecycle2:rxlifecycle-android:$versions.rxlifecycle_version"
+rxlifecycle.components = "com.trello.rxlifecycle2:rxlifecycle-components:$versions.rxlifecycle_version"
+deps.rxlifecycle = rxlifecycle
+
+def glide = [:]
+versions.glide_version = "4.7.1"
+glide.glide = "com.github.bumptech.glide:glide:$versions.glide_version"
+glide.compiler = "com.github.bumptech.glide:compiler:$versions.glide_version"
+glide.okhttp3_integration = "com.github.bumptech.glide:okhttp3-integration:$versions.glide_version"
+deps.glide = glide
+
+def butterknife = [:]
+versions.butterknife_version = "8.8.1"
+butterknife.butterknife = "com.jakewharton:butterknife:$versions.butterknife_version"
+butterknife.compiler = "com.jakewharton:butterknife-compiler:$versions.butterknife_version"
+deps.butterknife = butterknife
+
+def paging = [:]
+versions.paging_version = "1.0.1"
+paging.runtime = "android.arch.paging:runtime:$versions.paging_version"
+paging.common = "android.arch.paging:common:$versions.paging_version"
+paging.rxjava2 = "android.arch.paging:rxjava2:$versions.paging_version"
+deps.paging = paging
+
+def nav = [:]
+versions.nav_version = "1.0.0-alpha06"
+nav.fragment = "android.arch.navigation:navigation-fragment:$versions.nav_version"
+nav.ui = "android.arch.navigation:navigation-ui:$versions.nav_version"
+nav.testing = "android.arch.navigation:navigation-testing:$versions.nav_version"
+deps.nav = nav
 
 ext.deps = deps

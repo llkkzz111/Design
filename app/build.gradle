@@ -50,12 +50,10 @@ android {
         }
     }
 
-
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-
 
     lintOptions {
         abortOnError false
@@ -67,16 +65,16 @@ dependencies {
     implementation project(':common')
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    testImplementation 'junit:junit:4.12'
+    testImplementation "junit:junit:4.12"
+    androidTestImplementation "com.android.support.test:runner:1.0.2"
+    androidTestImplementation "com.android.support.test.espresso:espresso-core:3.0.2"
 
     implementation 'com.amap.api:location:3.8.0'
     implementation 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
     implementation deps.support.design
-    implementation deps.support.appcompat
     implementation deps.support.recyclerview
     implementation deps.support.vector
     implementation deps.support.v4
@@ -95,19 +93,20 @@ dependencies {
     implementation deps.dagger.support
     annotationProcessor deps.dagger.processor
 
-    def paging_version = "1.0.1"
-    implementation "android.arch.paging:runtime:$paging_version"
-    testImplementation "android.arch.paging:common:$paging_version"
-    implementation 'android.arch.paging:rxjava2:1.0.1'
-    def nav_version = "1.0.0-alpha06"
-    implementation "android.arch.navigation:navigation-fragment:$nav_version"
-    implementation "android.arch.navigation:navigation-ui:$nav_version"
-    androidTestImplementation "android.arch.navigation:navigation-testing:$nav_version"
+    implementation deps.butterknife.butterknife
+    annotationProcessor deps.butterknife.compiler
+
+    implementation deps.paging.runtime
+    testImplementation deps.paging.common
+    implementation deps.paging.rxjava2
+
+    implementation deps.nav.fragment
+    implementation deps.nav.ui
+    androidTestImplementation deps.nav.testing
 
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
-    api 'com.jakewharton:butterknife:8.8.1'
-    annotationProcessor "com.jakewharton:butterknife-compiler:8.8.1"
+
 
     implementation 'org.glassfish:javax.annotation:10.0-b28'
     implementation 'com.youth.banner:banner:1.4.10'

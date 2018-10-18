@@ -1,13 +1,13 @@
 apply plugin: "com.android.library"
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion rootProject.compileSdkVersion
 
     defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 27
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion rootProject.minSdkVersion
+        targetSdkVersion rootProject.targetSdkVersion
+        versionCode rootProject.versionCode
+        versionName rootProject.versionName
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -35,19 +35,17 @@ android {
 }
 
 dependencies {
-    implementation fileTree(include: ["*.jar"], dir: "libs")
-    implementation "com.android.support:appcompat-v7:27.1.1"
+    api project(":lotus")
+    api fileTree(include: ["*.jar"], dir: "libs")
+
     testImplementation "junit:junit:4.12"
     androidTestImplementation "com.android.support.test:runner:1.0.2"
     androidTestImplementation "com.android.support.test.espresso:espresso-core:3.0.2"
-    def room_version = "1.1.1"
-    api "android.arch.persistence.room:runtime:$room_version"
-    annotationProcessor "android.arch.persistence.room:compiler:$room_version"
-    // optional - RxJava support for Room
-    api "android.arch.persistence.room:rxjava2:$room_version"
-    // optional - Guava support for Room, including Optional and ListenableFuture
-    api "android.arch.persistence.room:guava:$room_version"
-    // Test helpers
-    testImplementation "android.arch.persistence.room:testing:$room_version"
-    api project(":lotus")
+
+    api deps.room.runtiume
+    annotationProcessor deps.room.compiler
+    api deps.room.rxjava2
+    api deps.room.guava
+    testImplementation deps.room.testing
+
 }

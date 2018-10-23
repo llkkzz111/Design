@@ -1,9 +1,9 @@
 package com.liuz.common.interceptor;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
 
 import okhttp3.Interceptor;
+import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.Response;
 
@@ -12,25 +12,29 @@ import okhttp3.Response;
  */
 
 public class LogInterceptorSlife implements Interceptor {
-    private static final Charset UTF8 = Charset.forName("UTF-8");
 
-    public String TAG = "LogInterceptorSlife";
 
     @Override
     public Response intercept(Chain chain) throws IOException {
-        Request request = chain.request();
-        request = request
-                .newBuilder()
-                .url(request.url())
+        Request oldRequest = chain.request();
+        Request.Builder newRequestBuild = oldRequest.newBuilder();
+        Request newRequest;
+        String newRequestUrl = oldRequest.url().toString();
+        newRequest = newRequestBuild
+                .url(newRequestUrl)
                 .addHeader("Content-Type1", "application/json")
                 .addHeader("Accept1", "application/json")
                 .addHeader("Accept-Language1", "zh")
                 .addHeader("app1", "01")
-                .addHeader("appToken1", "hhehehehehehehehhee")
-                .removeHeader("user-agent1")
-                .addHeader("user-agent1", "slife-agent-x3NKb7qR=")
+                .addHeader("appToken1", "--------------------------")
                 .build();
-        return chain.proceed(request);
+        Response response = chain.proceed(newRequest);
+        MediaType mediaType = response.body().contentType();
+        String content = response.body().string();
+        return response.newBuilder()
+                .body(okhttp3.ResponseBody.create(mediaType, content))
+                .build();
     }
+
 
 }

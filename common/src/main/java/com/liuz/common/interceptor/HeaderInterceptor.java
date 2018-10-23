@@ -9,7 +9,6 @@ import java.util.Set;
 
 import okhttp3.FormBody;
 import okhttp3.HttpUrl;
-import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
@@ -18,12 +17,7 @@ import okhttp3.Response;
  * date: 2018/10/18 17:24
  * author liuzhao
  */
-public class HeaderInterceptor implements Interceptor {
-
-    private static final String NETWORK_TYPE = "networkType";
-    private static final String VERSION_CODE = "versionCode";
-    private static final String OP_SYSTEM = "operatingSystem";
-    private static final String DEVICE = "device";
+public class HeaderInterceptor extends HttpResponseInterceptor {
 
     @Override
     public Response intercept(Chain chain) throws IOException {
@@ -37,8 +31,6 @@ public class HeaderInterceptor implements Interceptor {
                 .addHeader("Accept-Language", "zh")
                 .addHeader("app", "01")
                 .addHeader("appToken", "hhehehehehehehehhee")
-                .removeHeader("user-agent")
-                .addHeader("user-agent", "slife-agent-x3NKb7qR=")
                 .build();
         if (request.method().equals("GET")) {
             HttpUrl url = request.url();
@@ -74,5 +66,40 @@ public class HeaderInterceptor implements Interceptor {
 
 
         return response;
+    }
+
+    @Override
+    Response processAccessTokenExpired(Chain chain, Request request) {
+        return null;
+    }
+
+    @Override
+    Response processRefreshTokenExpired(Chain chain, Request request) {
+        return null;
+    }
+
+    @Override
+    Response processOtherPhoneLogin(Chain chain, Request request) {
+        return null;
+    }
+
+    @Override
+    Response processSignError(Chain chain, Request request) {
+        return null;
+    }
+
+    @Override
+    Response processTimestampError(Chain chain, Request request) {
+        return null;
+    }
+
+    @Override
+    Response processNoAccessToken(Chain chain, Request request) {
+        return null;
+    }
+
+    @Override
+    Response processOtherError(int errorCode, Chain chain, Request request) {
+        return null;
     }
 }

@@ -115,11 +115,12 @@ public class LotusApplication extends DaggerApplication {
                 .setCookie(true)
                 .converterFactory(GsonConverterFactory.create())
                 //配置日志拦截器
+                .networkInterceptor(new HttpLoggingInterceptor()
+                        .setLevel(HttpLoggingInterceptor.Level.BODY))
                 .networkInterceptor(new StethoInterceptor())
                 .interceptor(new LogInterceptorSlife())
                 .interceptor(new HeaderInterceptor())
-                .interceptor(new HttpLoggingInterceptor()
-                        .setLevel(HttpLoggingInterceptor.Level.HEADERS));
+        ;
         initStetho();
 
     }

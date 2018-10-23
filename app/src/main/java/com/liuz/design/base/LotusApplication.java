@@ -7,6 +7,8 @@ import com.activeandroid.ActiveAndroid;
 import com.facebook.stetho.Stetho;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.liuz.common.convert.GsonConverterFactory;
+import com.liuz.common.interceptor.HeaderInterceptor;
+import com.liuz.common.interceptor.LogInterceptorSlife;
 import com.liuz.design.R;
 import com.liuz.design.di.DaggerAppComponent;
 import com.liuz.design.utils.UIManager;
@@ -114,8 +116,10 @@ public class LotusApplication extends DaggerApplication {
                 .converterFactory(GsonConverterFactory.create())
                 //配置日志拦截器
                 .networkInterceptor(new StethoInterceptor())
+                .interceptor(new LogInterceptorSlife())
+                .interceptor(new HeaderInterceptor())
                 .interceptor(new HttpLoggingInterceptor()
-                        .setLevel(HttpLoggingInterceptor.Level.BODY));
+                        .setLevel(HttpLoggingInterceptor.Level.HEADERS));
         initStetho();
 
     }

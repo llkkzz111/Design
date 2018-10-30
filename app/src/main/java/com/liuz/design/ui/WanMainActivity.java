@@ -245,9 +245,9 @@ public class WanMainActivity extends TranslucentBarBaseActivity
             intent.setClass(mContext, LoginActivity.class);
         } else {
             intent.setClass(mContext, LoginActivity.class);
-            startActivityForResult(intent, ACCOUNT_LOGIN);
-        }
 
+        }
+        startActivityForResult(intent, ACCOUNT_LOGIN);
     }
 
 

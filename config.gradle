@@ -26,17 +26,6 @@ support.design = "com.android.support:design:$versions.support_version"
 support.vector = "com.android.support:support-vector-drawable:$versions.support_version"
 deps.support = support
 
-def lifecycle = [:]
-versions.lifecycle_version = "1.1.1"
-lifecycle.extensions = "android.arch.lifecycle:extensions:$versions.lifecycle_version"
-lifecycle.viewmodel = "android.arch.lifecycle:viewmodel:$versions.lifecycle_version"
-lifecycle.livedata = "android.arch.lifecycle:livedata:$versions.lifecycle_version"
-lifecycle.runtime = "android.arch.lifecycle:runtime:$versions.lifecycle_version"
-lifecycle.compiler = "android.arch.lifecycle:compiler:$versions.lifecycle_version"
-lifecycle.reactivestreams = "android.arch.lifecycle:reactivestreams:$versions.lifecycle_version"
-lifecycle.core_testing = "android.arch.core:core-testing:$versions.lifecycle_version"
-deps.lifecycle = lifecycle
-
 def dagger = [:]
 versions.dagger_version = "2.16"
 dagger.compiler = "com.google.dagger:dagger-compiler:$versions.dagger_version"
@@ -61,15 +50,6 @@ retrofit.simplexml = "com.squareup.retrofit2:converter-simplexml:$versions.retro
 retrofit.scalars = "com.squareup.retrofit2:converter-scalars:$versions.retrofit_version"
 retrofit.jackson = "com.squareup.retrofit2:converter-jackson:$versions.retrofit_version"
 deps.retrofit = retrofit
-
-def room = [:]
-versions.room_version = "1.1.1"
-room.runtiume = "android.arch.persistence.room:runtime:$versions.room_version"
-room.compiler = "android.arch.persistence.room:compiler:$versions.room_version"
-room.rxjava2 = "android.arch.persistence.room:rxjava2:$versions.room_version"
-room.guava = "android.arch.persistence.room:guava:$versions.room_version"
-room.testing = "android.arch.persistence.room:testing:$versions.room_version"
-deps.room = room
 
 def rxlifecycle = [:]
 versions.rxlifecycle_version = "2.2.1"
@@ -99,10 +79,31 @@ paging.rxjava2 = "android.arch.paging:rxjava2:$versions.paging_version"
 deps.paging = paging
 
 def nav = [:]
-versions.nav_version = "1.0.0-alpha06"
+versions.nav_version = "1.0.0-alpha07"
 nav.fragment = "android.arch.navigation:navigation-fragment:$versions.nav_version"
 nav.ui = "android.arch.navigation:navigation-ui:$versions.nav_version"
 nav.testing = "android.arch.navigation:navigation-testing:$versions.nav_version"
 deps.nav = nav
+
+
+def room = [:]
+versions.room_version = "1.1.1"
+room.runtiume = "android.arch.persistence.room:runtime:$versions.room_version"
+room.compiler = "android.arch.persistence.room:compiler:$versions.room_version"
+room.rxjava2 = "android.arch.persistence.room:rxjava2:$versions.room_version"
+room.guava = "android.arch.persistence.room:guava:$versions.room_version"
+room.testing = "android.arch.persistence.room:testing:$versions.room_version"
+deps.room = room
+
+def lifecycle = [:]
+versions.lifecycle_version = "1.1.1"
+lifecycle.extensions = "android.arch.lifecycle:extensions:$versions.lifecycle_version"
+lifecycle.viewmodel = "android.arch.lifecycle:viewmodel:$versions.lifecycle_version"
+lifecycle.livedata = "android.arch.lifecycle:livedata:$versions.lifecycle_version"
+lifecycle.runtime = "android.arch.lifecycle:runtime:$versions.lifecycle_version"
+lifecycle.compiler = "android.arch.lifecycle:compiler:$versions.lifecycle_version"
+lifecycle.reactivestreams = "android.arch.lifecycle:reactivestreams:$versions.lifecycle_version"
+lifecycle.core_testing = "android.arch.core:core-testing:$versions.lifecycle_version"
+deps.lifecycle = lifecycle
 
 ext.deps = deps

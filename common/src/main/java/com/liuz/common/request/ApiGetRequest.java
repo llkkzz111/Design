@@ -1,10 +1,8 @@
 package com.liuz.common.request;
 
 import com.liuz.common.func.ApiResultFunc;
-import com.liuz.lotus.net.ViseHttp;
 import com.liuz.lotus.net.callback.ACallback;
 import com.liuz.lotus.net.core.ApiManager;
-import com.liuz.lotus.net.mode.CacheResult;
 import com.liuz.lotus.net.subscriber.ApiCallbackSubscriber;
 
 import java.lang.reflect.Type;
@@ -27,10 +25,6 @@ public class ApiGetRequest extends ApiBaseRequest<ApiGetRequest> {
         return apiService.get(suffixUrl, params).map(new ApiResultFunc<T>(type)).compose(this.<T>apiTransformer());
     }
 
-    @Override
-    protected <T> Observable<CacheResult<T>> cacheExecute(Type type) {
-        return this.<T>execute(type).compose(ViseHttp.getApiCache().<T>transformer(cacheMode, type));
-    }
 
     @Override
     protected <T> void execute(ACallback<T> callback) {
@@ -38,10 +32,6 @@ public class ApiGetRequest extends ApiBaseRequest<ApiGetRequest> {
         if (super.tag != null) {
             ApiManager.get().add(super.tag, disposableObserver);
         }
-        if (isLocalCache) {
-            this.cacheExecute(getSubType(callback)).subscribe(disposableObserver);
-        } else {
-            this.execute(getType(callback)).subscribe(disposableObserver);
-        }
+        this.execute(getType(callback)).subscribe(disposableObserver);
     }
 }

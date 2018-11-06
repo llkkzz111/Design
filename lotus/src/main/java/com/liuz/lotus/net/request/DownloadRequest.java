@@ -9,7 +9,6 @@ import com.liuz.lotus.net.ViseHttp;
 import com.liuz.lotus.net.callback.ACallback;
 import com.liuz.lotus.net.core.ApiManager;
 import com.liuz.lotus.net.func.ApiRetryFunc;
-import com.liuz.lotus.net.mode.CacheResult;
 import com.liuz.lotus.net.mode.DownProgress;
 import com.liuz.lotus.net.subscriber.DownCallbackSubscriber;
 
@@ -116,11 +115,6 @@ public class DownloadRequest extends BaseHttpRequest<DownloadRequest> {
                 .observeOn(AndroidSchedulers.mainThread())
                 .toObservable()
                 .retryWhen(new ApiRetryFunc(retryCount, retryDelayMillis));
-    }
-
-    @Override
-    protected <T> Observable<CacheResult<T>> cacheExecute(Type type) {
-        return null;
     }
 
     @Override

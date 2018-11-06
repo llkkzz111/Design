@@ -4,7 +4,6 @@ import android.content.Context;
 
 import com.liuz.lotus.net.callback.UCallback;
 import com.liuz.lotus.net.config.HttpGlobalConfig;
-import com.liuz.lotus.net.core.ApiCache;
 import com.liuz.lotus.net.core.ApiManager;
 import com.liuz.lotus.net.request.BaseHttpRequest;
 import com.liuz.lotus.net.request.DeleteRequest;
@@ -32,7 +31,7 @@ public class ViseHttp {
     private static Context context;
     private static OkHttpClient.Builder okHttpBuilder;
     private static Retrofit.Builder retrofitBuilder;
-    private static ApiCache.Builder apiCacheBuilder;
+
     private static OkHttpClient okHttpClient;
 
     public static HttpGlobalConfig CONFIG() {
@@ -44,7 +43,6 @@ public class ViseHttp {
             context = appContext.getApplicationContext();
             okHttpBuilder = new OkHttpClient.Builder();
             retrofitBuilder = new Retrofit.Builder();
-            apiCacheBuilder = new ApiCache.Builder(context);
         }
     }
 
@@ -69,22 +67,11 @@ public class ViseHttp {
         return retrofitBuilder;
     }
 
-    public static ApiCache.Builder getApiCacheBuilder() {
-        if (apiCacheBuilder == null) {
-            throw new IllegalStateException("Please call ViseHttp.init(this) in Application to initialize!");
-        }
-        return apiCacheBuilder;
-    }
-
     public static OkHttpClient getOkHttpClient() {
         if (okHttpClient == null) {
             okHttpClient = getOkHttpBuilder().build();
         }
         return okHttpClient;
-    }
-
-    public static ApiCache getApiCache() {
-        return getApiCacheBuilder().build();
     }
 
     /**
@@ -234,22 +221,5 @@ public class ViseHttp {
         ApiManager.get().cancelAll();
     }
 
-    /**
-     * 清除对应Key的缓存
-     *
-     * @param key
-     */
-    public static void removeCache(String key) {
-        getApiCache().remove(key);
-    }
-
-    /**
-     * 清楚所有缓存并关闭缓存
-     *
-     * @return
-     */
-    public static Disposable clearCache() {
-        return getApiCache().clear();
-    }
 
 }

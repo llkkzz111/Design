@@ -6,7 +6,6 @@ import com.liuz.lotus.net.body.UploadProgressRequestBody;
 import com.liuz.lotus.net.callback.ACallback;
 import com.liuz.lotus.net.callback.UCallback;
 import com.liuz.lotus.net.core.ApiManager;
-import com.liuz.lotus.net.mode.CacheResult;
 import com.liuz.lotus.net.mode.MediaTypes;
 import com.liuz.lotus.net.subscriber.ApiCallbackSubscriber;
 
@@ -64,11 +63,6 @@ public class UploadRequest extends BaseHttpRequest<UploadRequest> {
             }
         }
         return apiService.uploadFiles(suffixUrl, multipartBodyParts).compose(this.<T>norTransformer(type));
-    }
-
-    @Override
-    protected <T> Observable<CacheResult<T>> cacheExecute(Type type) {
-        return null;
     }
 
     @Override

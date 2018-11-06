@@ -2,15 +2,10 @@ package com.liuz.lotus.net.request;
 
 import android.text.TextUtils;
 
-import com.liuz.lotus.common.ViseConfig;
-import com.liuz.lotus.net.ViseHttp;
 import com.liuz.lotus.net.api.ApiService;
 import com.liuz.lotus.net.callback.ACallback;
 import com.liuz.lotus.net.func.ApiFunc;
 import com.liuz.lotus.net.func.ApiRetryFunc;
-import com.liuz.lotus.net.mode.ApiHost;
-import com.liuz.lotus.net.mode.CacheMode;
-import com.liuz.lotus.net.mode.CacheResult;
 
 import java.lang.reflect.Type;
 import java.util.LinkedHashMap;
@@ -34,10 +29,6 @@ public abstract class BaseHttpRequest<R extends BaseHttpRequest> extends BaseReq
     protected String suffixUrl = "";//链接后缀
     protected int retryDelayMillis;//请求失败重试间隔时间
     protected int retryCount;//重试次数
-    protected boolean isLocalCache;//是否使用本地缓存
-    protected CacheMode cacheMode;//本地缓存类型
-    protected String cacheKey;//本地缓存Key
-    protected long cacheTime;//本地缓存时间
     protected Map<String, String> params = new LinkedHashMap<>();//请求参数
 
     public BaseHttpRequest() {
@@ -55,11 +46,6 @@ public abstract class BaseHttpRequest<R extends BaseHttpRequest> extends BaseReq
         return execute(type);
     }
 
-    public <T> Observable<CacheResult<T>> cacheRequest(Type type) {
-        generateGlobalConfig();
-        generateLocalConfig();
-        return cacheExecute(type);
-    }
 
     public <T> void request(ACallback<T> callback) {
         generateGlobalConfig();
@@ -79,27 +65,11 @@ public abstract class BaseHttpRequest<R extends BaseHttpRequest> extends BaseReq
         if (retryDelayMillis <= 0) {
             retryDelayMillis = httpGlobalConfig.getRetryDelayMillis();
         }
-        if (isLocalCache) {
-            if (cacheKey != null) {
-                ViseHttp.getApiCacheBuilder().cacheKey(cacheKey);
-            } else {
-                ViseHttp.getApiCacheBuilder().cacheKey(ApiHost.getHost());
-            }
-            if (cacheTime > 0) {
-                ViseHttp.getApiCacheBuilder().cacheTime(cacheTime);
-            } else {
-                ViseHttp.getApiCacheBuilder().cacheTime(ViseConfig.CACHE_NEVER_EXPIRE);
-            }
-        }
-        if (baseUrl != null && isLocalCache && cacheKey == null) {
-            ViseHttp.getApiCacheBuilder().cacheKey(baseUrl);
-        }
         apiService = retrofit.create(ApiService.class);
     }
 
     protected abstract <T> Observable<T> execute(Type type);
 
-    protected abstract <T> Observable<CacheResult<T>> cacheExecute(Type type);
 
     protected abstract <T> void execute(ACallback<T> callback);
 
@@ -192,38 +162,6 @@ public abstract class BaseHttpRequest<R extends BaseHttpRequest> extends BaseReq
         return (R) this;
     }
 
-    /**
-     * 设置本地缓存类型
-     *
-     * @param cacheMode
-     * @return
-     */
-    public R cacheMode(CacheMode cacheMode) {
-        this.cacheMode = cacheMode;
-        return (R) this;
-    }
-
-    /**
-     * 设置本地缓存Key
-     *
-     * @param cacheKey
-     * @return
-     */
-    public R cacheKey(String cacheKey) {
-        this.cacheKey = cacheKey;
-        return (R) this;
-    }
-
-    /**
-     * 设置本地缓存时间(毫秒)，默认永久
-     *
-     * @param cacheTime
-     * @return
-     */
-    public R cacheTime(long cacheTime) {
-        this.cacheTime = cacheTime;
-        return (R) this;
-    }
 
     public String getSuffixUrl() {
         return suffixUrl;
@@ -235,33 +173,6 @@ public abstract class BaseHttpRequest<R extends BaseHttpRequest> extends BaseReq
 
     public int getRetryCount() {
         return retryCount;
-    }
-
-    public boolean isLocalCache() {
-        return isLocalCache;
-    }
-
-    /**
-     * 设置是否进行本地缓存
-     *
-     * @param isLocalCache
-     * @return
-     */
-    public R setLocalCache(boolean isLocalCache) {
-        this.isLocalCache = isLocalCache;
-        return (R) this;
-    }
-
-    public CacheMode getCacheMode() {
-        return cacheMode;
-    }
-
-    public String getCacheKey() {
-        return cacheKey;
-    }
-
-    public long getCacheTime() {
-        return cacheTime;
     }
 
     public Map<String, String> getParams() {

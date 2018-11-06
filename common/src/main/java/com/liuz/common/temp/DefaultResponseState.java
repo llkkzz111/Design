@@ -1,6 +1,6 @@
 package com.liuz.common.temp;
 
-import com.liuz.common.mode.ResponseCode;
+import com.liuz.lotus.net.mode.ResponseCode;
 
 import java.util.List;
 

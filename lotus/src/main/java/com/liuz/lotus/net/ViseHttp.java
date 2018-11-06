@@ -2,20 +2,9 @@ package com.liuz.lotus.net;
 
 import android.content.Context;
 
-import com.liuz.lotus.net.callback.UCallback;
 import com.liuz.lotus.net.config.HttpGlobalConfig;
 import com.liuz.lotus.net.core.ApiManager;
-import com.liuz.lotus.net.request.BaseHttpRequest;
-import com.liuz.lotus.net.request.DeleteRequest;
-import com.liuz.lotus.net.request.DownloadRequest;
-import com.liuz.lotus.net.request.GetRequest;
-import com.liuz.lotus.net.request.HeadRequest;
-import com.liuz.lotus.net.request.OptionsRequest;
-import com.liuz.lotus.net.request.PatchRequest;
-import com.liuz.lotus.net.request.PostRequest;
-import com.liuz.lotus.net.request.PutRequest;
 import com.liuz.lotus.net.request.RetrofitRequest;
-import com.liuz.lotus.net.request.UploadRequest;
 
 import io.reactivex.disposables.Disposable;
 import okhttp3.OkHttpClient;
@@ -75,126 +64,12 @@ public class ViseHttp {
     }
 
     /**
-     * 通用请求，可传入自定义请求
-     *
-     * @param request
-     * @return
-     */
-    public static BaseHttpRequest BASE(BaseHttpRequest request) {
-        if (request != null) {
-            return request;
-        } else {
-            return new GetRequest("");
-        }
-    }
-
-    /**
      * 可传入自定义Retrofit接口服务的请求类型
      *
      * @return
      */
     public static <T> RetrofitRequest RETROFIT() {
         return new RetrofitRequest();
-    }
-
-    /**
-     * GET请求
-     *
-     * @param suffixUrl
-     * @return
-     */
-    public static GetRequest GET(String suffixUrl) {
-        return new GetRequest(suffixUrl);
-    }
-
-    /**
-     * POST请求
-     *
-     * @param suffixUrl
-     * @return
-     */
-    public static PostRequest POST(String suffixUrl) {
-        return new PostRequest(suffixUrl);
-    }
-
-    /**
-     * HEAD请求
-     *
-     * @param suffixUrl
-     * @return
-     */
-    public static HeadRequest HEAD(String suffixUrl) {
-        return new HeadRequest(suffixUrl);
-    }
-
-    /**
-     * PUT请求
-     *
-     * @param suffixUrl
-     * @return
-     */
-    public static PutRequest PUT(String suffixUrl) {
-        return new PutRequest(suffixUrl);
-    }
-
-    /**
-     * PATCH请求
-     *
-     * @param suffixUrl
-     * @return
-     */
-    public static PatchRequest PATCH(String suffixUrl) {
-        return new PatchRequest(suffixUrl);
-    }
-
-    /**
-     * OPTIONS请求
-     *
-     * @param suffixUrl
-     * @return
-     */
-    public static OptionsRequest OPTIONS(String suffixUrl) {
-        return new OptionsRequest(suffixUrl);
-    }
-
-    /**
-     * DELETE请求
-     *
-     * @param suffixUrl
-     * @return
-     */
-    public static DeleteRequest DELETE(String suffixUrl) {
-        return new DeleteRequest(suffixUrl);
-    }
-
-    /**
-     * 上传
-     *
-     * @param suffixUrl
-     * @return
-     */
-    public static UploadRequest UPLOAD(String suffixUrl) {
-        return new UploadRequest(suffixUrl);
-    }
-
-    /**
-     * 上传（包含上传进度回调）
-     *
-     * @param suffixUrl
-     * @return
-     */
-    public static UploadRequest UPLOAD(String suffixUrl, UCallback uCallback) {
-        return new UploadRequest(suffixUrl, uCallback);
-    }
-
-    /**
-     * 下载（回调DownProgress）
-     *
-     * @param suffixUrl
-     * @return
-     */
-    public static DownloadRequest DOWNLOAD(String suffixUrl) {
-        return new DownloadRequest(suffixUrl);
     }
 
     /**

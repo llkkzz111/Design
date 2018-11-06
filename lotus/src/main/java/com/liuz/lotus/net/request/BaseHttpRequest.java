@@ -2,7 +2,6 @@ package com.liuz.lotus.net.request;
 
 import android.text.TextUtils;
 
-import com.liuz.lotus.net.api.ApiService;
 import com.liuz.lotus.net.callback.ACallback;
 import com.liuz.lotus.net.func.ApiFunc;
 import com.liuz.lotus.net.func.ApiRetryFunc;
@@ -25,7 +24,7 @@ import okhttp3.ResponseBody;
  */
 public abstract class BaseHttpRequest<R extends BaseHttpRequest> extends BaseRequest<R> {
 
-    protected ApiService apiService;//通用接口服务
+
     protected String suffixUrl = "";//链接后缀
     protected int retryDelayMillis;//请求失败重试间隔时间
     protected int retryCount;//重试次数
@@ -65,7 +64,6 @@ public abstract class BaseHttpRequest<R extends BaseHttpRequest> extends BaseReq
         if (retryDelayMillis <= 0) {
             retryDelayMillis = httpGlobalConfig.getRetryDelayMillis();
         }
-        apiService = retrofit.create(ApiService.class);
     }
 
     protected abstract <T> Observable<T> execute(Type type);

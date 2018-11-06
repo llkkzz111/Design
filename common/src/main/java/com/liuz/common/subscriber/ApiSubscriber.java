@@ -1,4 +1,4 @@
-package com.liuz.lotus.net.subscriber;
+package com.liuz.common.subscriber;
 
 import com.liuz.lotus.net.exception.ApiException;
 import com.liuz.lotus.net.mode.ApiCode;

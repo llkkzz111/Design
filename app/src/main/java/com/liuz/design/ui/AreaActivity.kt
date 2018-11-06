@@ -12,6 +12,7 @@ import android.widget.TextView
 import com.amap.api.location.AMapLocationClient
 import com.amap.api.location.AMapLocationClientOption
 import com.amap.api.location.AMapLocationListener
+import com.liuz.common.subscriber.ApiCallbackSubscriber
 import com.liuz.db.AreaBean
 import com.liuz.db.AreasDatabase
 import com.liuz.design.R
@@ -25,7 +26,6 @@ import com.liuz.design.utils.PreferencesUtils
 import com.liuz.design.utils.Utils
 import com.liuz.lotus.net.ViseHttp
 import com.liuz.lotus.net.callback.ACallback
-import com.liuz.lotus.net.subscriber.ApiCallbackSubscriber
 import com.vise.log.ViseLog
 import io.reactivex.Observable
 import io.reactivex.ObservableOnSubscribe

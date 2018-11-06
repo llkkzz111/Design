@@ -1,8 +1,8 @@
 package com.liuz.common;
 
-import com.liuz.common.mode.ApiResult;
 import com.liuz.lotus.net.config.HttpGlobalConfig;
 import com.liuz.lotus.net.func.ApiRetryFunc;
+import com.liuz.lotus.net.mode.ApiResult;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;

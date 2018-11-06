@@ -3,11 +3,10 @@ package com.liuz.common.interceptor;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
-import com.liuz.common.mode.ApiResult;
 import com.liuz.common.temp.DefaultResponseState;
 import com.liuz.common.temp.IResponseState;
-import com.liuz.common.temp.Utils;
 import com.liuz.lotus.common.GsonUtil;
+import com.liuz.lotus.net.mode.ApiResult;
 import com.vise.log.ViseLog;
 
 import java.io.IOException;
@@ -36,7 +35,6 @@ public abstract class HttpResponseInterceptor implements Interceptor {
 
     public HttpResponseInterceptor(IResponseState responseState) {
         this.responseState = responseState;
-        Utils.checkIllegalArgument(responseState, "this responseState is null.");
     }
 
     @Override
@@ -72,7 +70,9 @@ public abstract class HttpResponseInterceptor implements Interceptor {
         if (!TextUtils.isEmpty(bodyString)) {
             ApiResult apiResult = GsonUtil.gson().fromJson(bodyString, ApiResult.class);
             if (apiResult != null) {
-                if (apiResult.getCode() == responseState.accessTokenExpired()) {//AccessToken错误或已过期
+                if (apiResult.getCode() == responseState.httpSuccess()) {
+                    return response;
+                } else if (apiResult.getCode() == responseState.accessTokenExpired()) {//AccessToken错误或已过期
                     return processAccessTokenExpired(chain, request);
                 } else if (apiResult.getCode() == responseState.refreshTokenExpired()) {//RefreshToken错误或已过期
                     return processRefreshTokenExpired(chain, request);

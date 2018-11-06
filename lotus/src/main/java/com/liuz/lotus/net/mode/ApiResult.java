@@ -1,4 +1,4 @@
-package com.liuz.common.mode;
+package com.liuz.lotus.net.mode;
 
 /**
  * @Description: 封装的通用服务器返回对象，可自行定义

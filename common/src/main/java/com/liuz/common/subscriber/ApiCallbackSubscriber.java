@@ -1,4 +1,4 @@
-package com.liuz.lotus.net.subscriber;
+package com.liuz.common.subscriber;
 
 import com.liuz.lotus.net.callback.ACallback;
 import com.liuz.lotus.net.exception.ApiException;

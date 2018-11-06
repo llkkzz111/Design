@@ -1,7 +1,6 @@
 package com.liuz.common.subscriber;
 
-import com.liuz.common.mode.ApiResult;
-import com.liuz.lotus.net.subscriber.ApiSubscriber;
+import com.liuz.lotus.net.mode.ApiResult;
 
 /**
  * date: 2018/7/3 15:15

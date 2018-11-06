@@ -26,7 +26,6 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.liuz.common.ApiResultTransformer;
-import com.liuz.common.mode.ApiResult;
 import com.liuz.common.subscriber.ApiResultSubscriber;
 import com.liuz.db.WanDataBase;
 import com.liuz.db.wan.AccountBean;
@@ -45,6 +44,7 @@ import com.liuz.lotus.net.ViseHttp;
 import com.liuz.lotus.net.config.HttpGlobalConfig;
 import com.liuz.lotus.net.exception.ApiException;
 import com.liuz.lotus.net.func.ApiRetryFunc;
+import com.liuz.lotus.net.mode.ApiResult;
 import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 
 import java.util.ArrayList;

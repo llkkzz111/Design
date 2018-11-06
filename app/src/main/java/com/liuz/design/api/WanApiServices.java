@@ -1,9 +1,9 @@
 package com.liuz.design.api;
 
-import com.liuz.common.mode.ApiResult;
 import com.liuz.db.wan.AccountBean;
 import com.liuz.design.bean.ArticleBeans;
 import com.liuz.design.bean.BannerBean;
+import com.liuz.lotus.net.mode.ApiResult;
 
 import java.util.List;
 

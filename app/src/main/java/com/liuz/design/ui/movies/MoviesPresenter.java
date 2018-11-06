@@ -4,13 +4,13 @@ import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.LifecycleOwner;
 import android.support.annotation.Nullable;
 
+import com.liuz.common.subscriber.ApiCallbackSubscriber;
 import com.liuz.design.api.MTimeApiService;
 import com.liuz.design.bean.HotMoviesBean;
 import com.liuz.design.di.ActivityScoped;
 import com.liuz.lotus.net.ViseHttp;
 import com.liuz.lotus.net.callback.ACallback;
 import com.liuz.lotus.net.core.ApiTransformer;
-import com.liuz.lotus.net.subscriber.ApiCallbackSubscriber;
 
 import org.jetbrains.annotations.NotNull;
 

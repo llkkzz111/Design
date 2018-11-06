@@ -74,6 +74,10 @@ android {
     aaptOptions {
         cruncherEnabled false
     }
+
+    dataBinding {
+        enabled = true
+    }
 }
 
 dependencies {
@@ -86,7 +90,7 @@ dependencies {
     androidTestImplementation "com.android.support.test.espresso:espresso-core:3.0.2"
 
     implementation 'com.amap.api:location:3.8.0'
-    implementation 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
+//    implementation 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
@@ -99,9 +103,16 @@ dependencies {
     implementation deps.lifecycle.viewmodel
     implementation deps.lifecycle.livedata
     implementation deps.lifecycle.runtime
+    implementation deps.lifecycle.java8
     annotationProcessor deps.lifecycle.compiler
     implementation deps.lifecycle.reactivestreams
     testImplementation deps.lifecycle.core_testing
+
+    api deps.room.runtiume
+    annotationProcessor deps.room.compiler
+    api deps.room.rxjava2
+    api deps.room.guava
+    testImplementation deps.room.testing
 
     annotationProcessor  deps.dagger.compiler
     implementation deps.dagger.dagger

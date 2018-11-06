@@ -3,6 +3,7 @@ package com.liuz.design.ui;
 import android.app.Activity;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.arch.lifecycle.LifecycleOwner;
 import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -35,10 +36,10 @@ import com.liuz.design.base.TranslucentBarBaseActivity;
 import com.liuz.design.bean.ArticleBean;
 import com.liuz.design.bean.ArticleBeans;
 import com.liuz.design.bean.BannerBean;
-import com.liuz.design.db.Category;
 import com.liuz.design.ui.adapter.WanArticleAdapter;
 import com.liuz.design.utils.PreferencesUtils;
 import com.liuz.design.view.DividerItemDecoration;
+import com.liuz.jetpack.lifecycle.MyObserver;
 import com.liuz.lotus.loader.LoaderFactory;
 import com.liuz.lotus.net.ViseHttp;
 import com.liuz.lotus.net.config.HttpGlobalConfig;
@@ -59,11 +60,9 @@ import io.reactivex.schedulers.Schedulers;
 
 
 public class WanMainActivity extends TranslucentBarBaseActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
-    private final int ACCOUNT_LOGIN = 100;
-
+        implements NavigationView.OnNavigationItemSelectedListener, LifecycleOwner {
     private static final String TAG = "WanMainActivity";
-
+    private final int ACCOUNT_LOGIN = 100;
     @BindView(R.id.nav_view) NavigationView navigationView;
     @BindView(R.id.drawer_layout) DrawerLayout drawer;
     @BindView(R.id.toolbar) Toolbar toolbar;
@@ -152,7 +151,9 @@ public class WanMainActivity extends TranslucentBarBaseActivity
             }
         });
 
+        getLifecycle().addObserver(new MyObserver());
     }
+
 
     private void getBannerInfo() {
         Observable<ApiResult<List<BannerBean>>> observableBanner = ViseHttp.RETROFIT().create(WanApiServices.class)
@@ -175,7 +176,6 @@ public class WanMainActivity extends TranslucentBarBaseActivity
                         if (apiResult.getData() != null)
                             if (apiResult.getData() instanceof ArticleBeans) {
                                 beanList.addAll(((ArticleBeans) apiResult.getData()).getDatas());
-                                addData();
                                 articleAdapter.notifyDataSetChanged();
                             } else {
                                 beanList.clear();
@@ -201,19 +201,6 @@ public class WanMainActivity extends TranslucentBarBaseActivity
                         rvArticle.setPullLoadMoreCompleted();
                     }
                 });
-    }
-
-
-    private void addData() {
-        Observable.create((ObservableOnSubscribe<String>) emitter -> {
-            for (ArticleBean bean : beanList) {
-                if (bean == null) {
-                    new Category("----").save();
-                } else {
-                    new Category(bean.getTitle()).save();
-                }
-            }
-        }).subscribeOn(Schedulers.io()).unsubscribeOn(Schedulers.io()).subscribe();
     }
 
     private void getArticleList() {

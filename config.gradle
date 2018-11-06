@@ -102,6 +102,7 @@ lifecycle.viewmodel = "android.arch.lifecycle:viewmodel:$versions.lifecycle_vers
 lifecycle.livedata = "android.arch.lifecycle:livedata:$versions.lifecycle_version"
 lifecycle.runtime = "android.arch.lifecycle:runtime:$versions.lifecycle_version"
 lifecycle.compiler = "android.arch.lifecycle:compiler:$versions.lifecycle_version"
+lifecycle.java8 = "android.arch.lifecycle:common-java8:$versions.lifecycle_version"
 lifecycle.reactivestreams = "android.arch.lifecycle:reactivestreams:$versions.lifecycle_version"
 lifecycle.core_testing = "android.arch.core:core-testing:$versions.lifecycle_version"
 deps.lifecycle = lifecycle

@@ -1,9 +1,7 @@
 package com.liuz.design.ui.movies;
 
-import com.liuz.design.di.ActivityScoped;
 import com.liuz.design.di.FragmentScoped;
 
-import dagger.Binds;
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
 
@@ -19,7 +17,5 @@ public abstract class MoviesModule {
     @ContributesAndroidInjector
     abstract MoviesFragment moviesFragment();
 
-    @ActivityScoped
-    @Binds
-    abstract MoviesContract.Presenter moviesPresenter(MoviesPresenter presenter);
+
 }

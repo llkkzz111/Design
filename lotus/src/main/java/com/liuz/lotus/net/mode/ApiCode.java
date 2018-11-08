@@ -48,7 +48,7 @@ public class ApiCode {
         //HTTP请求成功状态码
         public static final int HTTP_SUCCESS = 0;
         //AccessToken错误或已过期
-        public static final int ACCESS_TOKEN_EXPIRED = 10001;
+        public static final int ACCESS_TOKEN_EXPIRED = -1001;
         //RefreshToken错误或已过期
         public static final int REFRESH_TOKEN_EXPIRED = 10002;
         //帐号在其它手机已登录

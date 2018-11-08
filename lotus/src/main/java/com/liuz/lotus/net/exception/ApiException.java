@@ -47,12 +47,13 @@ public class ApiException extends IOException {
     private static boolean ignoreSomeIssue(int code) {
         switch (code) {
             case ApiCode.Response.TIMESTAMP_ERROR://时间戳过期
-            case ApiCode.Response.ACCESS_TOKEN_EXPIRED://AccessToken错误或已过期
             case ApiCode.Response.REFRESH_TOKEN_EXPIRED://RefreshToken错误或已过期
             case ApiCode.Response.OTHER_PHONE_LOGIN://帐号在其它手机已登录
             case ApiCode.Response.NO_ACCESS_TOKEN://缺少授权信息,没有AccessToken
             case ApiCode.Response.SIGN_ERROR://签名错误
                 return true;
+            case ApiCode.Response.ACCESS_TOKEN_EXPIRED://AccessToken错误或已过期
+                return false;
             default:
                 return false;
         }

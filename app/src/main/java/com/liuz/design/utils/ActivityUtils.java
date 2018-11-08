@@ -16,10 +16,13 @@
 
 package com.liuz.design.utils;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+
+import com.liuz.design.ui.LoginActivity;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -39,6 +42,12 @@ public class ActivityUtils {
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.add(frameId, fragment);
         transaction.commit();
+    }
+
+    public static void gotoLogin() {
+        Intent intent = new Intent(UIManager.getInstance().getBaseContext(), LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        UIManager.getInstance().getBaseContext().startActivity(intent);
     }
 
 }

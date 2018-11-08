@@ -8,8 +8,7 @@ import javax.inject.Inject;
 
 
 public class MTimesMoviesActivity extends BaseDaggerActivity {
-    @Inject
-    MoviesPresenter mMoviesPresenter;
+
     @Inject
     MoviesFragment fragment;
 

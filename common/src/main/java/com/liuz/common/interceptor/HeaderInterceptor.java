@@ -21,6 +21,7 @@ public class HeaderInterceptor extends HttpResponseInterceptor {
 
     @Override
     public Response intercept(Chain chain) throws IOException {
+        super.intercept(chain);
         Request request = chain.request();
         RequestBody requestBody = request.body();
         request = request
@@ -70,6 +71,7 @@ public class HeaderInterceptor extends HttpResponseInterceptor {
 
     @Override
     Response processAccessTokenExpired(Chain chain, Request request) {
+
         return null;
     }
 

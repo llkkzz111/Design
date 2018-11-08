@@ -48,6 +48,8 @@ public class ActivityUtils {
         Intent intent = new Intent(UIManager.getInstance().getBaseContext(), LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         UIManager.getInstance().getBaseContext().startActivity(intent);
+        PreferencesUtils.setLoginState(false);
+        PreferencesUtils.setUsername("");
     }
 
 }

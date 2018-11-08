@@ -75,6 +75,7 @@ public class WanMainActivity extends TranslucentBarBaseActivity
     private int pageNo = 0;
     private List<ArticleBean> beanList;
     private WanArticleAdapter articleAdapter;
+    private boolean loginState;
 
     @Override
     protected int getLayoutResId() {
@@ -150,10 +151,8 @@ public class WanMainActivity extends TranslucentBarBaseActivity
                 getArticleList();
             }
         });
-
         getLifecycle().addObserver(new MyObserver());
     }
-
 
     private void getBannerInfo() {
 
@@ -220,7 +219,6 @@ public class WanMainActivity extends TranslucentBarBaseActivity
                 });
     }
 
-
     private void profileClick() {
         Intent intent = new Intent();
         if (account != null) {
@@ -231,7 +229,6 @@ public class WanMainActivity extends TranslucentBarBaseActivity
         }
         startActivityForResult(intent, ACCOUNT_LOGIN);
     }
-
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -249,6 +246,15 @@ public class WanMainActivity extends TranslucentBarBaseActivity
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loginState = PreferencesUtils.getLoginState();
+        if (!PreferencesUtils.getLoginState()) {
+
+        }
     }
 
     @Override

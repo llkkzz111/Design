@@ -2,6 +2,7 @@ package com.liuz.net.interceptor;
 
 import android.util.Log;
 
+import com.liuz.design.utils.ActivityUtils;
 import com.liuz.lotus.BuildConfig;
 
 import java.io.IOException;
@@ -71,7 +72,7 @@ public class HeaderInterceptor extends HttpResponseInterceptor {
 
     @Override
     Response processAccessTokenExpired(Chain chain, Request request) {
-
+        ActivityUtils.gotoLogin();
         return null;
     }
 

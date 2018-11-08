@@ -1,4 +1,4 @@
-package com.liuz.common.interceptor;
+package com.liuz.net.interceptor;
 
 import android.support.annotation.NonNull;
 import android.text.TextUtils;

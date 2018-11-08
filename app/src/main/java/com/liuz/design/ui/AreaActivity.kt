@@ -16,7 +16,6 @@ import com.liuz.common.subscriber.ApiCallbackSubscriber
 import com.liuz.db.AreaBean
 import com.liuz.db.AreasDatabase
 import com.liuz.design.R
-import com.liuz.design.api.MTimeApiService
 import com.liuz.design.base.TranslucentBarBaseActivity
 import com.liuz.design.bean.AreasBean
 import com.liuz.design.bindView
@@ -26,6 +25,7 @@ import com.liuz.design.utils.PreferencesUtils
 import com.liuz.design.utils.Utils
 import com.liuz.lotus.net.ViseHttp
 import com.liuz.lotus.net.callback.ACallback
+import com.liuz.net.api.MTimeApiService
 import com.vise.log.ViseLog
 import io.reactivex.Observable
 import io.reactivex.ObservableOnSubscribe

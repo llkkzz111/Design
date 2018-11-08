@@ -6,12 +6,12 @@ import android.support.multidex.MultiDex;
 import com.facebook.stetho.Stetho;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.liuz.common.convert.GsonConverterFactory;
-import com.liuz.common.interceptor.HeaderInterceptor;
-import com.liuz.common.interceptor.LogInterceptorSlife;
 import com.liuz.design.R;
 import com.liuz.design.di.DaggerAppComponent;
 import com.liuz.design.utils.UIManager;
 import com.liuz.lotus.net.ViseHttp;
+import com.liuz.net.interceptor.HeaderInterceptor;
+import com.liuz.net.interceptor.LogInterceptorSlife;
 import com.vise.log.ViseLog;
 import com.vise.log.inner.LogcatTree;
 

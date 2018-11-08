@@ -5,7 +5,6 @@ import android.widget.Toast;
 
 import com.liuz.common.subscriber.ApiCallbackSubscriber;
 import com.liuz.design.R;
-import com.liuz.design.api.MTimeApiService;
 import com.liuz.design.base.BaseDaggerFragment;
 import com.liuz.design.bean.HotMoviesBean;
 import com.liuz.design.di.ActivityScoped;
@@ -14,6 +13,7 @@ import com.liuz.design.utils.PreferencesUtils;
 import com.liuz.lotus.net.ViseHttp;
 import com.liuz.lotus.net.callback.ACallback;
 import com.liuz.lotus.net.core.ApiTransformer;
+import com.liuz.net.api.MTimeApiService;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package com.liuz.design.api;
+package com.liuz.net.api;
 
 import com.liuz.design.bean.AreasBean;
 import com.liuz.design.bean.HotMoviesBean;

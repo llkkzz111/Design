@@ -1,4 +1,4 @@
-package com.liuz.design.api;
+package com.liuz.net.api;
 
 import com.liuz.db.wan.AccountBean;
 import com.liuz.design.bean.ArticleBeans;

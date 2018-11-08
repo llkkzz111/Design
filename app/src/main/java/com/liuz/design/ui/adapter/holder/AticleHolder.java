@@ -10,13 +10,13 @@ import android.widget.Toast;
 import com.liuz.common.ApiResultTransformer;
 import com.liuz.common.subscriber.ApiResultSubscriber;
 import com.liuz.design.R;
-import com.liuz.design.api.WanApiServices;
 import com.liuz.design.base.BaseViewHolder;
 import com.liuz.design.bean.ArticleBean;
 import com.liuz.design.ui.WebViewActivity;
 import com.liuz.design.utils.TimeUtils;
 import com.liuz.lotus.net.ViseHttp;
 import com.liuz.lotus.net.exception.ApiException;
+import com.liuz.net.api.WanApiServices;
 
 import butterknife.BindView;
 import butterknife.OnClick;

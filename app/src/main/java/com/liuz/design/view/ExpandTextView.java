@@ -57,6 +57,7 @@ public class ExpandTextView extends AppCompatTextView {
         super(context);
         initTextView();
     }
+
     public ExpandTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
         int[] attributes = new int[]{android.R.attr.lineSpacingExtra, android.R.attr.lineSpacingMultiplier};
@@ -66,6 +67,7 @@ public class ExpandTextView extends AppCompatTextView {
         arr.recycle();
         initTextView();
     }
+
     public ExpandTextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         int[] attributes = new int[]{android.R.attr.lineSpacingExtra, android.R.attr.lineSpacingMultiplier};

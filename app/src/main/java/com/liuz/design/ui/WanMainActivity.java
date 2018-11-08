@@ -156,8 +156,10 @@ public class WanMainActivity extends TranslucentBarBaseActivity
 
 
     private void getBannerInfo() {
+
         Observable<ApiResult<List<BannerBean>>> observableBanner = ViseHttp.RETROFIT().create(WanApiServices.class)
                 .getBanner();
+
         Observable<ApiResult<ArticleBeans>> observableArticle = ViseHttp.RETROFIT().create(WanApiServices.class)
                 .getArticleList(pageNo);
         Observable.concat(observableBanner, observableArticle)
@@ -181,13 +183,6 @@ public class WanMainActivity extends TranslucentBarBaseActivity
                                 beanList.clear();
                                 beanList.add(new ArticleBean());
                                 articleAdapter.setBannerBean((List<BannerBean>) apiResult.getData());
-//                                tabBanner.setData((List<BannerBean>) apiResult.getData());
-//                                tabBanner.setOnBannerListener(new OnBannerListener() {
-//                                    @Override
-//                                    public void OnBannerClick(BannerBean bean) {
-//                                        Toast.makeText(mContext, bean.getTitle(), Toast.LENGTH_SHORT).show();
-//                                    }
-//                                });
                             }
                     }
 

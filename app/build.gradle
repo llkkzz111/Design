@@ -21,7 +21,7 @@ android {
         versionName rootProject.versionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
-        resConfigs "zh-rCN", "zh-rHK" ,"zh-rTW"
+        resConfigs "zh-rCN", "zh-rHK", "zh-rTW"
     }
 
     signingConfigs {
@@ -99,7 +99,7 @@ dependencies {
     implementation deps.support.vector
     implementation deps.support.v4
 
-    implementation  deps.lifecycle.extensions
+    implementation deps.lifecycle.extensions
     implementation deps.lifecycle.viewmodel
     implementation deps.lifecycle.livedata
     implementation deps.lifecycle.runtime
@@ -114,7 +114,7 @@ dependencies {
     api deps.room.guava
     testImplementation deps.room.testing
 
-    annotationProcessor  deps.dagger.compiler
+    annotationProcessor deps.dagger.compiler
     implementation deps.dagger.dagger
     implementation deps.dagger.android
     implementation deps.dagger.support

@@ -33,6 +33,7 @@ public class AticleHolder extends BaseViewHolder<ArticleBean> {
     @BindView(R.id.ll_article_content) LinearLayout llContent;
 
     private ArticleBean bean;
+
     public AticleHolder(View view) {
         super(view);
     }

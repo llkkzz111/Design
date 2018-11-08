@@ -1,6 +1,7 @@
 package com.liuz.common.temp;
 
-import com.liuz.lotus.net.mode.ResponseCode;
+
+import com.liuz.lotus.net.mode.ApiCode;
 
 import java.util.List;
 
@@ -12,37 +13,37 @@ import java.util.List;
 public class DefaultResponseState implements IResponseState {
     @Override
     public int httpSuccess() {
-        return ResponseCode.HTTP_SUCCESS;
+        return ApiCode.Response.HTTP_SUCCESS;
     }
 
     @Override
     public int accessTokenExpired() {
-        return ResponseCode.ACCESS_TOKEN_EXPIRED;
+        return ApiCode.Response.ACCESS_TOKEN_EXPIRED;
     }
 
     @Override
     public int refreshTokenExpired() {
-        return ResponseCode.REFRESH_TOKEN_EXPIRED;
+        return ApiCode.Response.REFRESH_TOKEN_EXPIRED;
     }
 
     @Override
     public int otherPhoneLogin() {
-        return ResponseCode.OTHER_PHONE_LOGIN;
+        return ApiCode.Response.OTHER_PHONE_LOGIN;
     }
 
     @Override
     public int timestampError() {
-        return ResponseCode.TIMESTAMP_ERROR;
+        return ApiCode.Response.TIMESTAMP_ERROR;
     }
 
     @Override
     public int noAccessToken() {
-        return ResponseCode.NO_ACCESS_TOKEN;
+        return ApiCode.Response.NO_ACCESS_TOKEN;
     }
 
     @Override
     public int signError() {
-        return ResponseCode.SIGN_ERROR;
+        return ApiCode.Response.SIGN_ERROR;
     }
 
     @Override

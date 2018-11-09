@@ -1,12 +1,9 @@
 package com.liuz.design.ui;
 
 import android.app.Activity;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.arch.lifecycle.LifecycleOwner;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import android.os.Build;
-import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -14,17 +11,10 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.analytics.FirebaseAnalytics;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
 import com.liuz.common.ApiResultTransformer;
 import com.liuz.common.subscriber.ApiResultSubscriber;
 import com.liuz.db.WanDataBase;
@@ -33,17 +23,14 @@ import com.liuz.design.R;
 import com.liuz.design.base.TranslucentBarBaseActivity;
 import com.liuz.design.bean.ArticleBean;
 import com.liuz.design.bean.ArticleBeans;
-import com.liuz.design.bean.BannerBean;
 import com.liuz.design.ui.adapter.WanArticleAdapter;
 import com.liuz.design.utils.PreferencesUtils;
 import com.liuz.design.view.DividerItemDecoration;
 import com.liuz.jetpack.lifecycle.MyObserver;
 import com.liuz.lotus.loader.LoaderFactory;
 import com.liuz.lotus.net.ViseHttp;
-import com.liuz.lotus.net.config.HttpGlobalConfig;
 import com.liuz.lotus.net.exception.ApiException;
-import com.liuz.lotus.net.func.ApiRetryFunc;
-import com.liuz.lotus.net.mode.ApiResult;
+import com.liuz.mvvm.vm.WanViewModel;
 import com.liuz.net.api.WanApiServices;
 import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 
@@ -53,9 +40,7 @@ import java.util.List;
 import butterknife.BindView;
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 
@@ -67,7 +52,6 @@ public class WanMainActivity extends TranslucentBarBaseActivity
     @BindView(R.id.drawer_layout) DrawerLayout drawer;
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.rv_article) PullLoadMoreRecyclerView rvArticle;
-    private FirebaseAnalytics mFirebaseAnalytics;
 
     private ImageView ivHeader;
     private TextView tvName;
@@ -75,7 +59,7 @@ public class WanMainActivity extends TranslucentBarBaseActivity
     private int pageNo = 0;
     private List<ArticleBean> beanList;
     private WanArticleAdapter articleAdapter;
-    private boolean loginState;
+    private WanViewModel viewModel;
 
     @Override
     protected int getLayoutResId() {
@@ -84,43 +68,12 @@ public class WanMainActivity extends TranslucentBarBaseActivity
 
     @Override
     protected void initEventAndData() {
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            // Create channel to show notifications.
-            String channelId = getString(R.string.default_notification_channel_id);
-            String channelName = getString(R.string.default_notification_channel_name);
-            NotificationManager notificationManager =
-                    getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(new NotificationChannel(channelId,
-                    channelName, NotificationManager.IMPORTANCE_LOW));
-        }
-
-        FirebaseInstanceId.getInstance().getInstanceId()
-                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                        if (!task.isSuccessful()) {
-                            Log.w(TAG, "getInstanceId failed", task.getException());
-                            return;
-                        }
-
-                        // Get new Instance ID token
-                        String token = task.getResult().getToken();
-
-                        // Log and toast
-                        String msg = getString(R.string.msg_token_fmt, token);
-                        Log.d(TAG, msg);
-                        Toast.makeText(WanMainActivity.this, msg, Toast.LENGTH_SHORT).show();
-                    }
-                });
-
         setSupportActionBar(toolbar);
         toolbar.setTitle("Wan");
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-
         navigationView.setNavigationItemSelectedListener(this);
         ivHeader = navigationView.getHeaderView(0).findViewById(R.id.iv_header);
         tvName = navigationView.getHeaderView(0).findViewById(R.id.tv_user_name);
@@ -138,11 +91,11 @@ public class WanMainActivity extends TranslucentBarBaseActivity
         if (!TextUtils.isEmpty(userName)) {
             getAccount(userName);
         }
-        getBannerInfo();
+
         rvArticle.setOnPullLoadMoreListener(new PullLoadMoreRecyclerView.PullLoadMoreListener() {
             @Override
             public void onRefresh() {
-                getBannerInfo();
+
             }
 
             @Override
@@ -151,55 +104,30 @@ public class WanMainActivity extends TranslucentBarBaseActivity
                 getArticleList();
             }
         });
+
+        toggle.setToolbarNavigationClickListener(v -> {
+            if (TextUtils.isEmpty(tvName.getText())) {
+                tvName.setText(PreferencesUtils.getUserName());
+            }
+        });
+
         getLifecycle().addObserver(new MyObserver());
+
+        viewModel = ViewModelProviders.of(this).get(WanViewModel.class);
+        viewModel.getLiveData().observe(this, articleBeans -> {
+            beanList.addAll(articleBeans.getDatas());
+            articleAdapter.notifyDataSetChanged();
+        });
+
+        viewModel.getLiveData().observe(this, articleBeans -> {
+
+        });
     }
 
-    private void getBannerInfo() {
-
-        Observable<ApiResult<List<BannerBean>>> observableBanner = ViseHttp.RETROFIT().create(WanApiServices.class)
-                .getBanner();
-
-        Observable<ApiResult<ArticleBeans>> observableArticle = ViseHttp.RETROFIT().create(WanApiServices.class)
-                .getArticleList(pageNo);
-        Observable.concat(observableBanner, observableArticle)
-                .subscribeOn(Schedulers.io())
-                .unsubscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .retryWhen(new ApiRetryFunc(HttpGlobalConfig.getInstance().getRetryCount(),
-                        HttpGlobalConfig.getInstance().getRetryDelayMillis()))
-                .subscribe(new Observer<ApiResult<? extends Object>>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                    }
-
-                    @Override
-                    public void onNext(ApiResult<?> apiResult) {
-                        if (apiResult.getData() != null)
-                            if (apiResult.getData() instanceof ArticleBeans) {
-                                beanList.addAll(((ArticleBeans) apiResult.getData()).getDatas());
-                                articleAdapter.notifyDataSetChanged();
-                            } else {
-                                beanList.clear();
-                                beanList.add(new ArticleBean());
-                                articleAdapter.setBannerBean((List<BannerBean>) apiResult.getData());
-                            }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        rvArticle.setPullLoadMoreCompleted();
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        rvArticle.setPullLoadMoreCompleted();
-                    }
-                });
-    }
 
     private void getArticleList() {
         ViseHttp.RETROFIT().create(WanApiServices.class).getArticleList(pageNo)
-                .compose(ApiResultTransformer.<ArticleBeans>norTransformer())
+                .compose(ApiResultTransformer.norTransformer())
                 .subscribe(new ApiResultSubscriber<ArticleBeans>() {
                     @Override
                     protected void onError(ApiException e) {
@@ -246,15 +174,6 @@ public class WanMainActivity extends TranslucentBarBaseActivity
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        loginState = PreferencesUtils.getLoginState();
-        if (!PreferencesUtils.getLoginState()) {
-
-        }
     }
 
     @Override

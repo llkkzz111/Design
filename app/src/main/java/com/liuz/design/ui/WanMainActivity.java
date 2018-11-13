@@ -19,6 +19,8 @@ import com.liuz.db.wan.AccountBean;
 import com.liuz.design.R;
 import com.liuz.design.base.TranslucentBarBaseActivity;
 import com.liuz.design.bean.ArticleBean;
+import com.liuz.design.bean.ArticleBeans;
+import com.liuz.design.bean.BannerBean;
 import com.liuz.design.ui.adapter.WanArticleAdapter;
 import com.liuz.design.utils.PreferencesUtils;
 import com.liuz.design.view.DividerItemDecoration;
@@ -59,14 +61,22 @@ public class WanMainActivity extends TranslucentBarBaseActivity
         initView();
 
         viewModel = ViewModelProviders.of(this).get(WanViewModel.class);
-        viewModel.getLiveData().observe(this, articleBeans -> {
-            beanList.addAll(articleBeans.getDatas());
-            articleAdapter.notifyDataSetChanged();
-        });
-        viewModel.getAccLiveData().observe(this, accountBean -> {
-            account = accountBean;
-            if (!TextUtils.isEmpty(accountBean.getIcon())) {
-                LoaderFactory.getLoader().loadNet(ivHeader, accountBean.getIcon(), null);
+        viewModel.getLiveData().observe(this, obj -> {
+            if (obj instanceof AccountBean) {
+                account = (AccountBean) obj;
+                if (!TextUtils.isEmpty(account.getIcon())) {
+                    LoaderFactory.getLoader().loadNet(ivHeader, account.getIcon(), null);
+                }
+            } else if (obj instanceof ArticleBeans) {
+                ArticleBeans articleBeans = (ArticleBeans) obj;
+                beanList.addAll(articleBeans.getDatas());
+                articleAdapter.notifyDataSetChanged();
+                rvArticle.setPullLoadMoreCompleted();
+            } else {
+                List<BannerBean> list = (List<BannerBean>) obj;
+                articleAdapter.setBannerBean(list);
+                beanList.add(new ArticleBean());
+                articleAdapter.notifyDataSetChanged();
             }
         });
         String userName = PreferencesUtils.getUserName();
@@ -101,7 +111,8 @@ public class WanMainActivity extends TranslucentBarBaseActivity
         rvArticle.setOnPullLoadMoreListener(new PullLoadMoreRecyclerView.PullLoadMoreListener() {
             @Override
             public void onRefresh() {
-
+                pageNo = 0;
+                viewModel.loadData(pageNo);
             }
 
             @Override

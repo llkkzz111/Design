@@ -5,16 +5,12 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.MediatorLiveData;
 import android.support.annotation.NonNull;
 
-import com.liuz.common.ApiResultTransformer;
-import com.liuz.common.subscriber.ApiResultSubscriber;
 import com.liuz.db.WanDataBase;
 import com.liuz.db.wan.AccountBean;
-import com.liuz.design.bean.ArticleBean;
 import com.liuz.design.bean.ArticleBeans;
 import com.liuz.design.bean.BannerBean;
 import com.liuz.lotus.net.ViseHttp;
 import com.liuz.lotus.net.config.HttpGlobalConfig;
-import com.liuz.lotus.net.exception.ApiException;
 import com.liuz.lotus.net.func.ApiRetryFunc;
 import com.liuz.lotus.net.mode.ApiResult;
 import com.liuz.mvvm.m.WanModel;
@@ -34,8 +30,7 @@ import io.reactivex.schedulers.Schedulers;
  * author liuzhao
  */
 public class WanViewModel extends AndroidViewModel {
-    private final MediatorLiveData<ArticleBeans> liveData = new MediatorLiveData<>();
-    private final MediatorLiveData<AccountBean> accLiveData = new MediatorLiveData<>();
+    private final MediatorLiveData liveData = new MediatorLiveData<>();
     private WanModel model;
 
     public WanViewModel(@NonNull Application application) {
@@ -43,19 +38,20 @@ public class WanViewModel extends AndroidViewModel {
         model = new WanModel(application);
     }
 
-    public MediatorLiveData<ArticleBeans> getLiveData() {
+    public MediatorLiveData<?> getLiveData() {
         return liveData;
     }
 
-    public MediatorLiveData<AccountBean> getAccLiveData() {
-        return accLiveData;
-    }
 
     public void loadData(int pageNo) {
 
 
         Observable<ApiResult<ArticleBeans>> observableArticle = ViseHttp.RETROFIT().create(WanApiServices.class)
                 .getArticleList(pageNo);
+
+        Observable<ApiResult<List<BannerBean>>> observableBanner = ViseHttp.RETROFIT().create(WanApiServices.class)
+                .getBanner();
+
         Observable.concat(observableBanner, observableArticle)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
@@ -63,6 +59,7 @@ public class WanViewModel extends AndroidViewModel {
                 .retryWhen(new ApiRetryFunc(HttpGlobalConfig.getInstance().getRetryCount(),
                         HttpGlobalConfig.getInstance().getRetryDelayMillis()))
                 .subscribe(new Observer<ApiResult<? extends Object>>() {
+
                     @Override
                     public void onSubscribe(Disposable d) {
                     }
@@ -71,42 +68,23 @@ public class WanViewModel extends AndroidViewModel {
                     public void onNext(ApiResult<?> apiResult) {
                         if (apiResult.getData() != null)
                             if (apiResult.getData() instanceof ArticleBeans) {
-                                beanList.addAll(((ArticleBeans) apiResult.getData()).getDatas());
-                                articleAdapter.notifyDataSetChanged();
+//                                liveData.postValue(apiResult.getData());
                             } else {
-                                beanList.clear();
-                                beanList.add(new ArticleBean());
-                                articleAdapter.setBannerBean((List<BannerBean>) apiResult.getData());
+                                liveData.postValue(apiResult.getData());
                             }
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        rvArticle.setPullLoadMoreCompleted();
+
                     }
 
                     @Override
                     public void onComplete() {
-                        rvArticle.setPullLoadMoreCompleted();
+
                     }
                 });
 
-
-        ViseHttp.RETROFIT().create(WanApiServices.class).getArticleList(pageNo)
-                .compose(ApiResultTransformer.norTransformer())
-                .subscribe(new ApiResultSubscriber<ArticleBeans>() {
-                    @Override
-                    protected void onError(ApiException e) {
-//                        liveData.postValue(e);
-                    }
-
-                    @Override
-                    public void onSuccess(ArticleBeans data) {
-                        liveData.postValue(data);
-                    }
-
-
-                });
 
         model.loadData(pageNo);
     }
@@ -121,7 +99,7 @@ public class WanViewModel extends AndroidViewModel {
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(accountBean -> {
-                    accLiveData.postValue(accountBean);
+
                 });
     }
 }

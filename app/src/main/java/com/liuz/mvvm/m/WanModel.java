@@ -1,6 +1,11 @@
 package com.liuz.mvvm.m;
 
 import android.app.Application;
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MediatorLiveData;
+import android.arch.lifecycle.MutableLiveData;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.liuz.design.bean.ArticleBeans;
 import com.liuz.design.bean.BannerBean;
@@ -11,7 +16,6 @@ import com.liuz.net.api.WanApiServices;
 import java.util.List;
 
 import io.reactivex.Observable;
-import io.reactivex.disposables.Disposable;
 
 /**
  * date: 2018/11/9 17:54
@@ -25,10 +29,47 @@ public class WanModel {
         this.application = application;
     }
 
-    public Disposable getBanners() {
-        Observable<ApiResult<List<BannerBean>>> observableBanner = ViseHttp.RETROFIT().create(WanApiServices.class)
-                .getBanner();
-        return observableBanner.subscribe();
+    public MediatorLiveData<List<BannerBean>> getBanners() {
+        return getBanner();
+    }
+
+    private MediatorLiveData<List<BannerBean>> getBanner() {
+
+
+        return new AbsDataSource<List<BannerBean>, List<BannerBean>>() {
+            @Override
+            protected void saveCallResult(@NonNull List<BannerBean> item) {
+
+            }
+
+            @Override
+            protected boolean shouldFetch(@Nullable List<BannerBean> data) {
+                return true;
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<List<BannerBean>> loadFromDb() {
+
+                LiveData<List<BannerBean>> entity = new MutableLiveData<>();
+                return entity;
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<ApiResult<List<BannerBean>>> createCall() {
+                final MediatorLiveData<ApiResult<List<BannerBean>>> result = new MediatorLiveData<>();
+
+                return result;
+
+            }
+
+            @Override
+            protected void onFetchFailed() {
+
+            }
+        }.getAsLiveData();
+
     }
 
 
@@ -37,7 +78,6 @@ public class WanModel {
 
         Observable<ApiResult<ArticleBeans>> observableArticle = ViseHttp.RETROFIT().create(WanApiServices.class)
                 .getArticleList(pageNo);
-
 
 
     }

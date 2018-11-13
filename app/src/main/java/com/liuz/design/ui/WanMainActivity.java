@@ -61,22 +61,23 @@ public class WanMainActivity extends TranslucentBarBaseActivity
         initView();
 
         viewModel = ViewModelProviders.of(this).get(WanViewModel.class);
-        viewModel.getLiveData().observe(this, obj -> {
-            if (obj instanceof AccountBean) {
-                account = (AccountBean) obj;
-                if (!TextUtils.isEmpty(account.getIcon())) {
-                    LoaderFactory.getLoader().loadNet(ivHeader, account.getIcon(), null);
+        viewModel.getLiveData().observe(this, apiResult -> {
+            if (apiResult != null && apiResult.getData() != null) {
+                if (apiResult.getData() instanceof AccountBean) {
+                    account = (AccountBean) apiResult.getData();
+                    if (!TextUtils.isEmpty(account.getIcon())) {
+                        LoaderFactory.getLoader().loadNet(ivHeader, account.getIcon(), null);
+                    }
+                } else if (apiResult.getData() instanceof ArticleBeans) {
+                    ArticleBeans articleBeans = (ArticleBeans) apiResult.getData();
+                    beanList.addAll(articleBeans.getDatas());
+                    articleAdapter.notifyDataSetChanged();
+                    rvArticle.setPullLoadMoreCompleted();
+                } else {
+                    List<BannerBean> list = (List<BannerBean>) apiResult.getData();
+                    beanList.add(new ArticleBean());
+                    articleAdapter.setBannerBean(list);
                 }
-            } else if (obj instanceof ArticleBeans) {
-                ArticleBeans articleBeans = (ArticleBeans) obj;
-                beanList.addAll(articleBeans.getDatas());
-                articleAdapter.notifyDataSetChanged();
-                rvArticle.setPullLoadMoreCompleted();
-            } else {
-                List<BannerBean> list = (List<BannerBean>) obj;
-                articleAdapter.setBannerBean(list);
-                beanList.add(new ArticleBean());
-                articleAdapter.notifyDataSetChanged();
             }
         });
         String userName = PreferencesUtils.getUserName();
@@ -118,7 +119,7 @@ public class WanMainActivity extends TranslucentBarBaseActivity
             @Override
             public void onLoadMore() {
                 pageNo++;
-                viewModel.loadData(pageNo);
+                viewModel.loadMore(pageNo);
             }
         });
 

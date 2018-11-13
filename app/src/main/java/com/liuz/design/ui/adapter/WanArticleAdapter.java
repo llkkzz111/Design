@@ -13,6 +13,7 @@ import com.liuz.design.bean.BannerBean;
 import com.liuz.design.ui.adapter.holder.AticleHolder;
 import com.liuz.design.ui.adapter.holder.BannerHolder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,6 +26,7 @@ public class WanArticleAdapter extends RecycleBaseAdapter<ArticleBean, BaseViewH
     private List<BannerBean> bannerBeans;
 
     public WanArticleAdapter(Context mContext, List<ArticleBean> articleBeans) {
+        bannerBeans = new ArrayList<>();
         this.list = articleBeans;
         this.mContext = mContext;
     }
@@ -54,7 +56,8 @@ public class WanArticleAdapter extends RecycleBaseAdapter<ArticleBean, BaseViewH
     public void convert(BaseViewHolder holder, ArticleBean data, int index, int type) {
         switch (type) {
             case R.layout.item_home_banner_layout:
-//                ((BannerHolder) holder).onBind(index, bannerBeans);
+                if (bannerBeans != null)
+                    ((BannerHolder) holder).onBind(index, bannerBeans);
                 break;
             case R.layout.item_article_title_layout:
             default:
@@ -65,6 +68,8 @@ public class WanArticleAdapter extends RecycleBaseAdapter<ArticleBean, BaseViewH
     }
 
     public void setBannerBean(List<BannerBean> bannerBeans) {
-        this.bannerBeans = bannerBeans;
+        this.bannerBeans.clear();
+        this.bannerBeans.addAll(bannerBeans);
+        notifyDataSetChanged();
     }
 }

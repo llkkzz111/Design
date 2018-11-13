@@ -54,7 +54,7 @@ public class WanArticleAdapter extends RecycleBaseAdapter<ArticleBean, BaseViewH
     public void convert(BaseViewHolder holder, ArticleBean data, int index, int type) {
         switch (type) {
             case R.layout.item_home_banner_layout:
-                ((BannerHolder) holder).onBind(index, bannerBeans);
+//                ((BannerHolder) holder).onBind(index, bannerBeans);
                 break;
             case R.layout.item_article_title_layout:
             default:

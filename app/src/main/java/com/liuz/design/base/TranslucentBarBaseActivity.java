@@ -1,6 +1,7 @@
 package com.liuz.design.base;
 
 import android.app.Activity;
+import android.arch.lifecycle.LifecycleRegistry;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -22,6 +23,7 @@ import butterknife.ButterKnife;
  */
 public abstract class TranslucentBarBaseActivity extends RxAppCompatActivity {
 
+    private final LifecycleRegistry mRegistry = new LifecycleRegistry(this);
     protected Context mContext;
 
     /**
@@ -42,6 +44,11 @@ public abstract class TranslucentBarBaseActivity extends RxAppCompatActivity {
                 rootView.setClipToPadding(true);
             }
         }
+    }
+
+    @Override
+    public LifecycleRegistry getLifecycle() {
+        return mRegistry;
     }
 
     @Override

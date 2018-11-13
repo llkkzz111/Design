@@ -24,7 +24,7 @@ import android.content.Context;
 /**
  * The Room database that contains the Users table
  */
-@Database(entities = {AreaBean.class}, version = 1)
+@Database(entities = {AreaBean.class}, version = 1, exportSchema = false)
 public abstract class AreasDatabase extends RoomDatabase {
 
     private static volatile AreasDatabase INSTANCE;

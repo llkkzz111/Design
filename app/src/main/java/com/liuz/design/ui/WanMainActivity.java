@@ -15,33 +15,21 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.liuz.common.ApiResultTransformer;
-import com.liuz.common.subscriber.ApiResultSubscriber;
-import com.liuz.db.WanDataBase;
 import com.liuz.db.wan.AccountBean;
 import com.liuz.design.R;
 import com.liuz.design.base.TranslucentBarBaseActivity;
 import com.liuz.design.bean.ArticleBean;
-import com.liuz.design.bean.ArticleBeans;
 import com.liuz.design.ui.adapter.WanArticleAdapter;
 import com.liuz.design.utils.PreferencesUtils;
 import com.liuz.design.view.DividerItemDecoration;
-import com.liuz.jetpack.lifecycle.MyObserver;
 import com.liuz.lotus.loader.LoaderFactory;
-import com.liuz.lotus.net.ViseHttp;
-import com.liuz.lotus.net.exception.ApiException;
 import com.liuz.mvvm.vm.WanViewModel;
-import com.liuz.net.api.WanApiServices;
 import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import io.reactivex.Observable;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 
 public class WanMainActivity extends TranslucentBarBaseActivity
@@ -68,6 +56,27 @@ public class WanMainActivity extends TranslucentBarBaseActivity
 
     @Override
     protected void initEventAndData() {
+        initView();
+
+        viewModel = ViewModelProviders.of(this).get(WanViewModel.class);
+        viewModel.getLiveData().observe(this, articleBeans -> {
+            beanList.addAll(articleBeans.getDatas());
+            articleAdapter.notifyDataSetChanged();
+        });
+        viewModel.getAccLiveData().observe(this, accountBean -> {
+            account = accountBean;
+            if (!TextUtils.isEmpty(accountBean.getIcon())) {
+                LoaderFactory.getLoader().loadNet(ivHeader, accountBean.getIcon(), null);
+            }
+        });
+        String userName = PreferencesUtils.getUserName();
+        if (!TextUtils.isEmpty(userName)) {
+            getAccount(userName);
+        }
+        viewModel.loadData(pageNo);
+    }
+
+    private void initView() {
         setSupportActionBar(toolbar);
         toolbar.setTitle("Wan");
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -87,10 +96,7 @@ public class WanMainActivity extends TranslucentBarBaseActivity
         rvArticle.setAdapter(articleAdapter);
         rvArticle.setPushRefreshEnable(true);
         rvArticle.setFooterViewText("加载中。。");
-        String userName = PreferencesUtils.getUserName();
-        if (!TextUtils.isEmpty(userName)) {
-            getAccount(userName);
-        }
+
 
         rvArticle.setOnPullLoadMoreListener(new PullLoadMoreRecyclerView.PullLoadMoreListener() {
             @Override
@@ -101,7 +107,7 @@ public class WanMainActivity extends TranslucentBarBaseActivity
             @Override
             public void onLoadMore() {
                 pageNo++;
-                getArticleList();
+                viewModel.loadData(pageNo);
             }
         });
 
@@ -110,41 +116,6 @@ public class WanMainActivity extends TranslucentBarBaseActivity
                 tvName.setText(PreferencesUtils.getUserName());
             }
         });
-
-        getLifecycle().addObserver(new MyObserver());
-
-        viewModel = ViewModelProviders.of(this).get(WanViewModel.class);
-        viewModel.getLiveData().observe(this, articleBeans -> {
-            beanList.addAll(articleBeans.getDatas());
-            articleAdapter.notifyDataSetChanged();
-        });
-
-        viewModel.getLiveData().observe(this, articleBeans -> {
-
-        });
-    }
-
-
-    private void getArticleList() {
-        ViseHttp.RETROFIT().create(WanApiServices.class).getArticleList(pageNo)
-                .compose(ApiResultTransformer.norTransformer())
-                .subscribe(new ApiResultSubscriber<ArticleBeans>() {
-                    @Override
-                    protected void onError(ApiException e) {
-                        rvArticle.setPullLoadMoreCompleted();
-                    }
-
-                    @Override
-                    public void onSuccess(ArticleBeans data) {
-                        if (pageNo == 1)
-                            beanList.clear();
-                        beanList.addAll(data.getDatas());
-                        articleAdapter.notifyDataSetChanged();
-                        rvArticle.setPullLoadMoreCompleted();
-                    }
-
-
-                });
     }
 
     private void profileClick() {
@@ -190,21 +161,7 @@ public class WanMainActivity extends TranslucentBarBaseActivity
 
     private void getAccount(final String userName) {
         tvName.setText(userName);
-
-        Observable.create((ObservableOnSubscribe<AccountBean>) emitter -> {
-            AccountBean bean = WanDataBase.getInstance(mContext).accountDao().getAccountBean(userName);
-            if (bean != null)
-                emitter.onNext(bean);
-        })
-                .subscribeOn(Schedulers.io())
-                .unsubscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(accountBean -> {
-                    account = accountBean;
-                    if (!TextUtils.isEmpty(accountBean.getIcon())) {
-                        LoaderFactory.getLoader().loadNet(ivHeader, accountBean.getIcon(), null);
-                    }
-                });
+        viewModel.getAccount(userName);
     }
 
 

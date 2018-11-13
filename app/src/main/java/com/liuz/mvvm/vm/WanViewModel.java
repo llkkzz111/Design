@@ -20,6 +20,7 @@ import com.liuz.net.api.WanApiServices;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -85,17 +86,12 @@ public class WanViewModel extends AndroidViewModel {
     }
 
     public void getAccount(String userName) {
+
         Observable.create((ObservableOnSubscribe<AccountBean>) emitter -> {
             AccountBean bean = WanDataBase.getInstance(getApplication()).accountDao().getAccountBean(userName);
             if (bean != null)
-                emitter.onNext(bean);
-        })
-                .subscribeOn(Schedulers.io())
-                .unsubscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(accountBean -> {
-
-                });
+                liveData.postValue(new ApiResult().setData(bean));
+        }).subscribeOn(Schedulers.io()).subscribe();
     }
 
     public void loadMore(int pageNo) {

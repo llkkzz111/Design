@@ -10,6 +10,9 @@ public class ApiResult<T> {
     private String errorMsg;
     private T data;
 
+    public ApiResult() {
+    }
+
     public ApiResult(String msg) {
         this.errorMsg = msg;
     }

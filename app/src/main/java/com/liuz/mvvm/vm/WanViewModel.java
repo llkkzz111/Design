@@ -12,9 +12,7 @@ import com.liuz.db.wan.AccountBean;
 import com.liuz.design.bean.ArticleBeans;
 import com.liuz.design.bean.BannerBean;
 import com.liuz.lotus.net.ViseHttp;
-import com.liuz.lotus.net.config.HttpGlobalConfig;
 import com.liuz.lotus.net.exception.ApiException;
-import com.liuz.lotus.net.func.ApiRetryFunc;
 import com.liuz.lotus.net.mode.ApiResult;
 import com.liuz.mvvm.m.WanModel;
 import com.liuz.net.api.WanApiServices;
@@ -59,8 +57,6 @@ public class WanViewModel extends AndroidViewModel {
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .retryWhen(new ApiRetryFunc(HttpGlobalConfig.getInstance().getRetryCount(),
-                        HttpGlobalConfig.getInstance().getRetryDelayMillis()))
                 .subscribe(new Observer<ApiResult>() {
 
                     @Override
@@ -69,7 +65,7 @@ public class WanViewModel extends AndroidViewModel {
 
                     @Override
                     public void onNext(ApiResult apiResult) {
-                        liveData.postValue(apiResult);
+                        liveData.setValue(apiResult);
                     }
 
 

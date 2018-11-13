@@ -34,11 +34,10 @@ public class WanArticleAdapter extends RecycleBaseAdapter<ArticleBean, BaseViewH
 
     @Override
     public int getLayoutRes(int position) {
-        if (position == 0) {
+        if (list.get(position).getId() == 0)
             return R.layout.item_home_banner_layout;
-        } else {
+        else
             return R.layout.item_article_title_layout;
-        }
     }
 
     @Override
@@ -56,8 +55,7 @@ public class WanArticleAdapter extends RecycleBaseAdapter<ArticleBean, BaseViewH
     public void convert(BaseViewHolder holder, ArticleBean data, int index, int type) {
         switch (type) {
             case R.layout.item_home_banner_layout:
-                if (bannerBeans != null)
-                    ((BannerHolder) holder).onBind(index, bannerBeans);
+                ((BannerHolder) holder).onBind(index, bannerBeans);
                 break;
             case R.layout.item_article_title_layout:
             default:
@@ -68,6 +66,8 @@ public class WanArticleAdapter extends RecycleBaseAdapter<ArticleBean, BaseViewH
     }
 
     public void setBannerBean(List<BannerBean> bannerBeans) {
+        list.clear();
+        list.add(0, new ArticleBean());
         this.bannerBeans.clear();
         this.bannerBeans.addAll(bannerBeans);
         notifyDataSetChanged();

@@ -11,6 +11,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -73,9 +74,9 @@ public class WanMainActivity extends TranslucentBarBaseActivity
                     beanList.addAll(articleBeans.getDatas());
                     articleAdapter.notifyDataSetChanged();
                     rvArticle.setPullLoadMoreCompleted();
-                } else {
+                } else if (apiResult.getData() instanceof List) {
                     List<BannerBean> list = (List<BannerBean>) apiResult.getData();
-                    beanList.add(new ArticleBean());
+                    Log.e("bannerBean", "setBannerBean" + apiResult.toString());
                     articleAdapter.setBannerBean(list);
                 }
             }

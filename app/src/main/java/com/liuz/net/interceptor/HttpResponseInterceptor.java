@@ -7,7 +7,6 @@ import com.liuz.common.temp.DefaultResponseState;
 import com.liuz.common.temp.IResponseState;
 import com.liuz.lotus.common.GsonUtil;
 import com.liuz.lotus.net.mode.ApiResult;
-import com.vise.log.ViseLog;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -61,7 +60,7 @@ public abstract class HttpResponseInterceptor implements Interceptor {
             return response;
         }
         String bodyString = buffer.clone().readString(charset);
-        ViseLog.i("<-- HTTP Interceptor:" + bodyString + " host:" + request.url().toString());
+
         boolean isText = isText(contentType);
         if (!isText) {
             return response;

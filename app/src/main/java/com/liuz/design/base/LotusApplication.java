@@ -12,7 +12,6 @@ import com.liuz.design.utils.UIManager;
 import com.liuz.lotus.net.ViseHttp;
 import com.liuz.net.interceptor.HeaderInterceptor;
 import com.liuz.net.interceptor.LogInterceptorSlife;
-import com.liuz.net.interceptor.ResponseInterceptor;
 import com.vise.log.ViseLog;
 import com.vise.log.inner.LogcatTree;
 
@@ -118,7 +117,6 @@ public class LotusApplication extends DaggerApplication {
                         .setLevel(HttpLoggingInterceptor.Level.BODY))
                 .networkInterceptor(new StethoInterceptor())
                 .interceptor(new LogInterceptorSlife())
-                .interceptor(new ResponseInterceptor())
                 .interceptor(new HeaderInterceptor())
         ;
         initStetho();

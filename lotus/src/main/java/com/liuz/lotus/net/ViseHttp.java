@@ -3,10 +3,8 @@ package com.liuz.lotus.net;
 import android.content.Context;
 
 import com.liuz.lotus.net.config.HttpGlobalConfig;
-import com.liuz.lotus.net.core.ApiManager;
 import com.liuz.lotus.net.request.RetrofitRequest;
 
-import io.reactivex.disposables.Disposable;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 
@@ -68,32 +66,8 @@ public class ViseHttp {
      *
      * @return
      */
-    public static <T> RetrofitRequest RETROFIT() {
+    public static RetrofitRequest RETROFIT() {
         return new RetrofitRequest();
-    }
-
-    /**
-     * 添加请求订阅者
-     *
-     * @param tag
-     * @param disposable
-     */
-    public static void addDisposable(Object tag, Disposable disposable) {
-        ApiManager.get().add(tag, disposable);
-    }
-
-    /**
-     * 根据Tag取消请求
-     */
-    public static void cancelTag(Object tag) {
-        ApiManager.get().cancel(tag);
-    }
-
-    /**
-     * 取消所有请求请求
-     */
-    public static void cancelAll() {
-        ApiManager.get().cancelAll();
     }
 
 

@@ -14,7 +14,6 @@ import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.liuz.common.ApiResultTransformer;
 import com.liuz.common.subscriber.ApiResultSubscriber;
 import com.liuz.db.WanDataBase;
 import com.liuz.db.wan.AccountBean;
@@ -31,6 +30,7 @@ import butterknife.OnEditorAction;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -94,7 +94,9 @@ public class LoginActivity extends TranslucentBarBaseActivity {
             ViseHttp.RETROFIT()
                     .create(WanApiServices.class)
                     .userLogin(email, password)
-                    .compose(ApiResultTransformer.<AccountBean>norTransformer())
+                    .subscribeOn(Schedulers.io())
+                    .unsubscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new ApiResultSubscriber<AccountBean>() {
                         @Override
                         protected void onError(ApiException e) {

@@ -5,10 +5,8 @@ import com.liuz.lotus.net.ViseHttp;
 import com.liuz.lotus.net.callback.UCallback;
 import com.liuz.lotus.net.config.HttpGlobalConfig;
 import com.liuz.lotus.net.core.ApiCookie;
-import com.liuz.lotus.net.interceptor.HeadersInterceptor;
 import com.liuz.lotus.net.interceptor.UploadProgressInterceptor;
 import com.liuz.lotus.net.mode.ApiHost;
-import com.liuz.lotus.net.mode.HttpHeaders;
 import com.vise.log.ViseLog;
 import com.vise.utils.assist.SSLUtil;
 
@@ -17,7 +15,6 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Cache;
@@ -38,189 +35,20 @@ public abstract class BaseRequest<R extends BaseRequest> {
     protected Retrofit retrofit;//Retrofit对象
     protected List<Interceptor> interceptors = new ArrayList<>();//局部请求的拦截器
     protected List<Interceptor> networkInterceptors = new ArrayList<>();//局部请求的网络拦截器
-    protected HttpHeaders headers = new HttpHeaders();//请求头
-    protected String baseUrl;//基础域名
-    protected Object tag;//请求标签
+
+
     protected long readTimeOut;//读取超时时间
     protected long writeTimeOut;//写入超时时间
     protected long connectTimeOut;//连接超时时间
     protected boolean isHttpCache;//是否使用Http缓存
     protected UCallback uploadCallback;//上传进度回调
 
-    /**
-     * 设置基础域名，当前请求会替换全局域名
-     *
-     * @param baseUrl
-     * @return
-     */
-    public R baseUrl(String baseUrl) {
-        if (baseUrl != null) {
-            this.baseUrl = baseUrl;
-        }
-        return (R) this;
-    }
-
-    /**
-     * 添加请求头
-     *
-     * @param headerKey
-     * @param headerValue
-     * @return
-     */
-    public R addHeader(String headerKey, String headerValue) {
-        this.headers.put(headerKey, headerValue);
-        return (R) this;
-    }
-
-    /**
-     * 添加请求头
-     *
-     * @param headers
-     * @return
-     */
-    public R addHeaders(Map<String, String> headers) {
-        this.headers.put(headers);
-        return (R) this;
-    }
-
-    /**
-     * 移除请求头
-     *
-     * @param headerKey
-     * @return
-     */
-    public R removeHeader(String headerKey) {
-        this.headers.remove(headerKey);
-        return (R) this;
-    }
-
-    /**
-     * 设置请求头
-     *
-     * @param headers
-     * @return
-     */
-    public R headers(HttpHeaders headers) {
-        if (headers != null) {
-            this.headers = headers;
-        }
-        return (R) this;
-    }
-
-    /**
-     * 设置请求标签
-     *
-     * @param tag
-     * @return
-     */
-    public R tag(Object tag) {
-        this.tag = tag;
-        return (R) this;
-    }
-
-    /**
-     * 设置连接超时时间（秒）
-     *
-     * @param connectTimeOut
-     * @return
-     */
-    public R connectTimeOut(int connectTimeOut) {
-        this.connectTimeOut = connectTimeOut;
-        return (R) this;
-    }
-
-    /**
-     * 设置读取超时时间（秒）
-     *
-     * @param readTimeOut
-     * @return
-     */
-    public R readTimeOut(int readTimeOut) {
-        this.readTimeOut = readTimeOut;
-        return (R) this;
-    }
-
-    /**
-     * 设置写入超时时间（秒）
-     *
-     * @param writeTimeOut
-     * @return
-     */
-    public R writeTimeOut(int writeTimeOut) {
-        this.writeTimeOut = writeTimeOut;
-        return (R) this;
-    }
-
-    /**
-     * 局部设置拦截器
-     *
-     * @param interceptor
-     * @return
-     */
-    public R interceptor(Interceptor interceptor) {
-        if (interceptor != null) {
-            interceptors.add(interceptor);
-        }
-        return (R) this;
-    }
-
-    /**
-     * 局部设置网络拦截器
-     *
-     * @param interceptor
-     * @return
-     */
-    public R networkInterceptor(Interceptor interceptor) {
-        if (interceptor != null) {
-            networkInterceptors.add(interceptor);
-        }
-        return (R) this;
-    }
-
-    public HttpHeaders getHeaders() {
-        return headers;
-    }
-
-    public String getBaseUrl() {
-        return baseUrl;
-    }
-
-    public long getReadTimeOut() {
-        return readTimeOut;
-    }
-
-    public long getWriteTimeOut() {
-        return writeTimeOut;
-    }
-
-    public long getConnectTimeOut() {
-        return connectTimeOut;
-    }
-
-    public boolean isHttpCache() {
-        return isHttpCache;
-    }
-
-    /**
-     * 设置是否进行HTTP缓存
-     *
-     * @param isHttpCache
-     * @return
-     */
-    public R setHttpCache(boolean isHttpCache) {
-        this.isHttpCache = isHttpCache;
-        return (R) this;
-    }
 
     /**
      * 生成局部配置
      */
     protected void generateLocalConfig() {
         OkHttpClient.Builder newBuilder = ViseHttp.getOkHttpClient().newBuilder();
-
-        if (httpGlobalConfig.getGlobalHeaders() != null) {
-            headers.put(httpGlobalConfig.getGlobalHeaders());
-        }
 
         if (!interceptors.isEmpty()) {
             for (Interceptor interceptor : interceptors) {
@@ -232,10 +60,6 @@ public abstract class BaseRequest<R extends BaseRequest> {
             for (Interceptor interceptor : networkInterceptors) {
                 newBuilder.addNetworkInterceptor(interceptor);
             }
-        }
-
-        if (headers.headersMap.size() > 0) {
-            newBuilder.addInterceptor(new HeadersInterceptor(headers.headersMap));
         }
 
         if (uploadCallback != null) {
@@ -267,25 +91,10 @@ public abstract class BaseRequest<R extends BaseRequest> {
             newBuilder.cache(httpGlobalConfig.getHttpCache());
         }
 
-        if (baseUrl != null) {
-            Retrofit.Builder newRetrofitBuilder = new Retrofit.Builder();
-            newRetrofitBuilder.baseUrl(baseUrl);
-            if (httpGlobalConfig.getConverterFactory() != null) {
-                newRetrofitBuilder.addConverterFactory(httpGlobalConfig.getConverterFactory());
-            }
-            if (httpGlobalConfig.getCallAdapterFactory() != null) {
-                newRetrofitBuilder.addCallAdapterFactory(httpGlobalConfig.getCallAdapterFactory());
-            }
-            if (httpGlobalConfig.getCallFactory() != null) {
-                newRetrofitBuilder.callFactory(httpGlobalConfig.getCallFactory());
-            }
-            newBuilder.hostnameVerifier(new SSLUtil.UnSafeHostnameVerifier(baseUrl));
-            newRetrofitBuilder.client(newBuilder.build());
-            retrofit = newRetrofitBuilder.build();
-        } else {
-            ViseHttp.getRetrofitBuilder().client(newBuilder.build());
-            retrofit = ViseHttp.getRetrofitBuilder().build();
-        }
+
+        ViseHttp.getRetrofitBuilder().client(newBuilder.build());
+        retrofit = ViseHttp.getRetrofitBuilder().build();
+
     }
 
     /**

@@ -7,7 +7,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.liuz.common.ApiResultTransformer;
 import com.liuz.common.subscriber.ApiResultSubscriber;
 import com.liuz.design.R;
 import com.liuz.design.base.BaseViewHolder;
@@ -20,6 +19,8 @@ import com.liuz.net.api.WanApiServices;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * date: 2018/7/18 15:32
@@ -63,7 +64,9 @@ public class AticleHolder extends BaseViewHolder<ArticleBean> {
             case R.id.tv_article_title:
                 if (bean.isCollect()) {
                     ViseHttp.RETROFIT().create(WanApiServices.class).delCollect(bean.getId())
-                            .compose(ApiResultTransformer.<String>norTransformer())
+                            .subscribeOn(Schedulers.io())
+                            .unsubscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(new ApiResultSubscriber<String>() {
                                 @Override
                                 protected void onError(ApiException e) {
@@ -77,7 +80,9 @@ public class AticleHolder extends BaseViewHolder<ArticleBean> {
                             });
                 } else {
                     ViseHttp.RETROFIT().create(WanApiServices.class).addCollect(bean.getId())
-                            .compose(ApiResultTransformer.<String>norTransformer())
+                            .subscribeOn(Schedulers.io())
+                            .unsubscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(new ApiResultSubscriber<String>() {
                                 @Override
                                 protected void onError(ApiException e) {

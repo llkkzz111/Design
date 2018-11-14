@@ -12,7 +12,6 @@ import com.liuz.design.ui.adapter.HotMovAdapter;
 import com.liuz.design.utils.PreferencesUtils;
 import com.liuz.lotus.net.ViseHttp;
 import com.liuz.lotus.net.callback.ACallback;
-import com.liuz.lotus.net.core.ApiTransformer;
 import com.liuz.net.api.MTimeApiService;
 
 import java.util.HashMap;
@@ -21,6 +20,8 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * date: 2018/6/20 18:20
@@ -52,7 +53,9 @@ public class MoviesFragment extends BaseDaggerFragment {
         ViseHttp.RETROFIT()
                 .create(MTimeApiService.class)
                 .getHotPlayMovies(params)
-                .compose(ApiTransformer.<HotMoviesBean>norTransformer())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new ApiCallbackSubscriber<>(new ACallback<HotMoviesBean>() {
                     @Override
                     public void onSuccess(HotMoviesBean data) {

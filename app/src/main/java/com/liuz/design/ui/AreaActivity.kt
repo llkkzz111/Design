@@ -195,7 +195,6 @@ class AreaActivity : TranslucentBarBaseActivity() {
 
     private fun getAreas() {
         ViseHttp.RETROFIT<Any>()
-                .addHeader("Host", "api-m.mtime.cn")
                 .create(MTimeApiService::class.java)
                 .areas
                 .subscribeOn(Schedulers.io())

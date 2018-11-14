@@ -5,7 +5,6 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.MediatorLiveData;
 import android.support.annotation.NonNull;
 
-import com.liuz.common.ApiResultTransformer;
 import com.liuz.common.subscriber.ApiSubscriber;
 import com.liuz.db.WanDataBase;
 import com.liuz.db.wan.AccountBean;
@@ -20,7 +19,6 @@ import com.liuz.net.api.WanApiServices;
 import java.util.List;
 
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -96,7 +94,9 @@ public class WanViewModel extends AndroidViewModel {
 
     public void loadMore(int pageNo) {
         ViseHttp.RETROFIT().create(WanApiServices.class).getArticleList(pageNo)
-                .compose(ApiResultTransformer.norTransformer())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new ApiSubscriber<ApiResult<ArticleBeans>>() {
                     @Override
                     public void onNext(ApiResult<ArticleBeans> articleBeansApiResult) {

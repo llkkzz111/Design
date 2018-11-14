@@ -21,6 +21,7 @@ import java.util.List;
 /**
  * date: 2018/11/9 17:54
  * author liuzhao
+ * https://blog.csdn.net/u012295927/article/details/72621756
  */
 public class WanModel {
 
@@ -77,6 +78,9 @@ public class WanModel {
     public LiveData<ApiResult<ArticleBeans>> loadData(int pageNo) {
         final MutableLiveData<ApiResult<ArticleBeans>> liveData = new MutableLiveData<>();
 
+
+        ViseHttp.RETROFIT().create(WanApiServices.class).getArticles(pageNo);
+        ViseHttp.RETROFIT().create(WanApiServices.class).getArticleList(pageNo);
 
         ViseHttp.RETROFIT().create(WanApiServices.class).getArticleList(pageNo)
                 .subscribe(new ApiSubscriber<ApiResult<ArticleBeans>>() {

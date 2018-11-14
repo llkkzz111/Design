@@ -8,6 +8,7 @@ import com.liuz.lotus.net.mode.ApiResult;
 import java.util.List;
 
 import io.reactivex.Observable;
+import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -29,6 +30,9 @@ public interface WanApiServices {
 
     @GET("article/list/{page}/json")
     Observable<ApiResult<ArticleBeans>> getArticleList(@Path("page") int page);
+
+    @GET("article/list/{page}/json")
+    Call<ApiResult<ArticleBeans>> getArticles(@Path("page") int page);
 
     @POST("lg/collect/{page}/json")
     Observable<ApiResult<String>> addCollect(@Path("page") int page);

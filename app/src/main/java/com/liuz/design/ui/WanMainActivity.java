@@ -58,42 +58,24 @@ public class WanMainActivity extends TranslucentBarBaseActivity
     @Override
     protected void initEventAndData() {
         initView();
-
         viewModel = ViewModelProviders.of(this).get(WanViewModel.class);
-//        viewModel.getLiveData().observe(this, apiResult -> {
-//            if (apiResult != null && apiResult.getData() != null) {
-//                if (apiResult.getData() instanceof AccountBean) {
-//                    account = (AccountBean) apiResult.getData();
-//                    if (!TextUtils.isEmpty(account.getIcon())) {
-//                        LoaderFactory.getLoader().loadNet(ivHeader, account.getIcon(), null);
-//                    }
-//                } else if (apiResult.getData() instanceof ArticleBeans) {
-//                    ArticleBeans articleBeans = (ArticleBeans) apiResult.getData();
-//                    beanList.addAll(articleBeans.getDatas());
-//                    articleAdapter.notifyDataSetChanged();
-//                    rvArticle.setPullLoadMoreCompleted();
-//                } else if (apiResult.getData() instanceof List) {
-//                    List<BannerBean> list = (List<BannerBean>) apiResult.getData();
-//                    Log.e("bannerBean", "setBannerBean" + apiResult.toString());
-//                    articleAdapter.setBannerBean(list);
-//                }
-//            }
-//        });
         String userName = PreferencesUtils.getUserName();
         if (!TextUtils.isEmpty(userName)) {
             getAccount(userName);
         }
-        viewModel.loadData(pageNo).observe(this, apiResult -> {
+        viewModel.getArticles().observe(this, apiResult -> {
             ArticleBeans articleBeans = apiResult.getData();
             beanList.addAll(articleBeans.getDatas());
             articleAdapter.notifyDataSetChanged();
             rvArticle.setPullLoadMoreCompleted();
         });
 
-        viewModel.loadBanner().observe(this, listApiResult -> {
+        viewModel.getBanners().observe(this, listApiResult -> {
             List<BannerBean> list = listApiResult.getData();
             articleAdapter.setBannerBean(list);
         });
+        viewModel.loadBanner();
+        viewModel.loadData(pageNo);
     }
 
     private void initView() {
@@ -122,8 +104,8 @@ public class WanMainActivity extends TranslucentBarBaseActivity
             @Override
             public void onRefresh() {
                 pageNo = 0;
-                viewModel.loadData(pageNo);
                 viewModel.loadBanner();
+                viewModel.loadData(pageNo);
             }
 
             @Override
@@ -183,7 +165,7 @@ public class WanMainActivity extends TranslucentBarBaseActivity
 
     private void getAccount(final String userName) {
         tvName.setText(userName);
-//        viewModel.getAccount(userName);
+        viewModel.getAccount(userName);
     }
 
 

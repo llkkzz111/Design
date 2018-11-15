@@ -13,7 +13,7 @@ import com.liuz.db.wan.AccountDao;
  * author liuzhao
  */
 
-@Database(entities = {AccountBean.class}, version = 1)
+@Database(entities = {AccountBean.class}, version = 1, exportSchema = false)
 public abstract class WanDataBase extends RoomDatabase {
 
     private static volatile WanDataBase INSTANCE;

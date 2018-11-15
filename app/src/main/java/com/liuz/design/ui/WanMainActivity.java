@@ -11,7 +11,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -25,7 +24,6 @@ import com.liuz.design.bean.BannerBean;
 import com.liuz.design.ui.adapter.WanArticleAdapter;
 import com.liuz.design.utils.PreferencesUtils;
 import com.liuz.design.view.DividerItemDecoration;
-import com.liuz.lotus.loader.LoaderFactory;
 import com.liuz.mvvm.vm.WanViewModel;
 import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 
@@ -62,30 +60,40 @@ public class WanMainActivity extends TranslucentBarBaseActivity
         initView();
 
         viewModel = ViewModelProviders.of(this).get(WanViewModel.class);
-        viewModel.getLiveData().observe(this, apiResult -> {
-            if (apiResult != null && apiResult.getData() != null) {
-                if (apiResult.getData() instanceof AccountBean) {
-                    account = (AccountBean) apiResult.getData();
-                    if (!TextUtils.isEmpty(account.getIcon())) {
-                        LoaderFactory.getLoader().loadNet(ivHeader, account.getIcon(), null);
-                    }
-                } else if (apiResult.getData() instanceof ArticleBeans) {
-                    ArticleBeans articleBeans = (ArticleBeans) apiResult.getData();
-                    beanList.addAll(articleBeans.getDatas());
-                    articleAdapter.notifyDataSetChanged();
-                    rvArticle.setPullLoadMoreCompleted();
-                } else if (apiResult.getData() instanceof List) {
-                    List<BannerBean> list = (List<BannerBean>) apiResult.getData();
-                    Log.e("bannerBean", "setBannerBean" + apiResult.toString());
-                    articleAdapter.setBannerBean(list);
-                }
-            }
-        });
+//        viewModel.getLiveData().observe(this, apiResult -> {
+//            if (apiResult != null && apiResult.getData() != null) {
+//                if (apiResult.getData() instanceof AccountBean) {
+//                    account = (AccountBean) apiResult.getData();
+//                    if (!TextUtils.isEmpty(account.getIcon())) {
+//                        LoaderFactory.getLoader().loadNet(ivHeader, account.getIcon(), null);
+//                    }
+//                } else if (apiResult.getData() instanceof ArticleBeans) {
+//                    ArticleBeans articleBeans = (ArticleBeans) apiResult.getData();
+//                    beanList.addAll(articleBeans.getDatas());
+//                    articleAdapter.notifyDataSetChanged();
+//                    rvArticle.setPullLoadMoreCompleted();
+//                } else if (apiResult.getData() instanceof List) {
+//                    List<BannerBean> list = (List<BannerBean>) apiResult.getData();
+//                    Log.e("bannerBean", "setBannerBean" + apiResult.toString());
+//                    articleAdapter.setBannerBean(list);
+//                }
+//            }
+//        });
         String userName = PreferencesUtils.getUserName();
         if (!TextUtils.isEmpty(userName)) {
             getAccount(userName);
         }
-        viewModel.loadData(pageNo);
+        viewModel.loadData(pageNo).observe(this, apiResult -> {
+            ArticleBeans articleBeans = apiResult.getData();
+            beanList.addAll(articleBeans.getDatas());
+            articleAdapter.notifyDataSetChanged();
+            rvArticle.setPullLoadMoreCompleted();
+        });
+
+        viewModel.loadBanner().observe(this, listApiResult -> {
+            List<BannerBean> list = listApiResult.getData();
+            articleAdapter.setBannerBean(list);
+        });
     }
 
     private void initView() {
@@ -115,12 +123,13 @@ public class WanMainActivity extends TranslucentBarBaseActivity
             public void onRefresh() {
                 pageNo = 0;
                 viewModel.loadData(pageNo);
+                viewModel.loadBanner();
             }
 
             @Override
             public void onLoadMore() {
                 pageNo++;
-                viewModel.loadMore(pageNo);
+                viewModel.loadData(pageNo);
             }
         });
 
@@ -174,7 +183,7 @@ public class WanMainActivity extends TranslucentBarBaseActivity
 
     private void getAccount(final String userName) {
         tvName.setText(userName);
-        viewModel.getAccount(userName);
+//        viewModel.getAccount(userName);
     }
 
 

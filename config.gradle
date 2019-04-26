@@ -107,4 +107,16 @@ lifecycle.reactivestreams = "android.arch.lifecycle:reactivestreams:$versions.li
 lifecycle.core_testing = "android.arch.core:core-testing:$versions.lifecycle_version"
 deps.lifecycle = lifecycle
 
+def rxAndroid = [:]
+versions.rxAndroid_version = "2.1.1"
+
+rxAndroid.rxandroid = "io.reactivex.rxjava2:rxjava:$versions.rxAndroid_version"
+
+deps.rxAndroid = rxAndroid
+
+
+
+
+
+
 ext.deps = deps

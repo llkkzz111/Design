@@ -34,23 +34,23 @@ public class PageTableFragmentAdapter extends FragmentStatePagerAdapter {
         BaseFragment fragment = null;
         if (tabs != null) {
             switch (tabs.get(position).getTitle()) {
-                case "首页":
+                case "消息":
                     HomeFragment homeFragment = new HomeFragment();
                     fragment = homeFragment;
                     break;
-                case "购票":
+                case "发现":
                     TicketFragment ticketFragment = new TicketFragment();
                     fragment = ticketFragment;
                     break;
-                case "商城":
+                case "联系人":
                     ShopFragment shopFragment = new ShopFragment();
                     fragment = shopFragment;
                     break;
-                case "直播":
+                case "任务":
                     LiveFragment liveFragment = new LiveFragment();
                     fragment = liveFragment;
                     break;
-                case "我的":
+                case "我":
                     MeFragment meFragment = new MeFragment();
                     fragment = meFragment;
                     break;

@@ -2,27 +2,18 @@ package com.liuz.design.ui.fragment;
 
 import android.Manifest;
 import android.content.Intent;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
 import com.liuz.design.R;
 import com.liuz.design.base.BaseFragment;
-import com.liuz.design.ui.AreaActivity;
 import com.liuz.design.ui.movies.MTimesMoviesActivity;
-import com.liuz.design.utils.DialogUtils;
 import com.liuz.design.view.Guides;
-import com.liuz.lotus.permission.Permission;
-import com.liuz.lotus.permission.RxPermissions;
-import com.vise.log.ViseLog;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -47,8 +38,10 @@ public class HomeFragment extends BaseFragment {
 
 
     String areaJson = "file:///android_asset/area.json";
-    @BindView(R.id.btn_area) Button btnArea;
-    @BindView(R.id.btn_hot) Button btnHot;
+    @BindView(R.id.btn_area)
+    Button btnArea;
+    @BindView(R.id.btn_hot)
+    Button btnHot;
     private String[] permissions = {Manifest.permission.ACCESS_COARSE_LOCATION};
 
     public HomeFragment() {
@@ -69,6 +62,11 @@ public class HomeFragment extends BaseFragment {
 
     @Override
     protected void initEventAndData() {
+
+
+    }
+
+    private void rxThread() {
         Observable<Integer> observable = Observable.create(emitter -> {
             Log.d(TAG, "Observable thread is : " + Thread.currentThread().getName());
             Log.d(TAG, "emit 1");
@@ -86,80 +84,102 @@ public class HomeFragment extends BaseFragment {
                 .observeOn(Schedulers.io())
                 .doOnNext(integer -> Log.d(TAG, "After observeOn(io), current thread is : " + Thread.currentThread().getName()))
                 .subscribe(consumer);
-
-
     }
 
-    @OnClick({R.id.btn_area, R.id.btn_hot, R.id.btn_rxtest})
+    @OnClick({R.id.btn_area, R.id.btn_hot, R.id.btn_rxzip, R.id.btn_rxmap, R.id.btn_rxflatmap})
     void onViewClick(View v) {
         switch (v.getId()) {
             case R.id.btn_area:
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && getActivity() != null) {
-                    RxPermissions rxPermissions = new RxPermissions(getActivity());
-                    rxPermissions.requestEach(permissions).subscribe(new Consumer<Permission>() {
-                        @Override
-                        public void accept(Permission permission) throws Exception {
-                            if (permission.granted) {
-                                startActivity(new Intent(mContext, AreaActivity.class));
-                            } else if (permission.shouldShowRequestPermissionRationale) {
-                                // 重新获取权限
-                                startActivity(new Intent(mContext, AreaActivity.class));
-                            } else {
-                                //提示
-                                DialogUtils.showTips(getActivity(), R.string.permission_storage_title, R.string.permission_storage_des,
-                                        R.string.permission_cancel, (dialog, which) -> getActivity().finish(),
-                                        R.string.permission_ok, (dialog, which) -> {
-                                            Uri packageURI = Uri.parse("package:" + "com.liuz.design");
-                                            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, packageURI);
-                                            startActivity(intent);
-                                            getActivity().finish();
-                                        });
-
-                            }
-                        }
-                    });
-                } else {
-                    startActivity(new Intent(mContext, AreaActivity.class));
-                }
+                rxThread();
+//                gotoArea();
                 break;
             case R.id.btn_hot:
                 startActivity(new Intent(mContext, MTimesMoviesActivity.class));
                 break;
-            case R.id.btn_rxtest:
+            case R.id.btn_rxzip:
                 rxZip();
+                break;
+            case R.id.btn_rxmap:
+                rxMap();
+                break;
+            case R.id.btn_rxflatmap:
+                rxFlatMap();
                 break;
         }
 
     }
 
+    private void gotoArea() {
+        //                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && getActivity() != null) {
+//                    RxPermissions rxPermissions = new RxPermissions(getActivity());
+//                    rxPermissions.requestEach(permissions).subscribe(new Consumer<Permission>() {
+//                        @Override
+//                        public void accept(Permission permission) throws Exception {
+//                            if (permission.granted) {
+//                                startActivity(new Intent(mContext, AreaActivity.class));
+//                            } else if (permission.shouldShowRequestPermissionRationale) {
+//                                // 重新获取权限
+//                                startActivity(new Intent(mContext, AreaActivity.class));
+//                            } else {
+//                                //提示
+//                                DialogUtils.showTips(getActivity(), R.string.permission_storage_title, R.string.permission_storage_des,
+//                                        R.string.permission_cancel, (dialog, which) -> getActivity().finish(),
+//                                        R.string.permission_ok, (dialog, which) -> {
+//                                            Uri packageURI = Uri.parse("package:" + "com.liuz.design");
+//                                            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, packageURI);
+//                                            startActivity(intent);
+//                                            getActivity().finish();
+//                                        });
+//
+//                            }
+//                        }
+//                    });
+//                } else {
+//                    startActivity(new Intent(mContext, AreaActivity.class));
+//                }
+    }
+
 
     private void rxMap() {
         Observable.create((ObservableOnSubscribe<Integer>) emitter -> {
+            Log.d(TAG, "emit 1");
             emitter.onNext(1);
+            Log.d(TAG, "emit 2");
             emitter.onNext(2);
-            emitter.onNext(3);
         }).map(integer -> "This is result  " + integer).subscribe(new Consumer<String>() {
             @Override
             public void accept(String s) throws Exception {
-                ViseLog.e(s);
+                Log.d(TAG, "emit " + s);
             }
         });
     }
 
     private void rxFlatMap() {
-        Observable.create((ObservableOnSubscribe<Integer>) emitter -> {
-            emitter.onNext(1);
-            emitter.onNext(2);
-            emitter.onNext(3);
-        }).flatMap((Function<Integer, ObservableSource<String>>) integer -> {
-            final List<String> list = new ArrayList<>();
+        Observable.create((ObservableOnSubscribe<String>) emitter -> {
+            Log.d(TAG, "current thread is: " + Thread.currentThread().getName());
+            Log.d(TAG, "emit 1");
+            emitter.onNext("emit 1");
+//            Thread.sleep(10000);
+//            Log.d(TAG, "emit 2");
+//            emitter.onNext("emit 2");
+//            Thread.sleep(10000);
+//            Log.d(TAG, "emit 3");
+//            emitter.onNext("emit 3");
+        }).flatMap((Function<String, ObservableSource<String>>) str -> {
+            Log.d(TAG, "current thread is: " + Thread.currentThread().getName());
+            List<String> list = new ArrayList<>();
             for (int i = 0; i < 3; i++) {
-                list.add("I am value " + integer);
+                list.add("I am value " + str + "---- i = " + 0);
+                Log.d(TAG, "I am value " + str + "---- i = " + 0);
             }
+            Log.d(TAG, "list.size() = " + list.size());
 
+            return Observable.fromIterable(list);
+        }).subscribe(s -> {
+            Log.d(TAG, "current thread is: " + Thread.currentThread().getName());
+            Log.d(TAG, "emit " + s);
 
-            return Observable.fromIterable(list).delay(10, TimeUnit.MILLISECONDS);
-        }).subscribe(s -> ViseLog.e(s));
+        });
     }
 
     private void rxZip() {
@@ -183,6 +203,7 @@ public class HomeFragment extends BaseFragment {
             emitter.onNext("B");
             Log.d(TAG, "emit C");
             emitter.onNext("C");
+
             Log.d(TAG, "emit complete2");
             emitter.onComplete();
         });
